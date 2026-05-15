@@ -1,0 +1,34 @@
+﻿@using Sofragrancia.UI.Models
+
+<div class="mt-20 table-card">
+    <div class="table-header">
+        <div>
+            <div class="chart-title">🏆 Ranking de Vendedores</div>
+            <div class="chart-subtitle">Performance do mês atual — Cotas vs Realizado</div>
+        </div>
+        <div class="table-filters">
+            <button class="btn btn-outline" @onclick="ExportarDados">📥 Exportar</button>
+        </div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cód</th>
+                <th>Vendedor</th>
+                <th class="text-center">Cota (Qtd)</th>
+                <th class="text-center">Vendido (Qtd)</th>
+                <th>% Atingimento</th>
+                <th class="text-right">Faturamento</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vendedor in VendedoresRanking)
+            {
+                <RankingTableRow Item="vendedor" />
+            }
+        </tbody>
+    </table>
+</div>

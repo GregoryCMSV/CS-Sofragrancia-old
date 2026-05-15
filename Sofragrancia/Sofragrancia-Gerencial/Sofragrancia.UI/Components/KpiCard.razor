@@ -1,0 +1,33 @@
+﻿@using Sofragrancia.UI.Models
+
+<div class="kpi-card @Model.ColorClass">
+    <div class="kpi-header">
+        <div class="kpi-label">@Model.Title</div>
+        <div class="kpi-icon">@Model.Icon</div>
+    </div>
+    
+    <div class="kpi-value">@Model.Value</div>
+    
+    @if (!string.IsNullOrEmpty(Model.ChangeText))
+    {
+        <div class="kpi-change @Model.ChangeClass">@Model.ChangeText</div>
+    }
+
+    @if (Model.HasProgress)
+    {
+        <div class="kpi-progress">
+            <div class="progress-bar">
+                <div class="progress-fill @Model.ColorClass" style="width: @Model.ProgressPercentage.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%"></div>
+            </div>
+            <div class="progress-label">
+                <span>@Model.ProgressTextLeft</span>
+                <span>@Model.ProgressTextRight</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public KpiModel Model { get; set; } = new();
+}

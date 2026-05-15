@@ -1,0 +1,28 @@
+﻿<div class="topbar">
+    <div class="topbar-left">
+        <h2>@Title</h2>
+        <div class="breadcrumb">@Breadcrumb</div>
+    </div>
+    
+    <div class="topbar-right">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="date" class="date-filter" @bind="DataInicio" />
+            <span style="font-size: 13px; color: #888;">até</span>
+            <input type="date" class="date-filter" @bind="DataFim" />
+            <button class="btn btn-primary" style="padding: 6px 12px;" @onclick="Filtrar">Filtrar</button>
+        </div>
+        <!--
+        <div class="notification">
+            🔔
+            <div class="badge">17</div>
+        </div>
+        -->
+        <div class="user-info">
+            <div class="user-avatar">GV</div>
+            <div>
+                <div class="user-name">Gerente Vendas</div>
+                <div class="user-role">Administrador</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@using Sofragrancia.UI.Models
+@using Sofragrancia.UI.Utils
+
+<div class="chart-card">
+    <div class="chart-title">@Title</div>
+    <div class="chart-subtitle">@Subtitle</div>
+
+    <div style="width: 100%; height: 25%; margin-top: 20px;">
+        <svg viewBox="-30 -50 1060 390" style="width: 100%; height: 100%; overflow: visible;">
+
+            @for (int i = 0; i <= 4; i++)
+            {
+                double gridY = 300 - (i * 75);
+                <line x1="0" y1="@gridY" x2="1000" y2="@gridY" stroke="#f0f0f0" stroke-width="2" />
+            }
+
+            <polyline fill="none" stroke="#9b59b6" stroke-width="3" points="@GetPolylinePoints()" />
+
+            @for (int i = 0; i < Items.Count; i++)
+            {
+                var item = Items[i];
+                double x = GetX(i);
+                double y = GetY(item.Percentage);
+
+                string xStr = x.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                string yStr = y.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                string yTopStr = (y - 25).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                
+                string corBolinha = CssUtils.GetCorHexadecimal(item.ColorClass);
+
+                <circle cx="@xStr" cy="@yStr" r="6" fill="@corBolinha" stroke="#fff" stroke-width="2" />
+
+                @((MarkupString)$"<text x='{xStr}' y='{yTopStr}' font-size='15' fill='#555' text-anchor='middle' font-weight='600'>{item.ValueText}</text>")
+
+                @((MarkupString)$"<text x='{xStr}' y='340' font-size='14' fill='#888' text-anchor='middle'>{item.Label}</text>")
+            }
+        </svg>
+    </div>
+</div>

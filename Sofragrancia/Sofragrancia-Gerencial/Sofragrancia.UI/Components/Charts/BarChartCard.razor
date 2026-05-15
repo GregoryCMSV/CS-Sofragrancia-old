@@ -1,0 +1,40 @@
+﻿@using Sofragrancia.UI.Utils
+<div class="chart-card">
+    <div class="chart-title">@Title</div>
+    <div class="chart-subtitle">@Subtitle</div>
+
+    <div class="@(IsHorizontal ? "h-bar-chart" : "bar-chart")" style="margin-top: 20px; min-height: 200px;">
+        @if (Items == null || !Items.Any())
+        {
+            <div class="text-center w-100" style="color: #ccc; padding: 40px;">Sem dados para exibir.</div>
+        }
+        else
+        {
+            @foreach (var item in Items)
+            {
+                if (IsHorizontal)
+                {
+                    <div class="h-bar-item">
+                        <div class="h-bar-label">@item.Label</div>
+                        <div class="h-bar-container">
+                            <div class="h-bar-fill @CssUtils.GetBarColorClass(item.ColorClass)"
+                                 style="width: @item.Percentage.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%">
+                                <span class="h-bar-text">@item.ValueText</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="bar-group" style="height: 100%; justify-content: flex-end;">
+                        <div class="bar-value">@item.ValueText</div>
+                        <div class="bar @item.ColorClass"
+                             style="height: @item.Percentage.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%">
+                        </div>
+                        <div class="bar-label">@item.Label</div>
+                    </div>
+                }
+            }
+        }
+    </div>
+</div>

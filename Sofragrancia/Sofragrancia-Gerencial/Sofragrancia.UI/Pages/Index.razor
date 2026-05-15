@@ -1,0 +1,33 @@
+﻿@page "/"
+@using Sofragrancia.UI.Components
+@using Sofragrancia.UI.Components.Charts
+@using Sofragrancia.UI.Components.Tables
+
+<Topbar Title="📊 Dashboard Geral" Breadcrumb="Início > Dashboard" />
+
+<div class="page-content">
+    
+    <div class="kpi-grid">
+        @foreach (var kpi in PinnedKpis.Take(12))
+        {
+            <KpiCard Model="kpi" />
+        }
+    </div>
+
+    <div class="charts-grid mt-4">
+        <BarChartCard Title="Faturamento Diário"
+                      Subtitle="Valores em R$ mil"
+                      Items="DadosFaturamento" 
+                      />
+            
+    </div>
+
+    <DonutChartCard Title="Mix de Vendas"
+                    Subtitle="Por linha de produto"
+                    TotalValue="32"
+                    TotalLabel="produtos"
+                    Items="DadosMixVendas" />
+
+    <RankingTableCard/>
+
+</div>

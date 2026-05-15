@@ -1,0 +1,29 @@
+﻿@using Sofragrancia.UI.Models
+<div class="chart-card">
+    <div class="chart-title">@Title</div>
+    <div class="chart-subtitle">@Subtitle</div>
+    <div class="donut-container">
+        
+        <div class="donut-chart" style="background: @GerarConicGradient();">
+            <div class="donut-center">
+                <div class="value">@TotalValue</div>
+                <div class="label">@TotalLabel</div>
+            </div>
+        </div>
+        
+        <div class="donut-legend">
+            @foreach (var item in Items)
+            {
+                <div class="legend-item">
+                    <div class="legend-left">
+                        <div class="legend-color" style="background: @item.ColorHex"></div>
+                        @item.Label
+                    </div>
+                    <div class="legend-value">@item.ValueText</div>
+                </div>
+            }
+        </div>
+        
+    </div>
+</div>
+

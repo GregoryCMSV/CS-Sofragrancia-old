@@ -1,0 +1,49 @@
+﻿@using Sofragrancia.UI.Models
+<tr style="@(Item.StatusClass == "danger" ? "background-color: #fff5f5;" : "")">
+    <td>
+        @if (Item.Rank == 1)
+        {
+            <span>🥇</span>
+        }
+        else if (Item.Rank == 2)
+        {
+
+            <span>🥈</span>
+        }
+        else if (Item.Rank == 3)
+        {
+
+            <span>🥉</span>
+        }
+        else
+        {
+            <span>@Item.Rank</span>
+        }
+    </td>
+    
+    <td>@Item.Codigo</td>
+    
+    <td class="@(Item.StatusClass == "danger" ? "text-red fw-bold" : (Item.Rank <= 3 ? "fw-bold" : ""))">
+        @Item.Vendedor
+    </td>
+    
+    <td class="text-center">@Item.CotaQtd.ToString("N0")</td>
+    <td class="text-center">@Item.VendidoQtd.ToString("N0")</td>
+    
+    <td>
+        <div class="inline-progress">
+            <div class="bar-container">
+                <div class="bar-fill" style="width: @(Item.PercentualAtingimento > 100 ? 100 : Item.PercentualAtingimento.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%; background: @GetBarColor(); border-radius: 4px;"></div>
+            </div>
+            <span class="percentage @GetTextColor()">@Item.PercentualAtingimento.ToString("0.0")%</span>
+        </div>
+    </td>
+    
+    <td class="text-right @(Item.Rank <= 3 ? "fw-bold" : "")">R$ @Item.Faturamento.ToString("N0")</td>
+    
+    <td>
+        <span class="status-badge @Item.StatusClass">
+            @GetStatusIcon() @Item.StatusNome
+        </span>
+    </td>
+</tr>
