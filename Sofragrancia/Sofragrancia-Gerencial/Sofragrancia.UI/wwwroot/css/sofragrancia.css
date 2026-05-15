@@ -12,6 +12,7 @@ body {
 
 /* ===== SIDEBAR ===== */
 .sidebar {
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -97,7 +98,7 @@ body {
 
 /* ===== MAIN CONTENT ===== */
 .main-content {
-    margin-left: 260px;
+    margin-left: 0px;
     min-height: 100vh;
 }
 
@@ -188,6 +189,32 @@ body {
 .user-role {
     font-size: 11px;
     color: #888;
+}
+
+/* Logo na topbar*/
+.topbar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-right: 20px;
+}
+
+.topbar-brand .logo {
+    font-size: 20px; /* Ajustado para a altura da barra */
+    font-weight: 700;
+    color: #e6a817; /* O dourado original */
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.topbar-brand .subtitle {
+    font-size: 7px; /* Um pouco menor para o topo */
+    color: #888;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* ===== PAGE CONTENT ===== */
