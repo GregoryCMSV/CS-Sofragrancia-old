@@ -197,7 +197,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: center;      /* Garante que o texto em si fique centralizado */
     padding-right: 20px;
 }
 
@@ -210,7 +210,7 @@ body {
 }
 
 .topbar-brand .subtitle {
-    font-size: 7px; /* Um pouco menor para o topo */
+    font-size: 6px; /* Um pouco menor para o topo */
     color: #888;
     margin-top: 2px;
     text-transform: uppercase;

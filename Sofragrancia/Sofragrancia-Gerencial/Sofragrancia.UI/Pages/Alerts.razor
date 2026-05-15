@@ -1,0 +1,57 @@
+@page "/alerts"
+@using Sofragrancia.UI.Components
+
+<Topbar Title="🔔 Central de Alertas" Breadcrumb="Início > Alertas" />
+
+<div class="page-content">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-primary">Alertas Recentes</h5>
+                <span class="badge bg-danger">@ListaAlertas.Count(a => !a.Lido) novos</span>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Status</th>
+                            <th>Data/Hora</th>
+                            <th>Categoria</th>
+                            <th>Mensagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var alerta in ListaAlertas)
+                        {
+                            <tr style="@(alerta.Lido ? "opacity: 0.7;" : "font-weight: bold; border-left: 4px solid #e74c3c;")">
+                                <td>
+                                    @if (alerta.Lido)
+                                    {
+                                        <span class="text-muted">⚪ Lido</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">🔴 Pendente</span>
+                                    }
+                                </td>
+                                <td>@alerta.Data.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    <span class="badge @alerta.CorClasse">@alerta.Categoria</span>
+                                </td>
+                                <td>@alerta.Mensagem</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" @onclick="() => MarcarComoLido(alerta)">
+                                        Marcar como lido
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

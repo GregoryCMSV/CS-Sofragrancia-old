@@ -1,5 +1,12 @@
 ﻿@page "/not-found"
 @layout MainLayout
+@using Sofragrancia.UI.Components
 
-<h3>Not Found</h3>
-<p>Sorry, the content you are looking for does not exist.</p>
+@* Adicionamos a Topbar com um título de erro *@
+<Topbar Title="⚠️ Página não encontrada" Breadcrumb="Erro > 404" />
+
+<div class="page-content" style="text-align: center; padding-top: 100px;">
+    <h1 style="font-size: 4rem; color: #ddd;">404</h1>
+    <h3>Ops! O conteúdo que você procura não existe.</h3>
+    <p class="text-muted">Verifique a URL ou utilize o logo lá em cima para voltar ao Dashboard.</p>
+</div>
