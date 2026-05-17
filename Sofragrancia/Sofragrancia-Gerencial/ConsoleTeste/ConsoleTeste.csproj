@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Sofragrancia.Banco\Sofragrancia.Banco.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CSV\" />
+  </ItemGroup>
+
 </Project>

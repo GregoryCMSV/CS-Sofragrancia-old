@@ -10,6 +10,11 @@ namespace Sofragrancia.ConsoleTest
     {
         static async Task Main(string[] args)
         {
+           
+        }
+
+        private static async Task TesteCadastro()
+        {
             Console.WriteLine("--- Iniciando testes com Autenticação no Supabase ---\n");
 
             string supabaseUrl = "https://uhgzwpwfojcgrlezjpta.supabase.co/";
@@ -64,12 +69,12 @@ namespace Sofragrancia.ConsoleTest
                     IsEnable = true
                 };
 
-                var produtoInserido = await produtoRepo.InserirAsync(novoProduto);
+                var produtoInserido = await produtoRepo.InsertAsync(novoProduto);
                 Console.WriteLine($"Produto inserido com sucesso! ID no banco: {produtoInserido?.Id}\n");
 
-                
+
                 Console.WriteLine("Buscando todos os produtos do banco");
-                var listaProdutos = await produtoRepo.ObterTodosAsync();
+                var listaProdutos = await produtoRepo.GetAllAsync();
 
                 if (listaProdutos != null && listaProdutos.Count > 0)
                 {
