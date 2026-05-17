@@ -14,7 +14,7 @@ namespace Sofragrancia.Banco
             _supabase = supabase;
         }
 
-        public Dictionary<string, object> GetUserOptions => new Dictionary<string, object>()
+        public Dictionary<string, object> GetDefaultUserOptions => new Dictionary<string, object>()
         {
             {"role",""},
             {"nomeCompleto",""}
@@ -24,7 +24,7 @@ namespace Sofragrancia.Banco
         {
             var opcoes = new SignUpOptions
             {
-                Data = metadados ?? GetUserOptions
+                Data = metadados ?? GetDefaultUserOptions
             };
             var session = await _supabase.Auth.SignUp(email, senha, opcoes);
             return session;
