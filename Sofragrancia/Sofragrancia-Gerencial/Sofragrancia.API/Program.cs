@@ -1,21 +1,53 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Sofragrancia.Banco;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Sofragrancia.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var supabaseUrl = builder.Configuration["Supabase:Url"];
+            var supabaseKey = builder.Configuration["Supabase:Key"];
+            var baseInstance = await Sofragrancia.Banco.SofragranciaBaseConnection.GetInstanceAsync(supabaseUrl, supabaseKey);
+            builder.Services.AddScoped<Supabase.Client>(_ => baseInstance.SupabaseClient);
+            var jwtSecret  = @"{
+                ""x"": ""BTc30wJglqPCZZH-AtrkU2nFDsNKxQvzVaqqykQtxoM"",
+                ""y"": ""wmWhwyEkNdbem6Y23Gpg1_bnIC6lJSsUDzg9y_9QU_0"",
+                ""alg"": ""ES256"",
+                ""crv"": ""P-256"",
+                ""ext"": true,
+                ""kid"": ""b01e51b2-e2b5-477c-a1b7-e056c01d163a"",
+                ""kty"": ""EC"",
+                ""key_ops"": [ ""verify"" ]
+            }";
+
+            var ecdsaKey = new JsonWebKey(jwtSecret);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = ecdsaKey,
+                        ValidAudience = "authenticated", 
+                        ValidateIssuer = false, 
+                        ValidateAudience = true
+                    };
+                });
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -23,11 +55,23 @@ namespace Sofragrancia.API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
-            app.MapControllers();
+            app.MapGet("/", () => new
+            {
+                Mensagem = "Bem-vindo à API da Sofragrancia",
+                Status = "Online",
+                EndpointsDisponiveis = new[]
+                {
+                    "POST /api/auth/login - Autenticação de usuário",
+                    "GET /api/products - Listar produtos (Requer Token)",
+                    "POST /api/products - Criar produto (Requer Token)"
+                }
+            });
 
+            app.MapControllers();
             app.Run();
         }
     }
