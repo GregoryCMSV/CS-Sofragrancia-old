@@ -18,7 +18,7 @@ namespace Sofragrancia.UI.Pages
 
         protected void SalvarConfiguracoes()
         {
-            // O código do seu amigo que se comunicará com o banco de dados entrará aqui
+            // O código que se comunicará com o banco de dados entrará aqui
             // Exemplo: await SupabaseClient.From<ConfiguracaoAlerta>().Insert(Config);
             
             System.Diagnostics.Debug.WriteLine($"[Config] Alertas salvos para o e-mail: {Config.EmailDestinatario}");

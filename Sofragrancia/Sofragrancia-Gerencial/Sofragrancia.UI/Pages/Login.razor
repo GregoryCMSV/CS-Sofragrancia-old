@@ -1,0 +1,64 @@
+@page "/login"
+@layout LoginLayout
+
+<div class="login-split-container">
+    
+    <div class="login-hero-side">
+        <div class="hero-content">
+            <div class="hero-logo">🌸</div>
+            <h1 class="hero-brand">SOFRAGRÂNCIA</h1>
+            <p class="hero-tagline">Sistema Gerencial de Vendas</p>
+            <div class="hero-footer-text">
+                Gestão inteligente de todas as áreas do seu Sistema em um só lugar.
+            </div>
+        </div>
+    </div>
+
+    <div class="login-form-side">
+        <div class="login-form-wrapper">
+            
+            <div class="form-header-mobile">
+                <span style="font-size: 28px;">🌸</span>
+                <h2>SOFRAGRÂNCIA</h2>
+            </div>
+
+            <div class="login-title-area">
+                <h2>Seja bem-vindo</h2>
+                <p>Insira suas credenciais corporativas para acessar o painel</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(MensagemErro))
+            {
+                <div class="login-error-message">
+                    ⚠️ @MensagemErro
+                </div>
+            }
+
+            <form @onsubmit="ExecutarLogin">
+                <div class="form-group-login">
+                    <label>E-mail Corporativo</label>
+                    @*Substituir por type="email" depois*@
+                    <input type="text" class="input-login" placeholder="gerente@sofragrancia.com.br / admin" @bind="Email" required />
+                </div>
+
+                <div class="form-group-login">
+                    <label>Senha de Acesso</label>
+                    <input type="password" class="input-login" placeholder="••••••••" @bind="Senha" required />
+                </div>
+
+                <div class="login-options">
+                    <label class="remember-me">
+                        <input type="checkbox" @bind="LembrarMe" /> Lembrar de mim
+                    </label>
+                    <a href="/recuperar-senha" class="forgot-password">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Entrar no Sistema (Use admin/admin por enquanto)
+                </button>
+            </form>
+            
+        </div>
+    </div>
+
+</div>
