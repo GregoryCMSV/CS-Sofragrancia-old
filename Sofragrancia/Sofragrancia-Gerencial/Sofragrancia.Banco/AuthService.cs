@@ -16,7 +16,6 @@ namespace Sofragrancia.Banco
         public async Task<Session> CadastrarUsuarioAsync(string email, string senha)
         {
             var session = await _supabase.Auth.SignUp(email, senha);
-
             return session;
         }
 

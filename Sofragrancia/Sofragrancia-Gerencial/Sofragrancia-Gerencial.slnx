@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="ConsoleTeste/ConsoleTeste.csproj" Id="7c2f8074-1f72-4f1e-ac60-131212378c91" />
   <Project Path="Sofragrancia.API/Sofragrancia.API.csproj" />
   <Project Path="Sofragrancia.Banco/Sofragrancia.Banco.csproj" />
   <Project Path="Sofragrancia.UI/Sofragrancia.UI.csproj" />
