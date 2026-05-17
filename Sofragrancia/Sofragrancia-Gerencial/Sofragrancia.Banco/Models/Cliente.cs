@@ -46,5 +46,8 @@ namespace Sofragrancia.Banco.Models
 
         [Column("codigo")]
         public string Codigo { get; set; }
+
+        [Column("tipo")]
+        public int TipoCliente { get; set; }
     }
 }

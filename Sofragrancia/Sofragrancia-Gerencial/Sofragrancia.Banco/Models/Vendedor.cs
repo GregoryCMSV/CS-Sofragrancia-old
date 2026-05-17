@@ -4,11 +4,14 @@ using Supabase.Postgrest.Models;
 
 namespace Sofragrancia.Banco.Models
 {
-    [Table("Vendedor")]
+    [Table("vendedor")]
     public class Vendedor : BaseModel, IEntidadeBase
     {
         [PrimaryKey("id")]
         public int Id { get; set; }
+
+        [Column("codigo")]
+        public string Codigo { get; set; }
 
         [Column("nome")]
         public string Name { get; set; }
