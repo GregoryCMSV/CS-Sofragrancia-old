@@ -10,6 +10,55 @@ body {
     color: #333;
 }
 
+
+/* ===== SELETOR DE DIAS DA SEMANA (CHECKBOX VISUAL) ===== */
+.days-checkbox-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.day-checkbox-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Oculta o quadrado original do checkbox */
+.day-checkbox-label input {
+    display: none;
+}
+
+/* Estilo do círculo/botão desmarcado */
+.day-checkbox-label span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efeito ao passar o mouse por cima */
+.day-checkbox-label:hover span {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+/* Estilo de quando o checkbox está ATIVO/MARCADO (Usa a paleta azul do seu projeto) */
+.day-checkbox-label input:checked + span {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-color: #2980b9;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+
 /* ===== SIDEBAR ===== */
 .sidebar {
     display: none;
