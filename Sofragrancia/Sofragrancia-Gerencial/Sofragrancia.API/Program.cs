@@ -15,8 +15,8 @@ namespace Sofragrancia.API
 
             var supabaseUrl = builder.Configuration["Supabase:Url"];
             var supabaseKey = builder.Configuration["Supabase:Key"];
-            var baseInstance = await Sofragrancia.Banco.SofragranciaBaseConnection.GetInstanceAsync(supabaseUrl, supabaseKey);
-            builder.Services.AddScoped<Supabase.Client>(_ => baseInstance.SupabaseClient);
+            var baseInstance = await SofragranciaBaseConnection.GetInstanceAsync(supabaseUrl, supabaseKey);
+            builder.Services.AddScoped(_ => baseInstance.SupabaseClient);
             var jwtSecret  = @"{
                 ""x"": ""BTc30wJglqPCZZH-AtrkU2nFDsNKxQvzVaqqykQtxoM"",
                 ""y"": ""wmWhwyEkNdbem6Y23Gpg1_bnIC6lJSsUDzg9y_9QU_0"",
@@ -46,6 +46,16 @@ namespace Sofragrancia.API
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirFrontEnd", policy =>
+                {
+                    policy.WithOrigins("http://localhost:7030")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -54,6 +64,8 @@ namespace Sofragrancia.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("PermitirFrontEnd");
 
             app.UseAuthentication();
             app.UseAuthorization();
