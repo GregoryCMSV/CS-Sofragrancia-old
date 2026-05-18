@@ -1,198 +1,33 @@
 @page "/settings"
 @using Sofragrancia.UI.Components
+@using Sofragrancia.UI.Components.Settings
 
 <Topbar Title="⚙️ Configurações" Breadcrumb="Início > Configurações" />
-
 <div class="page-content">
     
-    <div class="story-banner" style="display: flex; gap: 20px; background: #fff; padding: 25px; border-radius: 12px; border-left: 5px solid #e6a817; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-bottom: 25px;">
-        <div style="font-size: 40px; display: flex; align-items: center;">⚙️</div>
-        <div>
-            <div class="chart-title" style="font-size: 1.25rem; font-weight: 700; color: #1a1a2e; letter-spacing: -0.3px;">Painel de Controle Corporativo</div>
-            <div class="text-muted small" style="margin-top: 6px; line-height: 1.6; color: #5a6a85;">
-                Gerencie as credenciais de segurança do seu perfil e administre os acessos da equipe ao ERP Sofragrância. 
-                Campos de identificação e níveis de permissão são restritos e gerenciados estritamente pela administração.
-            </div>
-        </div>
-    </div>
+    <PageIntroduction
+        Icon="⚙️"
+        Title="Painel de Controle Corporativo"
+        Description="Gerencie as credenciais de segurança do seu perfil e administre os acessos da equipe ao ERP Sofragrância. 
+                    <br>Campos de identificação e níveis de permissão são restritos e gerenciados estritamente pela administração.">
+    </PageIntroduction>
 
-    <div class="tab-nav" style="margin-bottom: 30px; display: flex; gap: 10px; border-bottom: 2px solid #eef0f3; padding-bottom: 0;">
-        <button class="tab-btn @(abaAtiva == "perfil" ? "active" : "")" 
-                @onclick='() => AlternarAba("perfil")'
-                style="padding: 14px 24px; font-weight: 600; font-size: 14px; border: none; background: none; position: relative; color: @(abaAtiva == "perfil" ? "#1a1a2e" : "#718096"); transition: all 0.2s;">
-            👤 Meu Perfil
-            @if (abaAtiva == "perfil") { <div style="position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: #e6a817; border-radius: 3px 3px 0 0;"></div> }
-        </button>
-        <button class="tab-btn @(abaAtiva == "usuarios" ? "active" : "")" 
-                @onclick='() => AlternarAba("usuarios")'
-                style="padding: 14px 24px; font-weight: 600; font-size: 14px; border: none; background: none; position: relative; color: @(abaAtiva == "usuarios" ? "#1a1a2e" : "#718096"); transition: all 0.2s;">
-            ➕ Cadastrar Usuário ERP
-            @if (abaAtiva == "usuarios") { <div style="position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: #e6a817; border-radius: 3px 3px 0 0;"></div> }
-        </button>
-    </div>
+    <TabNavigation
+        Tabs="tabs"
+        ActiveTab="@abaAtiva"
+        ActiveTabChanged="AlternarAba">
+    </TabNavigation>
 
     <div class="tab-container" style="animation: fadeIn 0.3s ease-in-out;">
         
         @if (abaAtiva == "perfil")
         {
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="table-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.02); border: 1px solid #eef0f3;">
-                        
-                        <div style="font-size:18px; font-weight:700; color:#1a1a2e; margin-bottom:6px; letter-spacing: -0.2px;">
-                            Dados de Identificação do Usuário
-                        </div>
-                        <div class="text-muted small" style="margin-bottom: 30px; color: #718096;">
-                            Estes são seus dados cadastrais ativos no ERP Sofragrância. Para retificações, entre em contato com a TI.
-                        </div>
-
-                        @if (!string.IsNullOrEmpty(MensagemSucessoPerfil))
-                        {
-                            <div style="background-color: #d4edda; color: #155724; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #28a745; font-weight: 500; box-shadow: 0 2px 4px rgba(40,167,69,0.05);">
-                                ✅ @MensagemSucessoPerfil
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(MensagemErroPerfil))
-                        {
-                            <div style="background-color: #fcedec; color: #c0392b; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #e74c3c; font-weight: 500; box-shadow: 0 2px 4px rgba(231,76,60,0.05);">
-                                ⚠️ @MensagemErroPerfil
-                            </div>
-                        }
-
-                        <div class="row" style="background: #f8fafc; padding: 24px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #e2e8f0; align-items: center;">
-                            <div class="col-md-4" style="margin-bottom: 12px;">
-                                <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Colaborador</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1a1a2e; margin-top: 6px;">@Perfil.Nome</div>
-                            </div>
-                            <div class="col-md-5" style="margin-bottom: 12px;">
-                                <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">E-mail de Login 🔒</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1a1a2e; margin-top: 6px;">@Perfil.Email</div>
-                            </div>
-                            <div class="col-md-3" style="margin-bottom: 12px;">
-                                <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Nível de Acesso</div>
-                                <div style="margin-top: 6px;">
-                                    <span style="background: @ObterCorFundoCargo(Perfil.PerfilAcesso); color: @ObterCorTextoCargo(Perfil.PerfilAcesso); font-size: 11px; font-weight: 700; padding: 6px 14px; border-radius: 6px; letter-spacing: 0.3px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.03);">
-                                        NÍVEL: @Perfil.PerfilAcesso
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <form @onsubmit="SalvarPerfil">
-                            <div style="margin-bottom: 10px;">
-                                <button type="button" class="tab-btn" 
-                                        style="height: auto; padding: 12px 20px; border: 1px solid #e2e8f0; background: #fff; color: #475569; font-size: 13px; font-weight: 600; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.2s;"
-                                        @onclick="AlternarMenuSenha">
-                                    @(exibirMenuSenha ? "▲ Cancelar Alteração" : "🔑 Alterar Minha Senha de Acesso")
-                                </button>
-                            </div>
-
-                            @if (exibirMenuSenha)
-                            {
-                                <div style="background: #fffdf9; padding: 25px; border-radius: 10px; border: 1px dashed #e6a817; margin-top: 20px; margin-bottom: 25px; animation: fadeIn 0.2s ease-in-out;">
-                                    <div style="font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 18px; letter-spacing: -0.1px;">Atualização de Credenciais de Segurança</div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-4" style="margin-bottom: 15px;">
-                                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase;">Senha Atual</label>
-                                            <input type="password" class="input-login" style="background-color: #fff; border: 2px solid #e2e8f0; padding: 11px 14px; border-radius: 8px;" placeholder="••••••••" @bind="Perfil.SenhaAntiga" required />
-                                        </div>
-                                        <div class="col-md-4" style="margin-bottom: 15px;">
-                                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase;">Nova Senha</label>
-                                            <input type="password" class="input-login" style="background-color: #fff; border: 2px solid #e2e8f0; padding: 11px 14px; border-radius: 8px;" placeholder="Mínimo 6 dígitos" @bind="Perfil.NovaSenha" required />
-                                        </div>
-                                        <div class="col-md-4" style="margin-bottom: 15px;">
-                                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase;">Confirmar Nova Senha</label>
-                                            <input type="password" class="input-login" style="background-color: #fff; border: 2px solid #e2e8f0; padding: 11px 14px; border-radius: 8px;" placeholder="Repita a nova senha" @bind="Perfil.ConfirmacaoNovaSenha" required />
-                                        </div>
-                                    </div>
-
-                                    <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                                        <button type="submit" class="btn-salvar" style="width: auto; padding: 0 25px; height: 42px; font-size: 13px; font-weight: 600; border-radius: 8px;">
-                                            Confirmar Nova Senha
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-                        </form>
-
-                    </div>
-                </div>
-            </div>
+            <MyProfile></MyProfile>
         }
 
         @if (abaAtiva == "usuarios")
-        {
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="table-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.02); border: 1px solid #eef0f3;">
-                        
-                        <div style="font-size:18px; font-weight:700; color:#1a1a2e; margin-bottom:6px; letter-spacing: -0.2px;">
-                            Cadastrar Novo Colaborador
-                        </div>
-                        <div class="text-muted small" style="margin-bottom: 30px; color: #718096;">
-                            Preencha os dados abaixo para gerar um novo login de acesso para a equipe.
-                        </div>
+        {   <NewUser></NewUser>
 
-                        @if (!string.IsNullOrEmpty(MensagemSucessoCadastro))
-                        {
-                            <div style="background-color: #d4edda; color: #155724; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #28a745; font-weight: 500;">
-                                ✅ @MensagemSucessoCadastro
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(MensagemErroCadastro))
-                        {
-                            <div style="background-color: #fcedec; color: #c0392b; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #e74c3c; font-weight: 500;">
-                                ⚠️ @MensagemErroCadastro
-                            </div>
-                        }
-
-                        <form @onsubmit="SalvarNovoUsuario">
-                            <div class="row">
-                                <div class="col-md-6" style="margin-bottom: 24px;">
-                                    <div class="input-container">
-                                        <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Nome Completo</label>
-                                        <input type="text" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="Ex: João Silva" @bind="NovoUsuario.Nome" required />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" style="margin-bottom: 24px;">
-                                    <div class="input-container">
-                                        <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">E-mail Corporativo</label>
-                                        <input type="email" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="joao@sofragrancia.com.br" @bind="NovoUsuario.Email" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6" style="margin-bottom: 24px;">
-                                    <div class="input-container">
-                                        <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Nível de Acesso</label>
-                                        <select class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; height: 48px; border-radius: 8px; -webkit-appearance: none;" @bind="NovoUsuario.PerfilAcesso">
-                                            <option value="Vendedor">Vendedor / Comercial</option>
-                                            <option value="Estoquista">Estoquista / Operacional</option>
-                                            <option value="Gerente">Gerente / Administrador</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" style="margin-bottom: 24px;">
-                                    <div class="input-container">
-                                        <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Senha Provisória</label>
-                                        <input type="password" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="••••••••" @bind="NovoUsuario.Senha" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div style="margin-top: 15px; padding-top: 25px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
-                                <button type="button" class="tab-btn" style="padding: 11px 22px; border: 1px solid #cbd5e1; background: #fff; color:#475569; border-radius: 8px; font-size: 13px; font-weight: 600; height: auto;" @onclick="LimparFormularioCadastro">Limpar</button>
-                                <button type="submit" class="btn-salvar" style="width: auto; padding: 0 30px; height: 44px; border-radius: 8px; font-weight: 600;">Finalizar Cadastro</button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </div>
         }
     </div>
 </div>

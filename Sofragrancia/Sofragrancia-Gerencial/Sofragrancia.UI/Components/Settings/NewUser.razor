@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="table-card" style="background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.02); border: 1px solid #eef0f3;">
+            
+            <div style="font-size:18px; font-weight:700; color:#1a1a2e; margin-bottom:6px; letter-spacing: -0.2px;">
+                Cadastrar Novo Colaborador
+            </div>
+            <div class="text-muted small" style="margin-bottom: 30px; color: #718096;">
+                Preencha os dados abaixo para gerar um novo login de acesso para a equipe.
+            </div>
+
+            @if (!string.IsNullOrEmpty(MensagemSucessoCadastro))
+            {
+                <div style="background-color: #d4edda; color: #155724; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #28a745; font-weight: 500;">
+                    ✅ @MensagemSucessoCadastro
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(MensagemErroCadastro))
+            {
+                <div style="background-color: #fcedec; color: #c0392b; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #e74c3c; font-weight: 500;">
+                    ⚠️ @MensagemErroCadastro
+                </div>
+            }
+
+            <form @onsubmit="SalvarNovoUsuario">
+                <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 24px;">
+                        <div class="input-container">
+                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Nome Completo</label>
+                            <input type="text" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="Ex: João Silva" @bind="NovoUsuario.Nome" required />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" style="margin-bottom: 24px;">
+                        <div class="input-container">
+                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">E-mail Corporativo</label>
+                            <input type="email" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="joao@sofragrancia.com.br" @bind="NovoUsuario.Email" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" style="margin-bottom: 24px;">
+                        <div class="input-container">
+                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Nível de Acesso</label>
+                            <select class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; height: 48px; border-radius: 8px; -webkit-appearance: none;" @bind="NovoUsuario.PerfilAcesso">
+                                <option value="Vendedor">Vendedor / Comercial</option>
+                                <option value="Estoquista">Estoquista / Operacional</option>
+                                <option value="Gerente">Gerente / Administrador</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" style="margin-bottom: 24px;">
+                        <div class="input-container">
+                            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.8px;">Senha Provisória</label>
+                            <input type="password" class="input-login" style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 8px;" placeholder="••••••••" @bind="NovoUsuario.Senha" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 25px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
+                    <button type="button" class="tab-btn" style="padding: 11px 22px; border: 1px solid #cbd5e1; background: #fff; color:#475569; border-radius: 8px; font-size: 13px; font-weight: 600; height: auto;" @onclick="LimparFormularioCadastro">Limpar</button>
+                    <button type="submit" class="btn-salvar" style="width: auto; padding: 0 30px; height: 44px; border-radius: 8px; font-weight: 600;">Finalizar Cadastro</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

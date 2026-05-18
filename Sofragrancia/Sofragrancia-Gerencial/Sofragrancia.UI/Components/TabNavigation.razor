@@ -1,0 +1,62 @@
+<div class="tab-nav">
+    @foreach (var tab in Tabs)
+    {
+        <button class="@(ActiveTab == tab.Id ? "tab-btn active" : "tab-btn")"
+                @onclick='() => OnTabClick(tab.Id)'>
+            @if (!string.IsNullOrEmpty(tab.Icon))
+            {
+                <span class="tab-icon">
+                    @tab.Icon
+                </span>
+            }
+            <span class="tab-title">
+                @tab.Title
+            </span>
+        </button>
+    }
+</div>
+
+<style>
+    .tab-nav {
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+        border-bottom: 2px solid #eef0f3;
+        padding-bottom: 0;
+    }
+    .tab-btn {
+        padding: 14px 24px;
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        background: none;
+        position: relative;
+        color: #718096;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .tab-btn:hover {
+        color: #1a1a2e;
+    }
+    .tab-btn.active {
+        color: #1a1a2e;
+    }
+    .tab-btn.active::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #e6a817;
+        border-radius: 3px 3px 0 0;
+    }
+    .tab-icon {
+        font-size: 15px;
+    }
+    .tab-title {
+        white-space: nowrap;
+    }
+</style>

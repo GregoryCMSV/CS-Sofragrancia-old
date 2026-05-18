@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Sofragrancia.UI.Pages // Ajuste se o namespace do CS-Sofragrancia-old for diferente
+namespace Sofragrancia.UI.Pages
 {
     public partial class Login
     {
@@ -17,7 +17,7 @@ namespace Sofragrancia.UI.Pages // Ajuste se o namespace do CS-Sofragrancia-old 
             if (Email == "admin" && Senha == "admin")
             {
                 MensagemErro = string.Empty;
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("/home");
             }
             else
             {
