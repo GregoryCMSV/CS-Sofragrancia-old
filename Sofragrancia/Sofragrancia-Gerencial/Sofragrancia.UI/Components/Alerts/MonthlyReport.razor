@@ -39,20 +39,20 @@
         </div>
     </div>
 
-    <div style="font-size:14px; font-weight:700; color:#1a1a2e; margin-bottom:12px;">📋 Seções Incluídas no Relatório</div>
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2" style="margin-bottom: 25px;">
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 📊 Dashboard Geral</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 🎯 Cotas e Atingimento</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 💰 Faturamento Detalhado</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 🏆 Ranking Vendedores</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 📦 Performance Produtos</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 👥 Análise de Clientes</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> ❌ Cancelamentos</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 🏭 Posição de Estoque</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 🛡️ Alertas Disparados</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 💹 Variação de Preços</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 📈 15 Análises de BI</label></div>
-        <div class="col"><label style="display:flex; align-items:center; gap:8px; padding:12px; background:#f8f9ff; border-radius:8px; border:1px solid #ddd; font-size:13px; width: 100%;"><input type="checkbox" checked style="width:16px; height:16px;"/> 🔮 Projeções Próx. Mês</label></div>
+        @foreach (var item in SecoesRelatorio)
+        {
+            <div class="col">
+                <label style="display:flex; align-items:center; gap:8px; padding:12px;
+                            background:#f8f9ff; border-radius:8px; border:1px solid #ddd;
+                            font-size:13px; width: 100%;">
+
+                    <input type="checkbox" @bind="item.Ativo"
+                        style="width:16px; height:16px;" />
+                    <span>@item.Icone @item.Titulo</span>
+                </label>
+            </div>
+        }
     </div>
 
     <div style="font-size:14px; font-weight:700; color:#1a1a2e; margin-bottom:12px;">👁️ Preview do Relatório — Março/2026</div>

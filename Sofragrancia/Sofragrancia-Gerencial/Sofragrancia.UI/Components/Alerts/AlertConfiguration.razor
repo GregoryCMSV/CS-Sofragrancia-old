@@ -90,138 +90,32 @@
                 </tr>
             </thead>
             <tbody>
+            @foreach (var item in AlertConfigs)
+            {
                 <tr>
                     <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">🏭 Estoque Crítico</div>
-                        <div class="text-muted small">Alertar quando estoque de qualquer produto atingir limite mínimo</div>
+                        <div class="fw-bold" style="color: #1a1a2e;">@item.Title</div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&le;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.LimiteEstoqueCritico" min="1" />
-                            <span class="text-muted" style="font-size:12px;">un.</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaEstoqueAtivo">
-                        </div>
-                    </td>
-                </tr>
+                            <span class="text-muted" style="font-size:12px;">@item.Operator</span>
 
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">❌ Taxa de Cancelamento</div>
-                        <div class="text-muted small">Alertar quando cancelamentos superarem % do faturamento</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&ge;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.LimiteCancelamento" min="1" />
-                            <span class="text-muted" style="font-size:12px;">%</span>
+                            <input type="number"
+                                class="filter-input"
+                                style="width: 80px; text-align: center;"
+                                @bind="item.Value" />
+                            <span class="text-muted" style="font-size:12px;">@item.Unit</span>
                         </div>
                     </td>
                     <td class="text-center">
                         <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaCancelamentoAtivo">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                @bind="item.IsActive" />
                         </div>
                     </td>
                 </tr>
-
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">🎯 Cobertura de Cota</div>
-                        <div class="text-muted small">Alertar quando vendedor estiver abaixo da meta no meio do mês</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&le;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.LimiteCoberturaCota" min="1" />
-                            <span class="text-muted" style="font-size:12px;">%</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaCotaAtivo">
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">💲 Desconto Excessivo</div>
-                        <div class="text-muted small">Alertar quando vendedor superar limite de desconto configurado</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&ge;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.LimiteDescontoExcessivo" min="1" />
-                            <span class="text-muted" style="font-size:12px;">%</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaDescontoAtivo">
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">📈 Meta Mensal em Risco</div>
-                        <div class="text-muted small">Alertar se projeção do mês estiver abaixo da meta</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&le;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.LimiteMetaRisco" min="1" />
-                            <span class="text-muted" style="font-size:12px;">% meta</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaMetaAtivo">
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">🔄 Cliente Inativo</div>
-                        <div class="text-muted small">Alertar quando cliente estratégico ficar X dias sem comprar</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&ge;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.DiasInatividadeCliente" min="1" />
-                            <span class="text-muted" style="font-size:12px;">dias</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaInatividadeAtivo">
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">💹 Variação de Preço Defasada</div>
-                        <div class="text-muted small">Alertar quando produto estiver sem reajuste acima do IPCA</div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">&ge;</span>
-                            <input type="number" class="filter-input" style="width: 80px; text-align: center;" @bind-value="Config.MesesPrecoDefasado" min="1" />
-                            <span class="text-muted" style="font-size:12px;">meses</span>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input" type="checkbox" @bind="Config.AlertaPrecoDefasado">
-                        </div>
-                    </td>
-                </tr>
+            }
             </tbody>
         </table>
     </div>
@@ -257,7 +151,7 @@
                         <tr>
                             <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Limite</td>
                             <td style="padding:6px 8px; border:1px solid #eee;">
-                                &le; @Config.LimiteEstoqueCritico unidades
+                                &le; @AlertConfigs.First(x => x.Id == "estoque_critico").Value unidades
                             </td>
                         </tr>
                     </table>
