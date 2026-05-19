@@ -4,7 +4,7 @@ using Supabase;
 
 namespace Sofragrancia.API.Controllers
 {
-    public class AlertaController : BaseController<AlertaBase, AlertaRepository>
+    public class AlertaController : BaseController<AlertaBase, AlertaHeaderRepository>
     {
         public AlertaController(Client client) : base(client)
         {
