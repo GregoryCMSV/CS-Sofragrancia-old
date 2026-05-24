@@ -45,16 +45,6 @@ public partial class AlertConfiguration
 
         new()
         {
-            Id = "desconto_excessivo",
-            Title = "💲 Desconto Excessivo",
-            Operator = "≥",
-            Unit = "%",
-            Value = 7.0,
-            IsActive = true
-        },
-
-        new()
-        {
             Id = "meta_risco",
             Title = "📈 Meta Mensal em Risco",
             Operator = "≤",
@@ -72,15 +62,5 @@ public partial class AlertConfiguration
             Value = 20.0,
             IsActive = true
         },
-
-        new()
-        {
-            Id = "preco_defasado",
-            Title = "💹 Variação de Preço Defasada",
-            Operator = "≥",
-            Unit = "meses",
-            Value = 3.0,
-            IsActive = false
-        }
     };
 }

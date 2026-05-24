@@ -24,7 +24,7 @@ namespace Sofragrancia.UI.Pages
             new()
             {
                 Id = "relatorio",
-                Title = "Relatório Mensal",
+                Title = "Relatórios",
                 Icon = "📊"
             }
         };
