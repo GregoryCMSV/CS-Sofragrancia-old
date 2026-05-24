@@ -1,54 +1,5 @@
-﻿@*@page "/"
-@using Sofragrancia.UI.Components
-@using Sofragrancia.UI.Components.Charts
-@using Sofragrancia.UI.Components.Tables
-
-<Topbar Title="📊 Dashboard Geral" Breadcrumb="Início > Dashboard" />
-
-<div class="page-content">
-    
-    <div class="kpi-grid">
-        @foreach (var kpi in PinnedKpis.Take(12))
-        {
-            <KpiCard Model="kpi" />
-        }
-    </div>
-
-    <div class="charts-grid mt-4">
-        <BarChartCard Title="Faturamento Diário"
-                      Subtitle="Valores em R$ mil"
-                      Items="DadosFaturamento" 
-                      />
-            
-    </div>
-
-    <DonutChartCard Title="Mix de Vendas"
-                    Subtitle="Por linha de produto"
-                    TotalValue="32"
-                    TotalLabel="produtos"
-                    Items="DadosMixVendas" />
-
-    <RankingTableCard/>
-
-</div>*@
-
-@page "/"
+﻿@page "/home"
 @using Sofragrancia.UI.Components
 
 <Topbar Title="📊 Dashboard" Breadcrumb="Início" />
-
-<div class="page-content" style="overflow: hidden;">
-    @* 100vw = 100% da largura da janela 
-       calc(100vh - 76px) = Altura total menos a Topbar
-    *@
-    <div style="width: 100vw; height: calc(100vh - 76px); border: none; margin: 0; padding: 0;">
-        <iframe title="Tourism_dashboard" 
-                width="100%" 
-                height="100%" 
-                src="https://app.powerbi.com/view?r=eyJrIjoiZTgxMWVlMTgtM2EyYS00ZjQ0LTg3ZjQtMGZmNTU1YjYwOTgyIiwidCI6ImVhYmU2NGM1LTY4ZjUtNGE3Ni04MzAxLTk1NzdhNjc5ZTQ0OSIsImMiOjR9" 
-                frameborder="0" 
-                allowFullScreen="true"
-                style="display: block; border: 0;">
-        </iframe>
-    </div>
-</div>
+<PowerBIComponent Title="Turismo" Source="@source"></PowerBIComponent>

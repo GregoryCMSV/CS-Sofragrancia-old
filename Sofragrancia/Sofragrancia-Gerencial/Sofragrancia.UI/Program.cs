@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Blazored.LocalStorage;
+using Sofragrancia.UI.Services;
 
 namespace Sofragrancia.UI
 {
@@ -12,6 +14,9 @@ namespace Sofragrancia.UI
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<HttpService>();
 
             await builder.Build().RunAsync();
         }

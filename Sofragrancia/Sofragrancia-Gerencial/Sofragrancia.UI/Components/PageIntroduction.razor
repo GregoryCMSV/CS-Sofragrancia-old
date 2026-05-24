@@ -1,0 +1,38 @@
+<div class="story-banner">
+    <div class="story-banner-icon">
+        @Icon
+    </div>
+    <div>
+        <div class="story-banner-title">
+            @Title
+        </div>
+        <div class="story-banner-description">
+            @((MarkupString)Description)
+        </div>
+    </div>
+</div>
+
+<style>
+    .story-banner {
+        display: flex;
+        gap: 20px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 5px solid #e6a817;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+    }
+    .story-banner-icon {
+        font-size: 40px;
+    }
+    .story-banner-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #1a1a2e;
+    }
+    .story-banner-description {
+        margin-top: 4px;
+        line-height: 1.5;
+    }
+</style>

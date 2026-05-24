@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sofragrancia.Banco\Sofragrancia.Banco.csproj" />
+    <ProjectReference Include="..\Sofragrancia.Shared\Sofragrancia.Shared.csproj" />
   </ItemGroup>
 
 </Project>

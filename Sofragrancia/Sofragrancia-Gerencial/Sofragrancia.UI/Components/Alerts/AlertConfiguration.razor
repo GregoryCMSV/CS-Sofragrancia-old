@@ -1,0 +1,168 @@
+<div class="table-card" style="margin-bottom: 20px;">
+    <div class="table-header" style="margin-bottom: 20px;">
+        <div>
+            <div class="chart-title">📱 Canais de Notificação</div>
+            <div class="chart-subtitle" style="margin-bottom: 0;">Configure onde você quer receber os alertas</div>
+        </div>
+        <button class="btn btn-success" @onclick="SalvarConfiguracoes">
+            💾 Salvar Configurações
+        </button>
+    </div>
+    
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div style="display:flex; align-items:center; gap:12px; padding:16px; background:#d6eaf8; border-radius:10px; border:1px solid #2980b9;">
+                <span style="font-size:28px;">📧</span>
+                <div style="flex:1">
+                    <div style="font-size:13px; font-weight:700; color:#1a1a2e;">E-mail</div>
+                    <input type="email" class="filter-input" style="margin-top:6px; width:100%;" placeholder="gerente@sofragrancia.com.br" @bind-value="Config.EmailDestinatario" />
+                </div>
+                <div class="form-check form-switch m-0">
+                    <input class="form-check-input" type="checkbox" style="cursor: pointer; width: 40px; height: 20px;" @bind="Config.EmailAtivo">
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div style="padding:16px; background:#fafafa; border-radius:10px; border:1px solid #eee; height: 100%;">
+                <div style="font-size:13px; font-weight:700; color:#1a1a2e; margin-bottom:10px;">⏰ Horário e Frequência de Envio</div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:4px;">HORA PREFERIDA</label>
+                        <input type="time" class="filter-input" style="width:100%;" @bind-value="Config.HorarioEnvio" />
+                    </div>
+                    <div class="col-6">
+                        <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:8px;">
+                            DIAS PARA RECEBIMENTO DO RELATÓRIO
+                        </label>
+                        <div class="days-checkbox-container">
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoSegunda" />
+                                <span>S</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoTerca" />
+                                <span>T</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoQuarta" />
+                                <span>Q</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoQuinta" />
+                                <span>Q</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoSexta" />
+                                <span>S</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoSabado" />
+                                <span>S</span>
+                            </label>
+                            <label class="day-checkbox-label">
+                                <input type="checkbox" @bind="Config.FaturamentoDomingo" />
+                                <span>D</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-card" style="margin-bottom: 25px;">
+    <div class="table-header">
+        <div>
+            <div class="chart-title">⚙️ Configuração de Indicadores</div>
+            <div class="chart-subtitle">Defina limites para cada alerta</div>
+        </div>
+    </div>
+    
+    <div style="width: 100%; overflow-x: auto;">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Indicador</th>
+                    <th style="width: 35%;">Limite / Gatilho</th>
+                    <th style="width: 15%; text-align: center;">Ativo</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in AlertConfigs)
+            {
+                <tr>
+                    <td>
+                        <div class="fw-bold" style="color: #1a1a2e;">@item.Title</div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="text-muted" style="font-size:12px;">@item.Operator</span>
+
+                            <input type="number"
+                                class="filter-input"
+                                style="width: 80px; text-align: center;"
+                                @bind="item.Value" />
+                            <span class="text-muted" style="font-size:12px;">@item.Unit</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="form-check form-switch d-inline-block">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                @bind="item.IsActive" />
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*
+<div class="row">
+    <div class="col-md-6">
+        <div class="table-card" style="background: #fafafa; padding: 20px;">
+            <div style="font-size:13px; font-weight:700; color:#1a1a2e; margin-bottom:12px;">📧 Preview Dinâmico — E-mail</div>
+            <div class="email-preview-card" style="background: #fff; border: 1px solid #eee; padding: 0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); overflow: hidden;">
+                
+                <div class="email-preview-header" style="background: #e74c3c; color: #fff; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px;">
+                    🌸 SOFRAGRÂNCIA — Alerta: Estoque Crítico
+                </div>
+                
+                <div class="email-preview-body" style="padding: 20px; font-size: 12px; line-height: 1.6; color: #333;">
+                    Olá, <strong>Gerente</strong>,<br><br>
+                    Um indicador crítico foi detectado no sistema:<br><br>
+                    
+                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                        <tr style="background:#fafafa;">
+                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700; width:35%;">Indicador</td>
+                            <td style="padding:6px 8px; border:1px solid #eee;">Estoque Crítico</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Produto</td>
+                            <td style="padding:6px 8px; border:1px solid #eee;">SONOAR 100ml masc.</td>
+                        </tr>
+                        <tr style="background:#fafafa;">
+                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Valor Atual</td>
+                            <td style="padding:6px 8px; border:1px solid #eee; color:#e74c3c; font-weight:700;">10 unidades</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Limite</td>
+                            <td style="padding:6px 8px; border:1px solid #eee;">
+                                &le; @AlertConfigs.First(x => x.Id == "estoque_critico").Value unidades
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <br>Acesse o sistema para providenciar a reposição.<br><br>
+                    <em style="color:#888; font-size:11px;">Sofragrância — Sistema Gerencial Automático enviado para @Config.EmailDestinatario</em>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+*@

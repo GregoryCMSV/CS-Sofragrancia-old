@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Sofragrancia.Banco;
+using Sofragrancia.Shared.DTOs;
 
 namespace Sofragrancia.API.Controllers
 {
@@ -16,13 +17,13 @@ namespace Sofragrancia.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             try
             {               
                 var session = await _authService.LoginAsync(request.Email, request.Password);
 
-                return Ok(new
+                return Ok(new LoginResponseDto
                 {
                     Mensagem = "Login realizado com sucesso",
                     Token = session.AccessToken
@@ -33,15 +34,6 @@ namespace Sofragrancia.API.Controllers
                 return Unauthorized(new { Erro = "Credenciais inválidas ou usuário não encontrado." });
             }
         }
-    }
-
-    public class LoginRequest
-    {
-        [Required(ErrorMessage = "O email é obrigatorio")]
-        public string Email { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "A senha é obrigatoria")]
-        public string Password { get; set; } = string.Empty;
     }
 }
 
