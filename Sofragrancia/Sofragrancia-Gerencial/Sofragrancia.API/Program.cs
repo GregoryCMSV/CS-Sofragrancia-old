@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using Sofragrancia.Banco;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -50,7 +51,7 @@ namespace Sofragrancia.API
             {
                 options.AddPolicy("PermitirFrontEnd", policy =>
                 {
-                    policy.WithOrigins("http://localhost:7030")
+                    policy.WithOrigins("https://localhost:7030")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
@@ -61,6 +62,11 @@ namespace Sofragrancia.API
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+
+                app.MapScalarApiReference("/", options =>
+                {
+                    options.WithTitle("API Gerencial");
+                });
             }
 
             app.UseHttpsRedirection();
@@ -70,18 +76,6 @@ namespace Sofragrancia.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-
-            app.MapGet("/", () => new
-            {
-                Mensagem = "Bem-vindo à API da Sofragrancia",
-                Status = "Online",
-                EndpointsDisponiveis = new[]
-                {
-                    "POST /api/auth/login - Autenticação de usuário",
-                    "GET /api/products - Listar produtos (Requer Token)",
-                    "POST /api/products - Criar produto (Requer Token)"
-                }
-            });
 
             app.MapControllers();
             app.Run();

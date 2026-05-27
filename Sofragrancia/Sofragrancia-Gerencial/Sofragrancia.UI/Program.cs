@@ -13,7 +13,7 @@ namespace Sofragrancia.UI
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7152/") });
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<HttpService>();
