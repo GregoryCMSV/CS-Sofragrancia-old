@@ -33,5 +33,8 @@ namespace Sofragrancia.Banco.Models.Alertas
 
         [Column("isenable")]
         public bool IsEnable { get; set; }
+
+        [Reference(typeof(AlertaConfigUser))]
+        public List<ItemPedido> Alertas { get; set; }
     }
 }

@@ -12,9 +12,11 @@ namespace Sofragrancia.Banco.Repositories
 {
     public abstract class Repository<T> where T :  BaseModel, IEntidadeBase, new()
     {
-        private readonly Client _supabase;
+        protected readonly Client _supabase;
 
         private static readonly PropertyInfo[] _propriedadesLimpas;
+
+        public static PropertyInfo[] PropriedadesLimpas { get => _propriedadesLimpas.ToArray(); private set;  }
 
         static Repository()
         {

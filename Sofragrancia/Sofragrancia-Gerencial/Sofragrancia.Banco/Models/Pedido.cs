@@ -48,5 +48,8 @@ namespace Sofragrancia.Banco.Models
 
         [Column("isenable")]
         public bool IsEnable { get; set; }
+
+        [Reference(typeof(ItemPedido))]
+        public List<ItemPedido> Itens { get; set; }
     }
 }

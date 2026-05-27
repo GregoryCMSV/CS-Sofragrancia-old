@@ -1,4 +1,5 @@
-﻿using Sofragrancia.Banco.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Sofragrancia.Banco.Models;
 using Sofragrancia.Banco.Repositories;
 using Supabase;
 
