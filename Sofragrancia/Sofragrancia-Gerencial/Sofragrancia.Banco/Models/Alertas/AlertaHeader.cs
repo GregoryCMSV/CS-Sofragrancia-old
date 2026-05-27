@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Sofragrancia.Banco.Models.Alertas
 {
-    [Table("alertaconfigurado")]
+    [Table("alertaheader")]
     public class AlertaHeader : BaseModel, IEntidadeBase
     {
         [PrimaryKey("id")]

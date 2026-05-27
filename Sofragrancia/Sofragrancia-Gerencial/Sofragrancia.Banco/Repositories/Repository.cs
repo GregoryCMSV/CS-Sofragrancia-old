@@ -2,6 +2,7 @@
 using Sofragrancia.Banco.Models;
 using Supabase;
 using Supabase.Postgrest.Models;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
@@ -52,7 +53,45 @@ namespace Sofragrancia.Banco.Repositories
             return response.Models.FirstOrDefault();
         }
         #endregion
-        
+
+        protected dynamic GenerateCleanObject(object item, Type tipo = null)
+        {
+            if (item == null) return null;
+
+            tipo ??= item.GetType();
+            var expando = new ExpandoObject() as IDictionary<string, object>;
+
+            var propriedades = tipo.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                   .Where(p => p.DeclaringType == tipo);
+
+            foreach (var prop in propriedades)
+            {
+                var valor = prop.GetValue(item);
+
+                if (valor is IEnumerable lista && prop.PropertyType != typeof(string))
+                {
+                    var tipoDaLista = prop.PropertyType.IsGenericType
+                                      ? prop.PropertyType.GetGenericArguments()[0]
+                                      : null;
+
+                    if (tipoDaLista != null && typeof(IEntidadeBase).IsAssignableFrom(tipoDaLista))
+                    {
+                        var listaLimpa = new List<dynamic>();
+                        foreach (var subItem in lista)
+                        {
+                            listaLimpa.Add(GenerateCleanObject(subItem, tipoDaLista));
+                        }
+                        expando[prop.Name] = listaLimpa;
+                        continue; 
+                    }
+                }
+
+                expando[prop.Name] = valor;
+            }
+
+            return expando;
+        }
+
         public virtual async Task<dynamic> InsertModelAsync(T produto)
         {
             var response = await _supabase.From<T>().Insert(produto);
@@ -62,14 +101,7 @@ namespace Sofragrancia.Banco.Repositories
                 return null;
             }
 
-            var expando = new ExpandoObject() as IDictionary<string, object>;
-
-            foreach (var prop in _propriedadesLimpas)
-            {
-                expando[prop.Name] = prop.GetValue(item);
-            }
-
-            return expando;
+            return GenerateCleanObject(item,typeof(T));
         }
 
         public virtual async Task<List<dynamic>> GetAllModelAsync()
@@ -79,14 +111,7 @@ namespace Sofragrancia.Banco.Repositories
 
             foreach (var item in response.Models)
             {
-                var expando = new ExpandoObject() as IDictionary<string, object>;
-
-                foreach (var prop in _propriedadesLimpas)
-                {
-                    expando[prop.Name] = prop.GetValue(item);
-                }
-
-                listaLimpa.Add(expando);
+                listaLimpa.Add(GenerateCleanObject(item, typeof(T)));
             }
 
             return listaLimpa;
@@ -103,14 +128,7 @@ namespace Sofragrancia.Banco.Repositories
                 return null;
             }
 
-            var expando = new ExpandoObject() as IDictionary<string, object>;
-
-            foreach (var prop in _propriedadesLimpas)
-            {
-                expando[prop.Name] = prop.GetValue(item);
-            }
-
-            return expando;
+            return GenerateCleanObject(item,typeof(T));
         }
 
         public virtual async Task<dynamic> UpdateByID(int id, Dictionary<string, object> atualizacoes)
@@ -148,13 +166,7 @@ namespace Sofragrancia.Banco.Repositories
             var updateResponse = await _supabase.From<T>().Update(itemAtual);
             var itemAtualizado = updateResponse.Models.FirstOrDefault();
 
-            var expando = new ExpandoObject() as IDictionary<string, object>;
-            foreach (var prop in _propriedadesLimpas) 
-            {
-                expando[prop.Name] = prop.GetValue(itemAtualizado);
-            }
-
-            return expando;
+            return GenerateCleanObject(itemAtualizado,typeof(T));
         }
     }
 }
