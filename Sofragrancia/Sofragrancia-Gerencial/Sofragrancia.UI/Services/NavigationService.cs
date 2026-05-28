@@ -1,0 +1,45 @@
+using Microsoft.AspNetCore.Components;
+
+namespace Sofragrancia.UI.Services;
+
+public class NavigationService
+{
+    private readonly NavigationManager _navigation;
+    private readonly TokenService _tokenService;
+
+    public NavigationService(
+        NavigationManager navigation,
+        TokenService tokenService,
+        HttpService httpService)
+    {
+        _navigation = navigation;
+        _tokenService = tokenService;
+
+        httpService.OnUnauthorized += HandleUnauthorized;
+    }
+
+    private async void HandleUnauthorized()
+    {
+        await _tokenService.RemoverTokenAsync();
+        _navigation.NavigateTo("/login", true);
+    }
+
+    public async Task NavigateAsync(string destino)
+    {
+        if (destino == "/login")
+        {
+            await _tokenService.RemoverTokenAsync();
+            _navigation.NavigateTo("/login", true);
+            return;
+        }
+
+        if (await _tokenService.TokenValidoAsync())
+        {
+            _navigation.NavigateTo(destino);
+            return;
+        }
+
+        await _tokenService.RemoverTokenAsync();
+        _navigation.NavigateTo("/login", true);
+    }
+}

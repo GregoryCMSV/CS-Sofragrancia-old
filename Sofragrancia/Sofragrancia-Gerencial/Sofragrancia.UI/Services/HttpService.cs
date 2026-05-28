@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -7,6 +8,7 @@ public class HttpService
 {
     private readonly HttpClient _httpClient;
     private readonly TokenService _tokenService;
+    public event Action? OnUnauthorized;
 
     public HttpService(
         HttpClient httpClient,
@@ -25,21 +27,40 @@ public class HttpService
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", token);
         }
+        else
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+    }
+
+    private async Task<HttpResponseMessage> SendAsync(
+        Func<Task<HttpResponseMessage>> request)
+    {
+        await ConfigurarTokenAsync();
+
+        var response = await request();
+
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            await _tokenService.RemoverTokenAsync();
+
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+
+            OnUnauthorized?.Invoke();
+        }
+
+        return response;
     }
 
     public async Task<HttpResponseMessage> GetAsync(string endpoint)
-    {
-        await ConfigurarTokenAsync();
+        => await SendAsync(() => _httpClient.GetAsync(endpoint));
 
-        return await _httpClient.GetAsync(endpoint);
-    }
+    public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
+        => await SendAsync(() => _httpClient.PostAsJsonAsync(endpoint, data));
 
-    public async Task<HttpResponseMessage> PostAsync<T>(
-        string endpoint,
-        T data)
-    {
-        await ConfigurarTokenAsync();
+    public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)
+        => await SendAsync(() => _httpClient.PutAsJsonAsync(endpoint, data));
 
-        return await _httpClient.PostAsJsonAsync(endpoint, data);
-    }
+    public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
+        => await SendAsync(() => _httpClient.DeleteAsync(endpoint));
 }

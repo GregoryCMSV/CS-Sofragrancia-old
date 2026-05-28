@@ -21,4 +21,9 @@ public class TokenService
     {
         await _localStorage.RemoveItemAsync(TOKEN_KEY);
     }
+    public async Task<bool> TokenValidoAsync()
+    {
+        var token = await ObterTokenAsync();
+        return !string.IsNullOrEmpty(token);
+    }
 }

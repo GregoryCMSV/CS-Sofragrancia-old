@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Sofragrancia.UI.Services;
 
 namespace Sofragrancia.UI.Components
 {
     public partial class Topbar
     {
         // Injeta o serviço de navegação
-        [Inject] public NavigationManager Navigation { get; set; } = default!;
+        [Inject] public NavigationService NavigationService{ get; set; } = default!;
+
+        [Inject]
+        protected TokenService TokenService { get; set; } = default!;
         [Parameter] public string Title { get; set; } = "Dashboard Geral";
         [Parameter] public string Breadcrumb { get; set; } = "Início > Dashboard";
 
@@ -22,10 +26,16 @@ namespace Sofragrancia.UI.Components
         }
 
         // Método para navegar e fechar o menu
-        private void IrPara(string rota)
+        private async Task IrPara(string rota)
         {
             exibirMenu = false;
-            Navigation.NavigateTo(rota);
+            await NavigationService.NavigateAsync(rota);
+        }
+
+        protected async Task Logout()
+        {
+            await TokenService.RemoverTokenAsync();
+            await NavigationService.NavigateAsync("/login");
         }
     }
 }

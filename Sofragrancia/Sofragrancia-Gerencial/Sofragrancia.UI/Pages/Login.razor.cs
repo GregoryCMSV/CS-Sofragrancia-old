@@ -8,7 +8,7 @@ namespace Sofragrancia.UI.Pages
     public partial class Login
     {
         [Inject]
-        protected NavigationManager Navigation { get; set; } = default!;
+        protected NavigationService NavigationService { get; set; } = default!;
         [Inject]
         protected HttpService HttpService { get; set; } = default!;
         [Inject]
@@ -23,8 +23,9 @@ namespace Sofragrancia.UI.Pages
         {
             if (Email == "admin" && Senha == "admin")
             {
+                await TokenService.SalvarTokenAsync("mock-token");
                 MensagemErro = string.Empty;
-                Navigation.NavigateTo("/home");
+                await NavigationService.NavigateAsync("/home");
 
                 return;
             }
@@ -48,10 +49,7 @@ namespace Sofragrancia.UI.Pages
                 if (result?.Token is not null)
                 {
                     await TokenService.SalvarTokenAsync(result.Token);
-
-                    MensagemErro = string.Empty;
-
-                    Navigation.NavigateTo("/home");
+                    await NavigationService.NavigateAsync("/home");
                 }
             }
             else

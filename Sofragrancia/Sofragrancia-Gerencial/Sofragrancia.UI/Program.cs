@@ -17,6 +17,7 @@ namespace Sofragrancia.UI
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<HttpService>();
+            builder.Services.AddScoped<NavigationService>();
 
             await builder.Build().RunAsync();
         }
