@@ -3,13 +3,14 @@
 @using Sofragrancia.UI.Components
 
 <Topbar Title="🔔 Central de Alertas" Breadcrumb="Início > Alertas" />
+
 <div class="page-content">
     
     <PageIntroduction
-    Icon="🔔"
-    Title="Central de Alertas & Relatórios"
-    Description="Configure alertas antecipados para indicadores críticos e receba notificações por e-mail antes que os problemas virem crise. 
-                <br>No final de cada mês, receba um relatório completo com todas as análises da empresa consolidadas em um único documento.">
+        Icon="🔔"
+        Title="Central de Alertas & Relatórios"
+        Description="Configure alertas antecipados para indicadores críticos e receba notificações por e-mail antes que os problemas virem crise. 
+                    <br>No final de cada mês, receba um relatório completo com todas as análises da empresa consolidadas em um único documento.">
     </PageIntroduction>
 
     <TabNavigation
@@ -21,13 +22,11 @@
     <div class="aba-container">
         @if (abaAtiva == "configurar")
         {
-            <AlertConfiguration>
-            </AlertConfiguration>
+            <AlertConfiguration />
         }
         else if (abaAtiva == "relatorio")
         {
-            <MonthlyReport>
-            </MonthlyReport>
+            <MonthlyReport />
         }
     </div>
 </div>

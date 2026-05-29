@@ -18,12 +18,13 @@
 
 <style>
     .tab-nav {
-        margin-bottom: 30px;
+        margin-bottom: 10px; /* Dá o espaço ideal para o card respirar */
         display: flex;
         gap: 10px;
-        border-bottom: 2px solid #eef0f3;
+        border-bottom: none; 
         padding-bottom: 0;
     }
+    
     .tab-btn {
         padding: 14px 24px;
         font-weight: 600;
@@ -37,25 +38,31 @@
         align-items: center;
         gap: 8px;
     }
+    
     .tab-btn:hover {
         color: #1a1a2e;
     }
+    
     .tab-btn.active {
         color: #1a1a2e;
     }
+    
     .tab-btn.active::after {
         content: "";
         position: absolute;
-        bottom: -2px;
+        /* Altere bottom de -2px para 0px para colar a barra dourada na base do botão */
+        bottom: 0px; 
         left: 0;
         right: 0;
         height: 3px;
         background: #e6a817;
         border-radius: 3px 3px 0 0;
     }
+    
     .tab-icon {
         font-size: 15px;
     }
+    
     .tab-title {
         white-space: nowrap;
     }

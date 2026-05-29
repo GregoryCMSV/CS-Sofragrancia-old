@@ -24,6 +24,6 @@ public class TokenService
     public async Task<bool> TokenValidoAsync()
     {
         var token = await ObterTokenAsync();
-        return !string.IsNullOrEmpty(token);
+        return !string.IsNullOrWhiteSpace(token);
     }
 }

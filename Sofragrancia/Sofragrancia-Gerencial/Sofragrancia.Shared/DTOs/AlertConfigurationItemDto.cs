@@ -1,4 +1,6 @@
-public class AlertConfigItem
+namespace Sofragrancia.Shared.Dtos;
+
+public class AlertConfigurationItemDto
 {
     public required string Id { get; set; }
     public required string Title { get; set; }

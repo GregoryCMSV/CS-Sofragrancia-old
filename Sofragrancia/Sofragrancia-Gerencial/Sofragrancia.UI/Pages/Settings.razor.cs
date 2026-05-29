@@ -1,39 +1,35 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Sofragrancia.UI.Components;
-using Sofragrancia.UI.Components.Settings;
 
-namespace Sofragrancia.UI.Pages
+namespace Sofragrancia.UI.Pages;
+
+public partial class Settings : ComponentBase
 {
-    public partial class Settings : ComponentBase
+    // Controla de forma fluida qual aba de configuração está ativa na tela
+    protected string abaAtiva = "perfil";
+
+    // REMOVIDOS os objetos "Perfil" e "NovoUsuario" antigos que causavam o erro de compilação,
+    // já que agora MyProfile e NewUser gerenciam seus próprios DTOs de forma isolada.
+
+    protected List<TabNavigation.TabItem> tabs = new()
     {
-        protected string abaAtiva = "perfil";
-
-        protected List<TabNavigation.TabItem> tabs = new()
+        new()
         {
-            new()
-            {
-                Id = "perfil",
-                Title = "Meu Perfil",
-                Icon = "👤"
-            },
-
-            new()
-            {
-                Id = "usuarios",
-                Title = "Cadastrar Usuário",
-                Icon = "➕"
-            }
-        };
-
-
-        protected PerfilModel Perfil { get; set; } = new PerfilModel();
-        protected CadastroUsuarioModel NovoUsuario { get; set; } = new CadastroUsuarioModel();
-
-        protected void AlternarAba(string novaAba)
+            Id = "perfil",
+            Title = "Meu Perfil",
+            Icon = "👤"
+        },
+        new()
         {
-            abaAtiva = novaAba;
-            //LimparTodasAsMensagens();
-            StateHasChanged();
+            Id = "cadastrar",
+            Title = "Cadastrar Colaborador",
+            Icon = "➕"
         }
+    };
+
+    protected void AlternarAba(string novaAba)
+    {
+        abaAtiva = novaAba;
     }
 }

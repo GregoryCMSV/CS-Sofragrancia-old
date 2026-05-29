@@ -4,21 +4,18 @@
             <div class="chart-title">📱 Canais de Notificação</div>
             <div class="chart-subtitle" style="margin-bottom: 0;">Configure onde você quer receber os alertas</div>
         </div>
-        <button class="btn btn-success" @onclick="SalvarConfiguracoes">
-            💾 Salvar Configurações
-        </button>
     </div>
     
-    <div class="row g-3">
+    <div class="row g-3 mb-4"> 
         <div class="col-md-6">
             <div style="display:flex; align-items:center; gap:12px; padding:16px; background:#d6eaf8; border-radius:10px; border:1px solid #2980b9;">
                 <span style="font-size:28px;">📧</span>
                 <div style="flex:1">
                     <div style="font-size:13px; font-weight:700; color:#1a1a2e;">E-mail</div>
-                    <input type="email" class="filter-input" style="margin-top:6px; width:100%;" placeholder="gerente@sofragrancia.com.br" @bind-value="Config.EmailDestinatario" />
+                    <input type="email" class="filter-input" style="margin-top:6px; width:100%;" placeholder="gerente@sofragrancia.com.br" @bind-value="Model.EmailDestinatario" />
                 </div>
                 <div class="form-check form-switch m-0">
-                    <input class="form-check-input" type="checkbox" style="cursor: pointer; width: 40px; height: 20px;" @bind="Config.EmailAtivo">
+                    <input class="form-check-input" type="checkbox" style="cursor: pointer; width: 40px; height: 20px;" @bind="Model.EmailAtivo">
                 </div>
             </div>
         </div>
@@ -29,50 +26,27 @@
                 <div class="row g-2">
                     <div class="col-6">
                         <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:4px;">HORA PREFERIDA</label>
-                        <input type="time" class="filter-input" style="width:100%;" @bind-value="Config.HorarioEnvio" />
+                        <input type="time" class="filter-input" style="width:100%;" @bind-value="Model.HorarioEnvio" />
                     </div>
                     <div class="col-6">
                         <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:8px;">
                             DIAS PARA RECEBIMENTO DO RELATÓRIO
                         </label>
                         <div class="days-checkbox-container">
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoSegunda" />
-                                <span>S</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoTerca" />
-                                <span>T</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoQuarta" />
-                                <span>Q</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoQuinta" />
-                                <span>Q</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoSexta" />
-                                <span>S</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoSabado" />
-                                <span>S</span>
-                            </label>
-                            <label class="day-checkbox-label">
-                                <input type="checkbox" @bind="Config.FaturamentoDomingo" />
-                                <span>D</span>
-                            </label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoSegunda" /><span>S</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoTerca" /><span>T</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoQuarta" /><span>Q</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoQuinta" /><span>Q</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoSexta" /><span>S</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoSabado" /><span>S</span></label>
+                            <label class="day-checkbox-label"><input type="checkbox" @bind="Model.FaturamentoDomingo" /><span>D</span></label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="table-card" style="margin-bottom: 25px;">
     <div class="table-header">
         <div>
             <div class="chart-title">⚙️ Configuração de Indicadores</div>
@@ -80,38 +54,51 @@
         </div>
     </div>
     
-    <div style="width: 100%; overflow-x: auto;">
-        <table class="table align-middle">
+    <div style="width: 100%; overflow-x: auto; margin-bottom: 24px;"> 
+        <table class="table table-hover align-middle m-0" style="border-collapse: separate; border-spacing: 0;"> 
             <thead>
                 <tr>
-                    <th style="width: 50%;">Indicador</th>
-                    <th style="width: 35%;">Limite / Gatilho</th>
-                    <th style="width: 15%; text-align: center;">Ativo</th>
+                    <th style="width: 40%; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #7f8c8d; border-bottom: 2px solid #edf2f7; padding: 10px 16px;">Indicador</th>
+                    <th style="width: 35%; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #7f8c8d; border-bottom: 2px solid #edf2f7; padding: 10px 16px;">Condição / Operador</th>
+                    <th style="width: 15%; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #7f8c8d; border-bottom: 2px solid #edf2f7; padding: 10px 16px;">Valor Limite</th>
+                    <th style="width: 10%; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #7f8c8d; border-bottom: 2px solid #edf2f7; padding: 10px 16px; text-align: center;">Ativo</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in AlertConfigs)
+            @foreach (var item in Model.Indicators)
             {
-                <tr>
-                    <td>
-                        <div class="fw-bold" style="color: #1a1a2e;">@item.Title</div>
+                <tr style="opacity: @(item.IsActive ? "1" : "0.45"); transition: all 0.2s ease-in-out;">
+                    <td style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
+                        <div class="fw-semibold" style="color: #2c3e50; font-size: 13px;">@item.Title</div>
                     </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-1">
-                            <span class="text-muted" style="font-size:12px;">@item.Operator</span>
-
-                            <input type="number"
-                                class="filter-input"
-                                style="width: 80px; text-align: center;"
-                                @bind="item.Value" />
-                            <span class="text-muted" style="font-size:12px;">@item.Unit</span>
+                    
+                    <td style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
+                        <select class="form-select form-select-sm" 
+                                style="cursor: pointer; border-radius: 6px; border-color: #cbd5e1; color: #4a5568; font-size: 12px; padding: 4px 8px; max-width: 180px;" 
+                                @bind="item.Operator">
+                            @foreach (var op in OperadoresDisponiveis)
+                            {
+                                <option value="@op.Key">@op.Value</option>
+                            }
+                        </select>
+                    </td>
+                    
+                    <td style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="number" 
+                                   class="form-control form-control-sm text-center" 
+                                   style="max-width: 70px; height: 28px; font-size: 12px; font-weight: 500; color: #2d3748; border-radius: 6px; border-color: #cbd5e1; padding: 2px 6px;" 
+                                   @bind="item.Value" />
+                            
+                            <span style="font-size: 12px; color: #94a3b8; font-weight: 500; user-select: none;">
+                                @item.Unit
+                            </span>
                         </div>
                     </td>
-                    <td class="text-center">
+                    
+                    <td class="text-center" style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
                         <div class="form-check form-switch d-inline-block">
-                            <input class="form-check-input"
-                                type="checkbox"
-                                @bind="item.IsActive" />
+                            <input class="form-check-input" type="checkbox" style="cursor: pointer; transform: scale(1.05);" @bind="item.IsActive" />
                         </div>
                     </td>
                 </tr>
@@ -119,50 +106,10 @@
             </tbody>
         </table>
     </div>
-</div>
 
-@*
-<div class="row">
-    <div class="col-md-6">
-        <div class="table-card" style="background: #fafafa; padding: 20px;">
-            <div style="font-size:13px; font-weight:700; color:#1a1a2e; margin-bottom:12px;">📧 Preview Dinâmico — E-mail</div>
-            <div class="email-preview-card" style="background: #fff; border: 1px solid #eee; padding: 0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); overflow: hidden;">
-                
-                <div class="email-preview-header" style="background: #e74c3c; color: #fff; padding: 10px 15px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px;">
-                    🌸 SOFRAGRÂNCIA — Alerta: Estoque Crítico
-                </div>
-                
-                <div class="email-preview-body" style="padding: 20px; font-size: 12px; line-height: 1.6; color: #333;">
-                    Olá, <strong>Gerente</strong>,<br><br>
-                    Um indicador crítico foi detectado no sistema:<br><br>
-                    
-                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
-                        <tr style="background:#fafafa;">
-                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700; width:35%;">Indicador</td>
-                            <td style="padding:6px 8px; border:1px solid #eee;">Estoque Crítico</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Produto</td>
-                            <td style="padding:6px 8px; border:1px solid #eee;">SONOAR 100ml masc.</td>
-                        </tr>
-                        <tr style="background:#fafafa;">
-                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Valor Atual</td>
-                            <td style="padding:6px 8px; border:1px solid #eee; color:#e74c3c; font-weight:700;">10 unidades</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:6px 8px; border:1px solid #eee; font-weight:700;">Limite</td>
-                            <td style="padding:6px 8px; border:1px solid #eee;">
-                                &le; @AlertConfigs.First(x => x.Id == "estoque_critico").Value unidades
-                            </td>
-                        </tr>
-                    </table>
-                    
-                    <br>Acesse o sistema para providenciar a reposição.<br><br>
-                    <em style="color:#888; font-size:11px;">Sofragrância — Sistema Gerencial Automático enviado para @Config.EmailDestinatario</em>
-                </div>
-
-            </div>
-        </div>
+    <div class="d-flex justify-content-end align-items-center gap-2 pt-3" style="border-top: 1px solid #eee;">
+        <button class="btn btn-success px-4 py-2 fw-bold" style="border-radius: 8px; font-size: 14px;" @onclick="SalvarConfiguracoes">
+            💾 Salvar Configurações
+        </button>
     </div>
 </div>
-*@
