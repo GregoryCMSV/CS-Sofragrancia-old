@@ -35,6 +35,6 @@ namespace Sofragrancia.Banco.Models.Alertas
         public bool IsEnable { get; set; }
 
         [Reference(typeof(AlertaConfigUser))]
-        public List<ItemPedido> Alertas { get; set; }
+        public List<AlertaConfigUser> Alertas { get; set; }
     }
 }

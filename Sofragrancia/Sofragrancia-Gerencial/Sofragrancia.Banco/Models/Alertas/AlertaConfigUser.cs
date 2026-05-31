@@ -14,10 +14,10 @@ namespace Sofragrancia.Banco.Models.Alertas
         public int Id { get; set; }
 
         [Column("id_header")]
-        public string IdHeader { get; set; }
+        public int IdHeader { get; set; }
 
         [Column("id_alertabase")]
-        public string IdAlertaBase { get; set; }
+        public int IdAlertaBase { get; set; }
 
         [Column("gatilho")]
         public int Trigger { get; set; }

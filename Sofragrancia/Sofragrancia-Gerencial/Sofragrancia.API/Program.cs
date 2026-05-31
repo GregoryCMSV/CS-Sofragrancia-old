@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -28,6 +29,8 @@ namespace Sofragrancia.API
                 ""kty"": ""EC"",
                 ""key_ops"": [ ""verify"" ]
             }";
+
+            builder.Services.AddScoped<AlertService>();
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
 
