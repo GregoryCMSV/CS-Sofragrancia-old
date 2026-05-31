@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace Sofragrancia.UI.Services;
@@ -15,13 +16,18 @@ public class NavigationService
         _navigation = navigation;
         _tokenService = tokenService;
 
+        // Ouve o evento do HttpService. Quando a API rejeitar o token, ele limpa tudo.
         httpService.OnUnauthorized += HandleUnauthorized;
     }
 
-    private async void HandleUnauthorized()
+    // 🛠️ Ajustado para rodar em background com segurança sem travar a UI (Fire and Forget)
+    private void HandleUnauthorized()
     {
-        await _tokenService.RemoverTokenAsync();
-        _navigation.NavigateTo("/login", true);
+        _ = Task.Run(async () =>
+        {
+            await _tokenService.RemoverTokenAsync();
+            _navigation.NavigateTo("/login", true);
+        });
     }
 
     public async Task NavigateAsync(string destino)

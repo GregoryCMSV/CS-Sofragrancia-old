@@ -38,7 +38,6 @@
             <form @onsubmit="ExecutarLogin">
                 <div class="form-group-login">
                     <label>E-mail Corporativo</label>
-                    @*Substituir por type="email" depois*@
                     <input type="text" class="input-login" placeholder="gerente@sofragrancia.com.br / admin" @bind="Email" required />
                 </div>
 
@@ -51,7 +50,7 @@
                     <label class="remember-me">
                         <input type="checkbox" @bind="LembrarMe" /> Lembrar de mim
                     </label>
-                    <a href="/recuperar-senha" class="forgot-password">Esqueceu a senha?</a>
+                    <button type="button" class="forgot-password" style="background: none; border: none; padding: 0; cursor: pointer;" @onclick="AbrirModal">Esqueceu a senha?</button>
                 </div>
 
                 <button type="submit" class="btn-login">
@@ -63,3 +62,56 @@
     </div>
 
 </div>
+
+@if (ExibirModalRecuperar)
+{
+    <div class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close-btn" @onclick="FecharModal">✕</button>
+
+            @if (!EnviouEmailRecuperacao)
+            {
+                <div class="login-title-area" style="margin-bottom: 20px;">
+                    <h2>Recuperar Senha</h2>
+                    <p>Insira o seu e-mail corporativo cadastrado para receber as instruções de redefinição.</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(MensagemErroModal))
+                {
+                    <div class="login-error-message">
+                        ⚠️ @MensagemErroModal
+                    </div>
+                }
+
+                <form @onsubmit="ProcessarRecuperacaoSenha">
+                    <div class="form-group-login">
+                        <label>E-mail Corporativo</label>
+                        <input type="email" class="input-login" placeholder="seu-email@sofragrancia.com.br" @bind="EmailRecuperacao" required />
+                    </div>
+
+                    <button type="submit" class="btn-login" style="margin-top: 10px;">
+                        @if (CarregandoModal)
+                        {
+                            <span>Enviando...</span>
+                        }
+                        else
+                        {
+                            <span>Enviar Link de Recuperação</span>
+                        }
+                    </button>
+                </form>
+            }
+            else
+            {
+                <div class="modal-success-state">
+                    <span class="modal-success-icon">📧</span>
+                    <h2 class="login-title-area" style="color: #1a1a2e; font-size: 22px; margin-bottom: 10px;">Verifique seu e-mail</h2>
+                    <p style="font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 25px;">
+                        Enviamos um link de recuperação para o endereço <strong style="color: #1a1a2e;">@EmailRecuperacao</strong>. O link expira em 15 minutos.
+                    </p>
+                    <button type="button" class="btn-login" @onclick="FecharModal">Voltar para o Login</button>
+                </div>
+            }
+        </div>
+    </div>
+}

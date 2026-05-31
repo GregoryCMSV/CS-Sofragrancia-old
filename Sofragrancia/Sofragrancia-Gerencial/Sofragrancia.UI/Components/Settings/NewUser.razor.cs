@@ -1,17 +1,21 @@
 using System;
+using System.Threading.Tasks; // Adicionado para suportar chamadas async de API
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 using Sofragrancia.Shared.Dtos;
+using Sofragrancia.UI.Services; 
 
 namespace Sofragrancia.UI.Components.Settings;
 
 public partial class NewUser
 {
-    // Estado isolado usando o novo DTO da Shared
-    protected UserRegistrationDto NovoUsuario { get; set; } = new();
+    [Inject] protected HttpService HttpService { get; set; } = default!;
 
+    protected UserRegistrationDto NovoUsuario { get; set; } = new();
     protected string MensagemSucessoCadastro { get; set; } = string.Empty;
     protected string MensagemErroCadastro { get; set; } = string.Empty;
 
-    protected void SalvarNovoUsuario()
+    protected async Task SalvarNovoUsuario()
     {
         LimparTodasAsMensagens();
 
@@ -23,9 +27,23 @@ public partial class NewUser
 
         try
         {
-            // TODO: Integrar chamada à API/Supabase aqui futuramente
+            // Simulação de delay para o feedback visual de salvamento na apresentação
+            await Task.Delay(1000); 
+
+
+            // [INTEGRACAO_API]
+            /*
+            var response = await HttpService.PostAsync("api/usuario/cadastrar", NovoUsuario);
+            if (!response.IsSuccessStatusCode) 
+            {
+                MensagemErroCadastro = "Não foi possível salvar o colaborador no servidor.";
+                return;
+            }
+            */
+
+            // [INTEGRACAO_API]
             MensagemSucessoCadastro = $"Colaborador '{NovoUsuario.Nome}' cadastrado com sucesso como '{NovoUsuario.PerfilAcesso}'!";
-            NovoUsuario = new UserRegistrationDto(); // Reseta o form limpo
+            NovoUsuario = new UserRegistrationDto();
         }
         catch (Exception)
         {

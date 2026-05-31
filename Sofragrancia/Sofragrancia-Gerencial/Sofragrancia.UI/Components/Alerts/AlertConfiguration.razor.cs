@@ -1,10 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json; // Lib para consumo do GetFromJsonAsync
 using Sofragrancia.Shared.Dtos;
+using Sofragrancia.UI.Services; 
 
 namespace Sofragrancia.UI.Components.Alerts;
 
 public partial class AlertConfiguration
 { 
+    [Inject] protected HttpService HttpService { get; set; } = default!;
+
     // O DTO unificado que agora gerencia o estado da tela inteira
     protected AlertConfigurationDto Model { get; set; } = new();
 
@@ -21,10 +28,9 @@ public partial class AlertConfiguration
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Buscar dados reais da sua API/Banco aqui
-        // Model = await SeuServico.GetAlertConfigurationAsync();
-        
-        // Dados iniciais de teste (Mock)
+        // [INTEGRACAO_API]
+        // Model = await HttpService.GetFromJsonAsync<AlertConfigurationDto>("api/configuracoes/alertas") ?? new();
+
         Model = CarregarDadosIniciais();
     }
 
@@ -32,8 +38,20 @@ public partial class AlertConfiguration
     {   
         try
         {
-            // O objeto 'Model' já chega aqui 100% atualizado com tudo da tela
-            // await SeuServico.SaveAlertConfigurationAsync(Model);
+            // Simulação de delay para feedback visual de salvamento na apresentação
+            await Task.Delay(1000); 
+
+
+            // [INTEGRACAO_API]
+            /*
+            var response = await HttpService.PostAsync("api/configuracoes/alertas", Model);
+            if (!response.IsSuccessStatusCode) 
+            {
+                // Tratar erro de salvamento aqui se necessário
+                return;
+            }
+            */
+
             
             System.Diagnostics.Debug.WriteLine($"[Sucesso] Configurações enviadas para o banco!");
             System.Diagnostics.Debug.WriteLine($"E-mail ativo: {Model.EmailAtivo} | Destinatário: {Model.EmailDestinatario}");

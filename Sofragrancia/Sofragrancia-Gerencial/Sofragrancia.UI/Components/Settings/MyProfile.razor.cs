@@ -1,11 +1,16 @@
 using System;
+using System.Threading.Tasks; 
 using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 using Sofragrancia.Shared.Dtos;
+using Sofragrancia.UI.Services; 
 
 namespace Sofragrancia.UI.Components.Settings;
 
 public partial class MyProfile
 {
+    [Inject] protected HttpService HttpService { get; set; } = default!;
+
     // Estado isolado usando o novo DTO da Shared
     protected UserProfileDto Perfil { get; set; } = new();
 
@@ -13,12 +18,16 @@ public partial class MyProfile
     protected string MensagemSucessoPerfil { get; set; } = string.Empty;
     protected string MensagemErroPerfil { get; set; } = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // Simulação da carga de dados da sessão do usuário logado
+
+        // [INTEGRACAO_API]
+        // Perfil = await HttpService.GetFromJsonAsync<UserProfileDto>("api/usuario/perfil") ?? new();
+
+
         Perfil.Nome = "Benjamin Franklin";
         Perfil.Email = "gerente@sofragrancia.com.br";
-        Perfil.PerfilAcesso = "Gerente"; 
+        Perfil.PerfilAcesso = "Gerente";
     }
 
     protected void AlternarMenuSenha()
@@ -33,7 +42,7 @@ public partial class MyProfile
         }
     }
 
-    protected void SalvarPerfil()
+    protected async Task SalvarPerfil()
     {
         MensagemSucessoPerfil = string.Empty;
         MensagemErroPerfil = string.Empty;
@@ -60,7 +69,19 @@ public partial class MyProfile
 
         try
         {
-            // TODO: Integrar chamada à API/Supabase aqui futuramente
+            // Simulação de delay para o feedback visual de carregamento na apresentação
+            await Task.Delay(1000); 
+
+            // [INTEGRACAO_API]
+            /*
+            var response = await HttpService.PostAsync("api/usuario/alterar-senha", Perfil);
+            if (!response.IsSuccessStatusCode) 
+            {
+                MensagemErroPerfil = "Não foi possível atualizar a senha no servidor.";
+                return;
+            }
+            */
+
             MensagemSucessoPerfil = "Sua senha foi updated com sucesso!";
             AlternarMenuSenha(); 
         }

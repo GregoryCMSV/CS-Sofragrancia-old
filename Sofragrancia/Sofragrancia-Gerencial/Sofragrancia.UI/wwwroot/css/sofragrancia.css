@@ -1467,3 +1467,69 @@ table {
 .mb-20 {
     margin-bottom: 20px;
 }
+
+/* ===== MODAL FLUTUANTE: RECUPERAÇÃO DE SENHA ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(26, 26, 46, 0.8); /* Fundo #1a1a2e com opacidade */
+    backdrop-filter: blur(4px); /* Efeito moderno de desfoque ao fundo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeInModal 0.2s ease-in-out;
+}
+
+.modal-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    position: relative;
+    border: 1px solid rgba(230, 168, 23, 0.2); /* Sutil borda dourada */
+    animation: scaleUpModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+    color: #c0392b;
+}
+
+.modal-success-state {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.modal-success-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+/* Animações de entrada */
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleUpModal {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
