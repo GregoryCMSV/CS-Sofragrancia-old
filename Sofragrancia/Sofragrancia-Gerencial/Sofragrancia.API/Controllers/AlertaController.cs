@@ -10,5 +10,7 @@ namespace Sofragrancia.API.Controllers
         {
             _repository = new(client);
         }
+
+       
     }
 }

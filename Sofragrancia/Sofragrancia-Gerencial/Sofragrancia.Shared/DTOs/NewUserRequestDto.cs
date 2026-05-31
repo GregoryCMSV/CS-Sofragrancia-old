@@ -8,7 +8,12 @@ namespace Sofragrancia.Shared.DTOs
     {
         public string Email { get; set; }
         public string Senha { get; set; }
-        public string Role { get; set; } 
+        public UserMetaData MetaDados { get; set; }
+    }
+
+    public record UserMetaData
+    {
+        public string Role { get; set; }
         public string NomeCompleto { get; set; }
     }
 }
