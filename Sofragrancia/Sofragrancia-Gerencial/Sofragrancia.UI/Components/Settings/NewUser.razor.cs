@@ -19,6 +19,7 @@ public partial class NewUser
     {
         LimparTodasAsMensagens();
 
+        // Validação local rápida (evita fazer requisição desnecessária se o form estiver vazio)
         if (string.IsNullOrWhiteSpace(NovoUsuario.Nome) || string.IsNullOrWhiteSpace(NovoUsuario.Email))
         {
             MensagemErroCadastro = "Por favor, preencha todos os campos obrigatórios.";
@@ -27,27 +28,31 @@ public partial class NewUser
 
         try
         {
-            // Simulação de delay para o feedback visual de salvamento na apresentação
+            // ⏳ Simulação de delay mantida para a apresentação local
             await Task.Delay(1000); 
 
+            // 🚀 Faz a chamada real para a rota corrigida
+            var response = await HttpService.PostAsync("api/usuario/cadastro", NovoUsuario);
 
-            // [INTEGRACAO_API]
-            /*
-            var response = await HttpService.PostAsync("api/usuario/cadastrar", NovoUsuario);
-            if (!response.IsSuccessStatusCode) 
+            if (response.IsSuccessStatusCode)
             {
-                MensagemErroCadastro = "Não foi possível salvar o colaborador no servidor.";
-                return;
+                // 🟢 SUCESSO: Lê o JSON gerado pelo "return Ok(new { Mensagem = ... })"
+                var resultadoSucesso = await response.Content.ReadFromJsonAsync<RespostaSucessoApiDto>();
+                
+                MensagemSucessoCadastro = resultadoSucesso?.Mensagem ?? "Colaborador cadastrado com sucesso!";
+                NovoUsuario = new UserRegistrationDto(); // Limpa o formulário
             }
-            */
-
-            // [INTEGRACAO_API]
-            MensagemSucessoCadastro = $"Colaborador '{NovoUsuario.Nome}' cadastrado com sucesso como '{NovoUsuario.PerfilAcesso}'!";
-            NovoUsuario = new UserRegistrationDto();
+            else
+            {
+                // 🔴 ERRO: Lê o JSON gerado pelo "return StatusCode(403)" ou "return BadRequest(new { Erro = ... })"
+                var resultadoErro = await response.Content.ReadFromJsonAsync<RespostaErroApiDto>();
+                
+                MensagemErroCadastro = resultadoErro?.Erro ?? "Não foi possível salvar o colaborador no servidor.";
+            }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            MensagemErroCadastro = "Falha técnica ao tentar salvar o colaborador no banco de dados.";
+            MensagemErroCadastro = $"Falha técnica ao tentar se comunicar com o servidor: {ex.Message}";
         }
     }
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Sofragrancia.Shared.DTOs;
+namespace Sofragrancia.Shared.Dtos;
 
 public class LoginRequestDto
 {

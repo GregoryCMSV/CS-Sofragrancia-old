@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using Sofragrancia.Shared.DTOs;
+using Sofragrancia.Shared.Dtos;
 using System;
 using System.Net.Http.Json;
 using System.Threading.Tasks;

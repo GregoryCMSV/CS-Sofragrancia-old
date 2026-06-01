@@ -1,5 +1,9 @@
 using Blazored.LocalStorage;
 using Microsoft.Extensions.DependencyInjection; 
+using System;
+using System.Threading.Tasks;
+using System.Net.Http.Json;
+using Sofragrancia.Shared.Dtos;
 
 namespace Sofragrancia.UI.Services;
 
@@ -10,7 +14,6 @@ public class TokenService
     private const string TOKEN_KEY = "authToken";
     private const string LEMBRAR_KEY = "lembrarMe";
     
-    // 🚀 Guarda em memória se a aba atual está em uso
     private bool _sessaoAtiva = false; 
 
     public TokenService(ILocalStorageService localStorage, IServiceProvider serviceProvider)
@@ -23,7 +26,7 @@ public class TokenService
     {
         await _localStorage.SetItemAsync(TOKEN_KEY, token);
         await _localStorage.SetItemAsync(LEMBRAR_KEY, lembrarMe);
-        _sessaoAtiva = true; // 👈 Ativa a sessão na memória
+        _sessaoAtiva = true; 
     }
 
     public async Task<string?> ObterTokenAsync()
@@ -35,7 +38,7 @@ public class TokenService
     {
         await _localStorage.RemoveItemAsync(TOKEN_KEY);
         await _localStorage.RemoveItemAsync(LEMBRAR_KEY);
-        _sessaoAtiva = false; // 👈 Derruba a sessão em memória
+        _sessaoAtiva = false; 
     }
 
     public async Task<bool> TokenValidoAsync()
@@ -45,23 +48,40 @@ public class TokenService
 
         var lembrarMe = await _localStorage.GetItemAsync<bool>(LEMBRAR_KEY);
 
-        // 🧠 SE A SESSÃO JÁ ESTÁ ATIVA: Significa que ele está navegando de uma tela para outra.
-        // Não importa se marcou LembrarMe ou não, ele está online!
-        if (_sessaoAtiva)
+        if (!_sessaoAtiva && !lembrarMe)
         {
-            return true;
-        }
-
-        // 🧠 SE A SESSÃO NÃO ESTÁ ATIVA: Significa que o app acabou de ligar (F5 ou nova aba).
-        if (!lembrarMe)
-        {
-            // Se ele não pediu para persistir, limpamos tudo e mandamos pro login.
             await RemoverTokenAsync();
             return false;
         }
-
-        // Se ele pediu para lembrar, reativamos a sessão em memória e deixamos passar
+        
         _sessaoAtiva = true;
         return true;
+        /*
+        try
+        {
+            var httpService = _serviceProvider.GetRequiredService<HttpService>();
+            var response = await httpService.GetAsync("api/auth/validate");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await RemoverTokenAsync();
+                return false;
+            }
+            var resultado = await response.Content.ReadFromJsonAsync<RespostaValidacaoTokenDto>();
+
+            if (resultado is not null && resultado.IsValid)
+            {
+                _sessaoAtiva = true;
+                return true;
+            }
+            await RemoverTokenAsync();
+            return false;
+        }
+        catch (Exception)
+        {
+            await RemoverTokenAsync();
+            return false;
+        }
+        */
     }
 }

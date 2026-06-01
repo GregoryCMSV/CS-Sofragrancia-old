@@ -70,16 +70,60 @@ public partial class AlertConfiguration
             EmailDestinatario = "gerente@sofragrancia.com.br",
             EmailAtivo = true,
             HorarioEnvio = new TimeOnly(17, 0, 0),
-            FaturamentoSegunda = true,
-            FaturamentoQuarta = true,
-            FaturamentoSexta = true,
             Indicators = new()
             {
-                new() { Id = "estoque_critico", Title = "🏭 Estoque Crítico", Operator = "<=", Unit = "un.", Value = 50.0, IsActive = true },
-                new() { Id = "cancelamento", Title = "❌ Taxa de Cancelamento", Operator = "<=", Unit = "%", Value = 5.0, IsActive = true },
-                new() { Id = "cobertura_cota", Title = "🎯 Cobertura de Cota", Operator = "<=", Unit = "%", Value = 40.0, IsActive = true },
-                new() { Id = "meta_risco", Title = "📈 Meta Mensal em Risco", Operator = "<=", Unit = "% meta", Value = 90.0, IsActive = true },
-                new() { Id = "cliente_inativo", Title = "🔄 Cliente Inativo", Operator = ">=", Unit = "dias", Value = 20.0, IsActive = true }
+                new() { 
+                    Id = "estoque_critico", 
+                    Title = "🏭 Estoque Crítico", 
+                    Operator = "<=", 
+                    Unit = "un.", 
+                    Value = 50.0, 
+                    IsActive = true,
+                    OperadoresPermitidos = new() { "<=", "<" },
+                    UnidadesPermitidas = new() { "un." }
+                },
+                new() { 
+                    Id = "cobertura_cota", 
+                    Title = "🎯 Cobertura de Cota", 
+                    Operator = "<=", 
+                    Unit = "%", 
+                    Value = 40.0, 
+                    IsActive = true, 
+                    OperadoresPermitidos = new() { "<=", "<" },
+                    UnidadesPermitidas = new() { "%" } // 👈 Ajustado para % condizendo com o indicador
+                },
+                new() { 
+                    Id = "cancelamento", 
+                    Title = "❌ Taxa de Cancelamento", 
+                    Operator = ">=", 
+                    Unit = "%", 
+                    Value = 5.0, 
+                    IsActive = true,
+                    OperadoresPermitidos = new() { ">=" },
+                    UnidadesPermitidas = new() { "%" }
+                },
+                // 🚀 ADICIONADO NOVAMENTE AQUI:
+                new() { 
+                    Id = "meta_risco", 
+                    Title = "📈 Meta Mensal em Risco", 
+                    Operator = "<=", 
+                    Unit = "% meta", 
+                    Value = 90.0, 
+                    IsActive = true,
+                    // 🔒 Travado para avisar apenas se ficar abaixo da porcentagem esperada
+                    OperadoresPermitidos = new() { "<=" },
+                    UnidadesPermitidas = new() { "% meta" }
+                },
+                new() { 
+                    Id = "cliente_inativo", 
+                    Title = "🔄 Cliente Inativo", 
+                    Operator = ">=", 
+                    Unit = "dias", 
+                    Value = 20.0, 
+                    IsActive = true,
+                    OperadoresPermitidos = new() { ">=", ">", "==" },
+                    UnidadesPermitidas = new() { "dias", "meses" }
+                }
             }
         };
     }

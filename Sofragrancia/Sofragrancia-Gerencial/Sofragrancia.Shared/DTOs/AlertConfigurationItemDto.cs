@@ -8,4 +8,6 @@ public class AlertConfigurationItemDto
     public required string Unit { get; set; }
     public double Value { get; set; }
     public bool IsActive { get; set; }
+    public List<string> OperadoresPermitidos { get; set; } = new();
+    public List<string> UnidadesPermitidas { get; set; } = new();
 }

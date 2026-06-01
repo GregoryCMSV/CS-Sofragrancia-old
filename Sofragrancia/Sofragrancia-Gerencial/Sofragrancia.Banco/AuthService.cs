@@ -1,4 +1,4 @@
-﻿using Sofragrancia.Shared.DTOs;
+﻿using Sofragrancia.Shared.Dtos;
 using Supabase;
 using Supabase.Gotrue;
 using Supabase.Interfaces;

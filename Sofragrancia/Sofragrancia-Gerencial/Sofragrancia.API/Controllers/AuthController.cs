@@ -2,7 +2,7 @@
 using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
 using Sofragrancia.Banco.Repositories;
-using Sofragrancia.Shared.DTOs;
+using Sofragrancia.Shared.Dtos;
 using Supabase.Gotrue;
 using System.IdentityModel.Tokens.Jwt;
 

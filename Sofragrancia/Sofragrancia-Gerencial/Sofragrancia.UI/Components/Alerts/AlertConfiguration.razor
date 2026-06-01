@@ -73,26 +73,46 @@
                     </td>
                     
                     <td style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
-                        <select class="form-select form-select-sm" 
-                                style="cursor: pointer; border-radius: 6px; border-color: #cbd5e1; color: #4a5568; font-size: 12px; padding: 4px 8px; max-width: 180px;" 
-                                @bind="item.Operator">
-                            @foreach (var op in OperadoresDisponiveis)
-                            {
-                                <option value="@op.Key">@op.Value</option>
-                            }
-                        </select>
+                        @if (item.OperadoresPermitidos.Count > 1)
+                        {
+                            // 🔓 Se houver mais de uma opção, vira um Select ativo
+                            <select class="form-select form-select-sm" style="cursor: pointer; border-radius: 6px; border-color: #cbd5e1; color: #4a5568; font-size: 12px; padding: 4px 8px; max-width: 180px;" @bind="item.Operator">
+                                @foreach (var op in item.OperadoresPermitidos)
+                                {
+                                    <option value="@op">@(OperadoresDisponiveis.ContainsKey(op) ? OperadoresDisponiveis[op] : op)</option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            // 🔒 Se houver só uma opção, exibe como texto fixo elegante
+                            <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 12px; font-weight: 500;">
+                                @(OperadoresDisponiveis.ContainsKey(item.Operator) ? OperadoresDisponiveis[item.Operator] : item.Operator)
+                            </span>
+                        }
                     </td>
                     
                     <td style="padding: 12px 16px; border-bottom: 1px solid #edf2f7;">
                         <div class="d-flex align-items-center gap-2">
-                            <input type="number" 
-                                   class="form-control form-control-sm text-center" 
-                                   style="max-width: 70px; height: 28px; font-size: 12px; font-weight: 500; color: #2d3748; border-radius: 6px; border-color: #cbd5e1; padding: 2px 6px;" 
-                                   @bind="item.Value" />
+                            <input type="number" class="form-control form-control-sm text-center" style="max-width: 70px; height: 28px; font-size: 12px; font-weight: 500; color: #2d3748; border-radius: 6px; border-color: #cbd5e1; padding: 2px 6px;" @bind="item.Value" />
                             
-                            <span style="font-size: 12px; color: #94a3b8; font-weight: 500; user-select: none;">
-                                @item.Unit
-                            </span>
+                            @if (item.UnidadesPermitidas.Count > 1)
+                            {
+                                // 🔓 Nova funcionalidade: Unidade vira um select se houver mais de uma opção (ex: dias/meses)
+                                <select class="form-select form-select-sm" style="cursor: pointer; border-radius: 6px; border-color: #cbd5e1; color: #4a5568; font-size: 12px; padding: 2px 4px; max-width: 90px; height: 28px;" @bind="item.Unit">
+                                    @foreach (var uni in item.UnidadesPermitidas)
+                                    {
+                                        <option value="@uni">@uni</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                // 🔒 Unidade fica fixa se só houver uma cadastrada no banco
+                                <span style="font-size: 12px; color: #94a3b8; font-weight: 500; user-select: none;">
+                                    @item.Unit
+                                </span>
+                            }
                         </div>
                     </td>
                     

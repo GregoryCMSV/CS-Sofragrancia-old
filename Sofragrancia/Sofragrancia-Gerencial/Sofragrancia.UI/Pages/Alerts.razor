@@ -13,12 +13,32 @@
                     <br>No final de cada mês, receba um relatório completo com todas as análises da empresa consolidadas em um único documento.">
     </PageIntroduction>
 
+    @*
     <TabNavigation
         Tabs="tabs"
         ActiveTab="@abaAtiva"
         ActiveTabChanged="AlternarAba">
     </TabNavigation>
+    *@
 
+    @*Versão sem aba relatório*@
+    <div class="aba-container">
+        @* 🚀 RENDERIZAÇÃO DIRETA: Agora exibe a configuração de alertas direto na página inteira *@
+        <AlertConfiguration />
+
+        @* 🛑 COMENTADO: A lógica antiga de alternar abas e o relatório mensal ficam guardados aqui
+        @if (abaAtiva == "configurar")
+        {
+            <AlertConfiguration />
+        }
+        else if (abaAtiva == "relatorio")
+        {
+            <MonthlyReport />
+        }
+        *@
+    </div>
+    
+    @*Versão com aba relatório
     <div class="aba-container">
         @if (abaAtiva == "configurar")
         {
@@ -29,4 +49,5 @@
             <MonthlyReport />
         }
     </div>
+    *@
 </div>
