@@ -11,16 +11,21 @@ public partial class NewUser
 {
     [Inject] protected HttpService HttpService { get; set; } = default!;
 
-    protected UserRegistrationDto NovoUsuario { get; set; } = new();
+    protected NewUserRequestDto NovoUsuario { get; set; } = new();
     protected string MensagemSucessoCadastro { get; set; } = string.Empty;
     protected string MensagemErroCadastro { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        NovoUsuario.MetaDados = new();
+    }
 
     protected async Task SalvarNovoUsuario()
     {
         LimparTodasAsMensagens();
 
         // Validação local rápida (evita fazer requisição desnecessária se o form estiver vazio)
-        if (string.IsNullOrWhiteSpace(NovoUsuario.Nome) || string.IsNullOrWhiteSpace(NovoUsuario.Email))
+        if (string.IsNullOrWhiteSpace(NovoUsuario.MetaDados.NomeCompleto) || string.IsNullOrWhiteSpace(NovoUsuario.Email))
         {
             MensagemErroCadastro = "Por favor, preencha todos os campos obrigatórios.";
             return;
@@ -29,10 +34,11 @@ public partial class NewUser
         try
         {
             // ⏳ Simulação de delay mantida para a apresentação local
-            await Task.Delay(1000); 
+            //await Task.Delay(1000); 
 
+            NovoUsuario.MetaDados.Role = "Admin";
             // 🚀 Faz a chamada real para a rota corrigida
-            var response = await HttpService.PostAsync("api/usuario/cadastro", NovoUsuario);
+            var response = await HttpService.PostAsync("api/auth/cadastro", NovoUsuario);
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,7 +46,8 @@ public partial class NewUser
                 var resultadoSucesso = await response.Content.ReadFromJsonAsync<RespostaSucessoApiDto>();
                 
                 MensagemSucessoCadastro = resultadoSucesso?.Mensagem ?? "Colaborador cadastrado com sucesso!";
-                NovoUsuario = new UserRegistrationDto(); // Limpa o formulário
+                NovoUsuario = new();
+                NovoUsuario.MetaDados = new();// Limpa o formulário
             }
             else
             {
@@ -58,7 +65,7 @@ public partial class NewUser
 
     protected void LimparFormularioCadastro()
     {
-        NovoUsuario = new UserRegistrationDto();
+        NovoUsuario = new();
         LimparTodasAsMensagens();
     }
 

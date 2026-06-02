@@ -15,5 +15,6 @@ public record UserMetaData
 {
     public string Role { get; set; }
     public string NomeCompleto { get; set; }
+
 }
 

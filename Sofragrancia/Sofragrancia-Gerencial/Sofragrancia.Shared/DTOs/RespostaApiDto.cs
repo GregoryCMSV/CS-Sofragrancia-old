@@ -1,8 +1,13 @@
+using System.Text.Json.Serialization;
+
 namespace Sofragrancia.Shared.Dtos;
 
 public class RespostaSucessoApiDto
 {
+    [JsonPropertyName("mensagem")]
     public string Mensagem { get; set; } = string.Empty;
+
+    [JsonPropertyName("userId")]
     public string UserId { get; set; } = string.Empty;
 }
 

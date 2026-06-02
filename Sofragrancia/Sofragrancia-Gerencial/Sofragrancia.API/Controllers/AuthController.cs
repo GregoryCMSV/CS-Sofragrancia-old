@@ -59,7 +59,7 @@ namespace Sofragrancia.API.Controllers
                     _configuration["Supabase:Pkey"]!
                     );
 
-                await _alertController.SincronizarAlertasDoUsuarioAsync(novoUserId, request.Email);
+                //await _alertController.SincronizarAlertasDoUsuarioAsync(novoUserId, request.Email);
 
                 return Ok(new { Mensagem = "Usuário e alertas configurados com sucesso!", UserId = novoUserId });
             }
