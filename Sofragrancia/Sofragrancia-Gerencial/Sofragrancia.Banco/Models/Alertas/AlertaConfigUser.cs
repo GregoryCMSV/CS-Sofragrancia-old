@@ -19,6 +19,9 @@ namespace Sofragrancia.Banco.Models.Alertas
         [Column("id_alertabase")]
         public int IdAlertaBase { get; set; }
 
+        [Reference(typeof(AlertaBase))]
+        public AlertaBase AlertaBaseDados { get; set; }
+
         [Column("gatilho")]
         public int Trigger { get; set; }
 

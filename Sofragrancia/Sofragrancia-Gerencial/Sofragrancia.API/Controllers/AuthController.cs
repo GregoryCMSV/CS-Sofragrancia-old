@@ -54,12 +54,14 @@ namespace Sofragrancia.API.Controllers
                     return StatusCode(403, new { Erro = "Acesso negado. Apenas administradores podem cadastrar." });
                 }
 
-                string novoUserId = await _authService.CadastrarUsuarioInternoAsync(
+                (string novoUserId, string errorMessage) = await _authService.CadastrarUsuarioInternoAsync(
                     request,
                     _configuration["Supabase:Pkey"]!
                     );
 
-                //await _alertController.SincronizarAlertasDoUsuarioAsync(novoUserId, request.Email);
+                if(string.IsNullOrEmpty(novoUserId)) return BadRequest(new { Erro = errorMessage });
+
+                await _alertController.SincronizarAlertasDoUsuarioAsync(novoUserId, request.Email);
 
                 return Ok(new { Mensagem = "Usuário e alertas configurados com sucesso!", UserId = novoUserId });
             }

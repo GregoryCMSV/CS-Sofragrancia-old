@@ -45,9 +45,15 @@ namespace Sofragrancia.Banco.Repositories
                     AtualizadoEm = DateTime.UtcNow,
                     IsEnable = true
                 };
+                try
+                {
+                    var insertHeaderResponse = await _supabase.From<AlertaHeader>().Insert(novoHeader);
+                    header = insertHeaderResponse.Models.FirstOrDefault();
+                }
+                catch (Exception e)
+                {
 
-                var insertHeaderResponse = await _supabase.From<AlertaHeader>().Insert(novoHeader);
-                header = insertHeaderResponse.Models.FirstOrDefault();
+                }
             }
 
             return header;

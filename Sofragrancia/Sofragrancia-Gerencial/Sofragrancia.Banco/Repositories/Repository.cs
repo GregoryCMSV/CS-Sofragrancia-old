@@ -1,5 +1,6 @@
 ﻿using Sofragrancia.Banco.Interfaces;
 using Sofragrancia.Banco.Models;
+using Sofragrancia.Banco.Models.Alertas;
 using Supabase;
 using Supabase.Postgrest.Models;
 using System.Collections;
@@ -68,7 +69,13 @@ namespace Sofragrancia.Banco.Repositories
             {
                 var valor = prop.GetValue(item);
 
-                if (valor is IEnumerable lista && prop.PropertyType != typeof(string))
+                if (valor != null && typeof(IEntidadeBase).IsAssignableFrom(prop.PropertyType))
+                {
+                    expando[prop.Name] = GenerateCleanObject(valor, prop.PropertyType);
+                    continue;
+                }
+
+                if (valor is IEnumerable lista  && prop.PropertyType != typeof(string))
                 {
                     var tipoDaLista = prop.PropertyType.IsGenericType
                                       ? prop.PropertyType.GetGenericArguments()[0]
@@ -167,6 +174,22 @@ namespace Sofragrancia.Banco.Repositories
             var itemAtualizado = updateResponse.Models.FirstOrDefault();
 
             return GenerateCleanObject(itemAtualizado,typeof(T));
+        }
+
+        public async Task<dynamic> GetByEmailAsync(string email)
+        {
+            var response = await _supabase.From<AlertaHeader>()
+                                          .Where(x => x.Email == email)
+                                          .Get();
+
+            var item = response.Models.FirstOrDefault();
+
+            if (item == null)
+            {
+                return null;
+            }
+
+            return GenerateCleanObject(item, typeof(AlertaHeader));
         }
     }
 }

@@ -5,6 +5,7 @@ using Supabase.Interfaces;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Sofragrancia.Banco
 {
@@ -49,7 +50,7 @@ namespace Sofragrancia.Banco
             return metadata != null && metadata.Contains($"\"Role\":\"{roleDesejada}\"");
         }
 
-        public async Task<string> CadastrarUsuarioInternoAsync(NewUserRequestDto newUser, string serviceRoleKey)
+        public async Task<(string,string)> CadastrarUsuarioInternoAsync(NewUserRequestDto newUser, string serviceRoleKey)
         {
             var metadados = newUser.MetaDados.GetType()
             .GetProperties()
@@ -70,11 +71,13 @@ namespace Sofragrancia.Banco
                 var admeTop = _supabase.AdminAuth(serviceRoleKey);
                 var user = await admeTop.CreateUser(atributos);
 
-                return user?.Id;
+                return (user?.Id , "");
             }
             catch (Exception ex)
             {
-                return "";
+                JsonNode node = JsonSerializer.Deserialize<JsonNode>(ex.Message);
+                string message = node is null ? ex.Message : node["msg"]?.GetValue<string>() ?? ex.Message;
+                return ("", message);
             }
         }
 
