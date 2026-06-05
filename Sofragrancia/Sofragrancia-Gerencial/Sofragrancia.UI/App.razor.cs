@@ -5,29 +5,39 @@ namespace Sofragrancia.UI;
 
 public class AppBase : ComponentBase
 {
-    [Inject]
-    protected TokenService TokenService { get; set; } = default!;
+    [Inject] protected TokenService TokenService { get; set; } = default!;
 
-    [Inject]
-    protected NavigationManager Navigation { get; set; } = default!;
+    [Inject] protected NavigationManager Navigation { get; set; } = default!;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        var rotaAtual =
-            Navigation.ToBaseRelativePath(Navigation.Uri);
+        await base.OnInitializedAsync();
 
-        if (string.IsNullOrEmpty(rotaAtual))
-            rotaAtual = "login";
-
-        if (rotaAtual.ToLower() == "login")
-            return;
-
-        var tokenValido =
-            await TokenService.TokenValidoAsync();
-
-        if (!tokenValido)
+        try
         {
-            Navigation.NavigateTo("/login", true);
+            var rotaAtual = Navigation.ToBaseRelativePath(Navigation.Uri);
+            if (string.IsNullOrEmpty(rotaAtual)) rotaAtual = "login";
+
+            bool isTokenValido = await TokenService.TokenValidoAsync();
+
+            if (rotaAtual.ToLower() == "login")
+            {
+                if (isTokenValido)
+                {
+                    Navigation.NavigateTo("/home", forceLoad: false);
+                }
+                return;
+            }
+
+            if (!isTokenValido)
+            {
+                Navigation.NavigateTo("/login", forceLoad: false);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro na validação global de rota: {ex.Message}");
+            Navigation.NavigateTo("/login", forceLoad: false);
         }
     }
 }
