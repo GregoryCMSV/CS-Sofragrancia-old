@@ -33,11 +33,8 @@ public partial class NewUser
 
         try
         {
-            // ⏳ Simulação de delay mantida para a apresentação local
-            //await Task.Delay(1000); 
-
+            // TODO: Remover depois
             NovoUsuario.MetaDados.Role = "Admin";
-            // 🚀 Faz a chamada real para a rota corrigida
             var response = await HttpService.PostAsync("api/auth/cadastro", NovoUsuario);
 
             if (response.IsSuccessStatusCode)

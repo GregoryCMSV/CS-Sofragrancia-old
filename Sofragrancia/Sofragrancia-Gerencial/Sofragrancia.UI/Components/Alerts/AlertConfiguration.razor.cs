@@ -110,7 +110,7 @@ public partial class AlertConfiguration
         {
             EmailDestinatario = "gerente@sofragrancia.com.br", 
             EmailAtivo = true,
-            HorarioEnvio = new TimeOnly(17, 0, 0),
+            HorarioEnvio = new TimeSpan(17, 0, 0),
             Indicators = new()
             {
                 new() { 

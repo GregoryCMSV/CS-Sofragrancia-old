@@ -5,7 +5,7 @@ public class AlertConfigurationDto
     // --- Canais de Notificação e Frequência ---
     public string EmailDestinatario { get; set; } = string.Empty;
     public bool EmailAtivo { get; set; }
-    public TimeOnly? HorarioEnvio { get; set; }
+    public TimeSpan HorarioEnvio { get; set; }
     
     // Dias da semana
     public bool FaturamentoSegunda { get; set; }
