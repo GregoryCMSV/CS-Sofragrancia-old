@@ -1,9 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
 using Blazored.LocalStorage;
 using Microsoft.Extensions.DependencyInjection; 
 using System;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Sofragrancia.Shared.Dtos;
+using System.Text.Json;
 
 namespace Sofragrancia.UI.Services;
 
@@ -83,5 +85,34 @@ public class TokenService
             return false;
         }
         */
+    }
+    public async Task<UserMetaData?> ObterDadosUsuarioLogadoAsync()
+    {   
+        var token = await ObterTokenAsync();
+        if (string.IsNullOrWhiteSpace(token)) return null;
+
+        try
+        {
+            token = token.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            
+            if (!handler.CanReadToken(token)) return null;
+            
+            var jwtToken = handler.ReadJwtToken(token);
+
+            // Busca a claim onde o Supabase joga as informações extras do usuário
+            var metadataJson = jwtToken.Claims.FirstOrDefault(c => c.Type == "user_metadata")?.Value;
+            if (string.IsNullOrEmpty(metadataJson)) return null;
+
+            // Deserializa o JSON interno do token direto para o DTO que você achou!
+            var opcoesJson = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var dadosUsuario = JsonSerializer.Deserialize<UserMetaData>(metadataJson, opcoesJson);
+
+            return dadosUsuario;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 }

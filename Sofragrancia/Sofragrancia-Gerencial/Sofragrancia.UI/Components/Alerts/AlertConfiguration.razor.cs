@@ -2,20 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using System.Net.Http.Json; // Lib para consumo do GetFromJsonAsync
+using System.Net.Http.Json;
 using Sofragrancia.Shared.Dtos;
 using Sofragrancia.UI.Services; 
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Sofragrancia.UI.Components.Alerts;
 
 public partial class AlertConfiguration
 { 
     [Inject] protected HttpService HttpService { get; set; } = default!;
+    
+    // Injeta o serviço de token para capturar o e-mail do usuário logado
+    [Inject] protected TokenService TokenService { get; set; } = default!;
 
-    // O DTO unificado que agora gerencia o estado da tela inteira
+    // O DTO unificado que gerencia o estado da tela inteira
     protected AlertConfigurationDto Model { get; set; } = new();
 
-    // Dicionário amigável por extenso para a nova coluna da tabela
+    // Dicionário amigável por extenso para a coluna da tabela
     protected readonly Dictionary<string, string> OperadoresDisponiveis = new()
     {
         { "<=", "Menor ou igual que" },
@@ -28,30 +33,66 @@ public partial class AlertConfiguration
 
     protected override async Task OnInitializedAsync()
     {
-        // [INTEGRACAO_API]
-        // Model = await HttpService.GetFromJsonAsync<AlertConfigurationDto>("api/configuracoes/alertas") ?? new();
-
+        // 1. Carrega as configurações padrão locais na tela
         Model = CarregarDadosIniciais();
+
+        // 2. Abre o Token JWT para descobrir o e-mail do usuário real logado
+        var tokenRaw = await TokenService.ObterTokenAsync();
+        if (!string.IsNullOrWhiteSpace(tokenRaw))
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(tokenRaw.Replace("Bearer ", ""));
+                
+                var emailReal = jwtToken.Claims.FirstOrDefault(c => c.Type == "email" || c.Type == "unique_name")?.Value;
+                
+                if (!string.IsNullOrEmpty(emailReal))
+                {
+                    // Atualiza o Model com o e-mail de quem realmente está usando o ERP
+                    Model.EmailDestinatario = emailReal;
+                }
+            }
+            catch (Exception)
+            {
+                // Se falhar a leitura do token, mantém o e-mail padrão do CarregarDadosIniciais
+            }
+        }
+
+        // 3. Com o e-mail definido, tenta buscar as regras reais usando o formato do seu HttpService
+        try
+        {
+            var response = await HttpService.GetAsync($"api/Alerta/email/{Model.EmailDestinatario}");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var dadosBanco = await response.Content.ReadFromJsonAsync<AlertConfigurationDto>();
+                if (dadosBanco != null)
+                {
+                    Model = dadosBanco;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Se a API estiver offline, ignora o erro e mantém os dados iniciais mockados para teste visual
+            System.Diagnostics.Debug.WriteLine($"[Aviso] Não foi possível conectar à API de Alertas: {ex.Message}. Usando dados simulados.");
+        }
     }
 
     protected async Task SalvarConfiguracoes()
     {   
         try
         {
-            // Simulação de delay para feedback visual de salvamento na apresentação
-            await Task.Delay(1000); 
-
-
-            // [INTEGRACAO_API]
+            // [INTEGRACAO_API] - Ajustado para usar o PostAsync da sua classe HttpService
             /*
-            var response = await HttpService.PostAsync("api/configuracoes/alertas", Model);
+            var response = await HttpService.PostAsync("api/Alerta/salvar", Model);
             if (!response.IsSuccessStatusCode) 
             {
-                // Tratar erro de salvamento aqui se necessário
+                System.Diagnostics.Debug.WriteLine("[Erro] Falha ao salvar as configurações na API.");
                 return;
             }
             */
-
             
             System.Diagnostics.Debug.WriteLine($"[Sucesso] Configurações enviadas para o banco!");
             System.Diagnostics.Debug.WriteLine($"E-mail ativo: {Model.EmailAtivo} | Destinatário: {Model.EmailDestinatario}");
@@ -67,7 +108,7 @@ public partial class AlertConfiguration
     {
         return new AlertConfigurationDto
         {
-            EmailDestinatario = "gerente@sofragrancia.com.br",
+            EmailDestinatario = "gerente@sofragrancia.com.br", 
             EmailAtivo = true,
             HorarioEnvio = new TimeOnly(17, 0, 0),
             Indicators = new()
@@ -90,7 +131,7 @@ public partial class AlertConfiguration
                     Value = 40.0, 
                     IsActive = true, 
                     OperadoresPermitidos = new() { "<=", "<" },
-                    UnidadesPermitidas = new() { "%" } // 👈 Ajustado para % condizendo com o indicador
+                    UnidadesPermitidas = new() { "%" }
                 },
                 new() { 
                     Id = "cancelamento", 
@@ -102,7 +143,6 @@ public partial class AlertConfiguration
                     OperadoresPermitidos = new() { ">=" },
                     UnidadesPermitidas = new() { "%" }
                 },
-                // 🚀 ADICIONADO NOVAMENTE AQUI:
                 new() { 
                     Id = "meta_risco", 
                     Title = "📈 Meta Mensal em Risco", 
@@ -110,7 +150,6 @@ public partial class AlertConfiguration
                     Unit = "% meta", 
                     Value = 90.0, 
                     IsActive = true,
-                    // 🔒 Travado para avisar apenas se ficar abaixo da porcentagem esperada
                     OperadoresPermitidos = new() { "<=" },
                     UnidadesPermitidas = new() { "% meta" }
                 },
