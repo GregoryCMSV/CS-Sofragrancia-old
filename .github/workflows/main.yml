@@ -3,9 +3,8 @@ name: Deploy UI to GitHub Pages
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'Sofragrancia-Gerencial/Sofragrancia.UI/**'
-      - 'Sofragrancia-Gerencial/Sofragrancia.Shared/**'
+  
+  workflow_dispatch: 
 
 permissions:
   contents: write
@@ -15,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout do código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configurar o .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '10.0.x' 
 
     - name: Publicar o projeto (Build)
-      run: dotnet publish Sofragrancia-Gerencial/Sofragrancia.UI/Sofragrancia.UI.csproj -c Release -o release --nologo
+      run: dotnet publish Sofragrancia/Sofragrancia-Gerencial/Sofragrancia.UI/Sofragrancia.UI.csproj -c Release -o release --nologo
 
     - name: Adicionar arquivo .nojekyll
       run: touch release/wwwroot/.nojekyll
