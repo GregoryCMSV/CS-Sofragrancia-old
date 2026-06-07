@@ -26,16 +26,16 @@ public class NavigationService
         _ = Task.Run(async () =>
         {
             await _tokenService.RemoverTokenAsync();
-            _navigation.NavigateTo("login", true);
+            _navigation.NavigateTo("", true);
         });
     }
 
     public async Task NavigateAsync(string destino)
     {
-        if (destino == "login")
+        if (destino == "login" || destino.Equals(""))
         {
             await _tokenService.RemoverTokenAsync();
-            _navigation.NavigateTo("login", true);
+            _navigation.NavigateTo("", true);
             return;
         }
 
@@ -46,6 +46,6 @@ public class NavigationService
         }
 
         await _tokenService.RemoverTokenAsync();
-        _navigation.NavigateTo("login", true);
+        _navigation.NavigateTo("", true);
     }
 }
