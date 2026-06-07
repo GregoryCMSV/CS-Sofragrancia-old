@@ -20,6 +20,8 @@ namespace Sofragrancia.UI
             builder.Services.AddScoped<NavigationService>();
 
             await builder.Build().RunAsync();
+
+            //
         }
     }
 }
