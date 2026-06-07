@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '10.0.x' 
 
     - name: Publicar o projeto (Build)
-      run: dotnet publish Sofragrancia-Gerencial/Sofragrancia.UI/Sofragrancia.UI.csproj -c Release -o release --nologo
+      run: dotnet publish Sofragrancia/Sofragrancia-Gerencial/Sofragrancia.UI/Sofragrancia.UI.csproj -c Release -o release --nologo
 
     - name: Adicionar arquivo .nojekyll
       run: touch release/wwwroot/.nojekyll
