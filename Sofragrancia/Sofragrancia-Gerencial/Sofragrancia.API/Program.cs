@@ -19,7 +19,7 @@ namespace Sofragrancia.API
             var supabaseKey = builder.Configuration["Supabase:Key"];
             var baseInstance = await SofragranciaBaseConnection.GetInstanceAsync(supabaseUrl, supabaseKey);
             builder.Services.AddScoped(_ => baseInstance.SupabaseClient);
-            var jwtSecret  = @"{
+            var jwtSecret = @"{
                 ""x"": ""BTc30wJglqPCZZH-AtrkU2nFDsNKxQvzVaqqykQtxoM"",
                 ""y"": ""wmWhwyEkNdbem6Y23Gpg1_bnIC6lJSsUDzg9y_9QU_0"",
                 ""alg"": ""ES256"",
@@ -41,8 +41,8 @@ namespace Sofragrancia.API
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = ecdsaKey,
-                        ValidAudience = "authenticated", 
-                        ValidateIssuer = false, 
+                        ValidAudience = "authenticated",
+                        ValidateIssuer = false,
                         ValidateAudience = true
                     };
                 });
@@ -62,15 +62,15 @@ namespace Sofragrancia.API
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
+            // if (app.Environment.IsDevelopment())
+            // {
+            app.MapOpenApi();
 
-                app.MapScalarApiReference("/", options =>
-                {
-                    options.WithTitle("API Gerencial");
-                });
-            }
+            app.MapScalarApiReference("/", options =>
+            {
+                options.WithTitle("API Gerencial");
+            });
+            // }
 
             app.UseHttpsRedirection();
 
