@@ -54,7 +54,7 @@ namespace Sofragrancia.API
             {
                 options.AddPolicy("PermitirFrontEnd", policy =>
                 {
-                    policy.WithOrigins("https://localhost:7030", "https://gregorycmsv.github.io")
+                    policy.AllowAnyOrigin()
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
