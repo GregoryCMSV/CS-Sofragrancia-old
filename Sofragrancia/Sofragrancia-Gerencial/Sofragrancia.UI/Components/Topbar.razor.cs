@@ -35,7 +35,7 @@ namespace Sofragrancia.UI.Components
         protected async Task Logout()
         {
             await TokenService.RemoverTokenAsync();
-            await NavigationService.NavigateAsync("/login");
+            await NavigationService.NavigateAsync("login");
         }
     }
 }

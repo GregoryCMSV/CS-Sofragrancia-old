@@ -34,7 +34,7 @@ namespace Sofragrancia.UI.Pages
 
             if (logado)
             {
-                await NavigationService.NavigateAsync("/home");
+                await NavigationService.NavigateAsync("home");
             }
         }
 
@@ -44,7 +44,7 @@ namespace Sofragrancia.UI.Pages
             {
                 await TokenService.SalvarTokenAsync("mock-token", LembrarMe);
                 MensagemErro = string.Empty;
-                await NavigationService.NavigateAsync("/home");
+                await NavigationService.NavigateAsync("home");
                 return;
             }
 
@@ -63,7 +63,7 @@ namespace Sofragrancia.UI.Pages
                 if (result?.Token is not null)
                 {
                     await TokenService.SalvarTokenAsync(result.Token, LembrarMe);
-                    await NavigationService.NavigateAsync("/home");
+                    await NavigationService.NavigateAsync("home");
                 }
             }
             else
