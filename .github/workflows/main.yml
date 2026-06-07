@@ -3,9 +3,8 @@ name: Deploy UI to GitHub Pages
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'Sofragrancia-Gerencial/Sofragrancia.UI/**'
-      - 'Sofragrancia-Gerencial/Sofragrancia.Shared/**'
+  
+  workflow_dispatch: 
 
 permissions:
   contents: write
