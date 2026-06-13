@@ -4,14 +4,19 @@ using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 using Sofragrancia.Shared.Dtos;
 using Sofragrancia.UI.Services; 
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace Sofragrancia.UI.Components.Settings;
 
 public partial class MyProfile
 {
     [Inject] protected HttpService HttpService { get; set; } = default!;
+    
+    // Injeta o TokenService para ler a sessão do usuário real
+    [Inject] protected TokenService TokenService { get; set; } = default!;
 
-    // Estado isolado usando o novo DTO da Shared
+    // Estado isolado usando o DTO da Shared que você já possui
     protected UserProfileDto Perfil { get; set; } = new();
 
     protected bool exibirMenuSenha = false;
@@ -20,14 +25,32 @@ public partial class MyProfile
 
     protected override async Task OnInitializedAsync()
     {
+        // 1. Busca os metadados (Nome e Cargo) usando o TokenService
+        var dadosToken = await TokenService.ObterDadosUsuarioLogadoAsync();
+        
+        if (dadosToken != null)
+        {
+            Perfil.Nome = dadosToken.NomeCompleto;
+            Perfil.PerfilAcesso = dadosToken.Role;
+        }
 
-        // [INTEGRACAO_API]
-        // Perfil = await HttpService.GetFromJsonAsync<UserProfileDto>("api/usuario/perfil") ?? new();
-
-
-        Perfil.Nome = "Benjamin Franklin";
-        Perfil.Email = "gerente@sofragrancia.com.br";
-        Perfil.PerfilAcesso = "Gerente";
+        // 2. Busca o e-mail que fica no nó principal do Token JWT
+        var tokenRaw = await TokenService.ObterTokenAsync();
+        if (!string.IsNullOrWhiteSpace(tokenRaw))
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(tokenRaw.Replace("Bearer ", ""));
+                
+                // Extrai a claim padrão de e-mail do Supabase
+                Perfil.Email = jwtToken.Claims.FirstOrDefault(c => c.Type == "email" || c.Type == "unique_name")?.Value ?? "usuario@sofragrancia.com.br";
+            }
+            catch (Exception)
+            {
+                Perfil.Email = "erro.usuario@sofragrancia.com.br";
+            }
+        }
     }
 
     protected void AlternarMenuSenha()
@@ -69,10 +92,7 @@ public partial class MyProfile
 
         try
         {
-            // Simulação de delay para o feedback visual de carregamento na apresentação
-            await Task.Delay(1000); 
-
-            // [INTEGRACAO_API]
+            // [INTEGRACAO_API] - Fica pronto para quando o back-end suportar a troca
             /*
             var response = await HttpService.PostAsync("api/usuario/alterar-senha", Perfil);
             if (!response.IsSuccessStatusCode) 
@@ -82,7 +102,7 @@ public partial class MyProfile
             }
             */
 
-            MensagemSucessoPerfil = "Sua senha foi updated com sucesso!";
+            MensagemSucessoPerfil = "Sua senha foi atualizada com sucesso!";
             AlternarMenuSenha(); 
         }
         catch (Exception)

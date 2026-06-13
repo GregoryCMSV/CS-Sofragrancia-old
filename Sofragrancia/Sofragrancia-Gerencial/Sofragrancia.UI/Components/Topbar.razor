@@ -34,11 +34,29 @@
 
         <div style="position: relative;">
             <div class="user-info" @onclick="ToggleMenu" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                <div class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem;">GV</div>
-                <div style="line-height: 1.1; display: flex; flex-direction: column; justify-content: center;">
-                    <div class="user-name" style="font-size: 0.85rem; font-weight: 600; color: #333; white-space: nowrap;">Gerente Vendas</div>
-                    <div class="user-role" style="font-size: 0.68rem; color: #777; white-space: nowrap;">Administrador</div>
-                </div>
+                @if (UsuarioLogado != null)
+                {
+                    <div class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem;">
+                        @ObterIniciais(UsuarioLogado.NomeCompleto)
+                    </div>
+                    <div style="line-height: 1.1; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="user-name" style="font-size: 0.85rem; font-weight: 600; color: #333; white-space: nowrap;">
+                            @UsuarioLogado.NomeCompleto
+                        </div>
+                        <div class="user-role" style="font-size: 0.68rem; color: #777; white-space: nowrap;">
+                            @UsuarioLogado.Role
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #eee; color: #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem;">
+                        ...
+                    </div>
+                    <div style="line-height: 1.1; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="user-name" style="font-size: 0.85rem; color: #999; white-space: nowrap;">Carregando...</div>
+                    </div>
+                }
             </div>
 
             @if (exibirMenu)

@@ -12,7 +12,7 @@
                 <span style="font-size:28px;">📧</span>
                 <div style="flex:1">
                     <div style="font-size:13px; font-weight:700; color:#1a1a2e;">E-mail</div>
-                    <input type="email" class="filter-input" style="margin-top:6px; width:100%;" placeholder="gerente@sofragrancia.com.br" @bind-value="Model.EmailDestinatario" />
+                    <input type="email" class="filter-input" style="margin-top:6px; width:100%;" placeholder="gerente@sofragrancia.com.br" @bind="Model.EmailDestinatario" />
                 </div>
                 <div class="form-check form-switch m-0">
                     <input class="form-check-input" type="checkbox" style="cursor: pointer; width: 40px; height: 20px;" @bind="Model.EmailAtivo">
@@ -26,7 +26,10 @@
                 <div class="row g-2">
                     <div class="col-6">
                         <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:4px;">HORA PREFERIDA</label>
-                        <input type="time" class="filter-input" style="width:100%;" @bind-value="Model.HorarioEnvio" />
+                        <input type="time" class="filter-input" style="width:100%;" 
+                            value="@Model.HorarioEnvio.ToString(@"hh\:mm")" 
+                            @onchange="@((ChangeEventArgs e) => Model.HorarioEnvio = TimeSpan.Parse(e.Value?.ToString() ?? "17:00"))" 
+                        />
                     </div>
                     <div class="col-6">
                         <label style="font-size:11px; color:#888; font-weight:600; display:block; margin-bottom:8px;">

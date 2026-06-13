@@ -1,32 +1,34 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Sofragrancia.UI.Components;
+using Sofragrancia.UI.Services;
 
 namespace Sofragrancia.UI.Pages;
 
 public partial class Settings : ComponentBase
 {
-    // Controla de forma fluida qual aba de configuração está ativa na tela
-    protected string abaAtiva = "perfil";
+    [Inject] protected TokenService TokenService { get; set; } = default!;
 
-    // REMOVIDOS os objetos "Perfil" e "NovoUsuario" antigos que causavam o erro de compilação,
-    // já que agora MyProfile e NewUser gerenciam seus próprios DTOs de forma isolada.
+protected string abaAtiva = "perfil";
+    protected List<TabNavigation.TabItem> tabs = new();
 
-    protected List<TabNavigation.TabItem> tabs = new()
+    protected override async Task OnInitializedAsync()
     {
-        new()
+        // 1. Define a lista base
+        tabs = new()
         {
-            Id = "perfil",
-            Title = "Meu Perfil",
-            Icon = "👤"
-        },
-        new()
+            new() { Id = "perfil", Title = "Meu Perfil", Icon = "👤" },
+            new() { Id = "cadastrar", Title = "Cadastrar Colaborador", Icon = "➕" }
+        };
+
+        // 2. Busca o usuário e bloqueia a aba se não for Admin
+        var usuario = await TokenService.ObterDadosUsuarioLogadoAsync();
+        
+        if (usuario?.Role != "Admin")
         {
-            Id = "cadastrar",
-            Title = "Cadastrar Colaborador",
-            Icon = "➕"
+            tabs.RemoveAll(t => t.Id == "cadastrar");
         }
-    };
+    }
 
     protected void AlternarAba(string novaAba)
     {
