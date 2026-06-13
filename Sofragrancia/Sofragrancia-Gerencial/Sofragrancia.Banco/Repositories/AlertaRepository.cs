@@ -86,6 +86,7 @@ namespace Sofragrancia.Banco.Repositories
                         IdAlertaBase = alertaBase.Id,
                         Trigger = alertaBase.Trigger,
                         Value = alertaBase.Value,
+                        UnidadeMedida = alertaBase.UnidadeMedida,
                         CriadoEm = DateTime.UtcNow,
                         AtualizadoEm = DateTime.UtcNow,
                         IsEnable = true

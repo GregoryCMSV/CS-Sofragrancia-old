@@ -22,6 +22,15 @@ namespace Sofragrancia.Banco.Models.Alertas
         [Column("gatilho")]
         public int Trigger { get; set; }
 
+        [Column("gatilhos_permitidos")]
+        public int[] ValidTrigger { get; set; }
+
+        [Column("unidade_medida")]
+        public int UnidadeMedida { get; set; }
+
+        [Column("unidade_medida_permitidas")]
+        public int[] UnidadeMedidaValidas { get; set; }
+
         [Column("valor")]
         public double Value { get; set; }
 

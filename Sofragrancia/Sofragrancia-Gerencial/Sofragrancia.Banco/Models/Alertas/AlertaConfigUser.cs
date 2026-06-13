@@ -25,6 +25,9 @@ namespace Sofragrancia.Banco.Models.Alertas
         [Column("gatilho")]
         public int Trigger { get; set; }
 
+        [Column("unidade_medida")]
+        public int UnidadeMedida { get; set; }
+
         [Column("valor")]
         public double Value { get; set; }
 
@@ -36,5 +39,7 @@ namespace Sofragrancia.Banco.Models.Alertas
 
         [Column("isenable")]
         public bool IsEnable { get; set; }
+
+
     }
 }
