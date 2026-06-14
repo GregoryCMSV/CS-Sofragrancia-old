@@ -14,7 +14,7 @@ WORKDIR /src
 COPY ["Sofragrancia.API/Sofragrancia.API.csproj", "Sofragrancia.API/"]
 COPY ["Sofragrancia.Banco/Sofragrancia.Banco.csproj", "Sofragrancia.Banco/"]
 COPY ["Sofragrancia.Shared/Sofragrancia.Shared.csproj", "Sofragrancia.Shared/"]
-COPY ["Sofragrancia.Shared/Sofragrancia.EmailSender.csproj", "Sofragrancia.Shared/"]
+COPY ["Sofragrancia.Shared/Sofragrancia.EmailSender.csproj", "Sofragrancia.EmailSender/"]
 
 # Restaura as dependências do projeto principal
 RUN dotnet restore "./Sofragrancia.API/Sofragrancia.API.csproj"
