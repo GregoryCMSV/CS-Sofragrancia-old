@@ -41,9 +41,9 @@ namespace Sofragrancia_EmailSender.Process
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var client = (await SofragranciaBaseConnection.GetInstanceAsync(_supaUrl, _supaKey)).SupabaseClient;
+                        var client = scope.ServiceProvider.GetRequiredService<Client>();
                         var alertas = await GetAlertsFromToday(client);
-                        _logger.LogInformation($"Hora: {_current.Hour} / {DateTimeOffset.Now.AddHours(-3)}");
+                        _logger.LogInformation($"Hora: {_current.Hour} / {DateTimeOffset.Now.AddHours(-3).Hour}\nMinutos: {_current.Minute} / {DateTimeOffset.Now.AddHours(-3).Minute}");
                         var alertasAgora = alertas.Where(a => a.Horario.Minute == _current.Minute && a.Horario.Hour == _current.Hour).ToList();
 
                         foreach (var alert in alertasAgora)
@@ -144,7 +144,7 @@ namespace Sofragrancia_EmailSender.Process
 
         private async Task<List<AlertaHeader>> GetAlertsFromToday(Client client)
         {
-            var hoje = (int)DateTime.Today.DayOfWeek;
+            var hoje = (int)DateTime.Now.AddHours(-3).DayOfWeek;
             var alertas = await client.From<AlertaHeader>()
                     .Get();
 
