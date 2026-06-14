@@ -7,7 +7,7 @@ using Supabase;
 using System.Text;
 using static Supabase.Postgrest.Constants;
 
-namespace Sofragrancia_EmailSender
+namespace Sofragrancia_EmailSender.Process
 {
     public class AlertSenderWorker : BackgroundService
     {
