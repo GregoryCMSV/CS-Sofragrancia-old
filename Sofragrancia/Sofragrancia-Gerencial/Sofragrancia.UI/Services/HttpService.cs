@@ -33,34 +33,36 @@ public class HttpService
         }
     }
 
-    private async Task<HttpResponseMessage> SendAsync(
-        Func<Task<HttpResponseMessage>> request)
+private async Task<HttpResponseMessage> SendAsync(
+    string endpoint,
+    Func<Task<HttpResponseMessage>> request)
+{
+    await ConfigurarTokenAsync();
+
+    var response = await request();
+
+    if (response.StatusCode == HttpStatusCode.Unauthorized &&
+        !endpoint.Contains("api/auth/login"))
     {
-        await ConfigurarTokenAsync();
+        await _tokenService.RemoverTokenAsync();
 
-        var response = await request();
+        _httpClient.DefaultRequestHeaders.Authorization = null;
 
-        if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            await _tokenService.RemoverTokenAsync();
-
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-
-            OnUnauthorized?.Invoke();
-        }
-
-        return response;
+        OnUnauthorized?.Invoke();
     }
+    return response;
+}
 
-    public async Task<HttpResponseMessage> GetAsync(string endpoint)
-        => await SendAsync(() => _httpClient.GetAsync(endpoint));
+public async Task<HttpResponseMessage> GetAsync(string endpoint)
+    => await SendAsync(endpoint, () => _httpClient.GetAsync(endpoint));
 
-    public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
-        => await SendAsync(() => _httpClient.PostAsJsonAsync(endpoint, data));
+public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
+    => await SendAsync(endpoint, () => _httpClient.PostAsJsonAsync(endpoint, data));
 
-    public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)
-        => await SendAsync(() => _httpClient.PutAsJsonAsync(endpoint, data));
+public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)
+    => await SendAsync(endpoint, () => _httpClient.PutAsJsonAsync(endpoint, data));
 
-    public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
-        => await SendAsync(() => _httpClient.DeleteAsync(endpoint));
+public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
+    => await SendAsync(endpoint, () => _httpClient.DeleteAsync(endpoint));
+
 }

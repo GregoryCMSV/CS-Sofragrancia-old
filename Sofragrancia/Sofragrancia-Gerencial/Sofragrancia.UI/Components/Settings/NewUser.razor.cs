@@ -63,6 +63,7 @@ public partial class NewUser
     protected void LimparFormularioCadastro()
     {
         NovoUsuario = new();
+        NovoUsuario.MetaDados = new();
         LimparTodasAsMensagens();
     }
 
