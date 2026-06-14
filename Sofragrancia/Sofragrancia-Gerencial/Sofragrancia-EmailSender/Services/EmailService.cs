@@ -13,12 +13,15 @@ namespace Sofragrancia_EmailSender.Services
         public string Password { get; private set; }
         public string Provider {  get; private set; }
 
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IConfiguration configuration)
+
+        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
         {
             User = configuration["smtp:user"]!;
             Password = configuration["smtp:pass"]!;
             Provider = configuration["smtp:provider"]!;
+            _logger = logger;
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlFinal)
@@ -30,11 +33,12 @@ namespace Sofragrancia_EmailSender.Services
                     var smtp = GetSmtpClient();
                     var message = CreateMailMessage(email, subject, htmlFinal);
                     smtp.Send(message);
+                    _logger.LogInformation($"Email enviado para {email}");
                 }
             }
             catch (Exception ex)
             {
-                
+                _logger.LogError($"Erro ao mandar email: {ex.Message}");
             }
         }
 
