@@ -242,7 +242,7 @@ public partial class AlertConfiguration
                 { "AtualizadoEm", DateTime.UtcNow }
             };
 
-            var respostaHeader = await HttpService.PatchAsync($"api/Alerta/{_headerIdBanco}", patchHeader);
+            var respostaHeader = await HttpService.PatchAsync($"api/Alerta/Update/{_headerIdBanco}", patchHeader);
             if (!respostaHeader.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine($"[Erro] Falha ao salvar header: {respostaHeader.StatusCode}");
@@ -268,12 +268,12 @@ public partial class AlertConfiguration
                     { "UnidadeMedida", unidadeInt },
                     { "Value",        item.Value  },
                     { "IsEnable",     item.IsActive },
-                    { "AtualizadoEm", DateTime.UtcNow }
+                    { "AtualizadoEm", DateTime.UtcNow.AddHours(-3) }
                 };
 
                 // O endpoint do PATCH de AlertaConfigUser — confirme se existe algo parecido
                 // se o controller de AlertaConfigUser está exposto ou se é pelo mesmo AlertaController
-                var respostaLinha = await HttpService.PatchAsync($"api/Alerta/{idLinhaConfig}", patchLinha);
+                var respostaLinha = await HttpService.PatchAsync($"api/Alerta/Update/{_headerIdBanco}/{idLinhaConfig}", patchLinha);
 
                 if (!respostaLinha.IsSuccessStatusCode)
                 {

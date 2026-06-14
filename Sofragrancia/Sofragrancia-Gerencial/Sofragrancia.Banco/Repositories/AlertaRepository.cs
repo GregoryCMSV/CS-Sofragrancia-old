@@ -4,7 +4,10 @@ using Supabase;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using static Supabase.Postgrest.Constants;
 
 namespace Sofragrancia.Banco.Repositories
 {
@@ -109,6 +112,58 @@ namespace Sofragrancia.Banco.Repositories
 
             return header != null;
         }
+
+        public async Task<bool> LineExists(int idlinha)
+        {
+            var lineResponse = await _supabase.From<AlertaConfigUser>()
+            .Where(h => h.Id == idlinha)
+            .Get();
+
+            var line = lineResponse.Models.FirstOrDefault();
+
+            return line != null;
+        }
+
+        public virtual async Task<dynamic> UpdateLineByID(int id, Dictionary<string, object> atualizacoes)
+        {
+            atualizacoes.Remove("id");
+            atualizacoes.Remove("Id");
+            var response = await _supabase.From<AlertaConfigUser>()
+                                          .Filter("id", Operator.Equals, id)
+                                          .Get();
+
+            var itemAtual = response.Models.FirstOrDefault();
+            if (itemAtual == null) return null;
+
+            var tipo = typeof(AlertaConfigUser);
+            foreach (var atualizacao in atualizacoes)
+            {
+                var prop = tipo.GetProperty(atualizacao.Key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                if (prop != null && prop.CanWrite && prop.DeclaringType == typeof(AlertaConfigUser))
+                {
+                    object valorFinal = atualizacao.Value;
+
+                    if (valorFinal is JsonElement jsonElement)
+                    {
+                        valorFinal = jsonElement.Deserialize(prop.PropertyType);
+                    }
+                    else if (valorFinal != null)
+                    {
+                        var tipoDestino = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                        valorFinal = Convert.ChangeType(valorFinal, tipoDestino);
+                    }
+
+                    prop.SetValue(itemAtual, valorFinal);
+                }
+            }
+
+            var updateResponse = await _supabase.From<AlertaConfigUser>().Update(itemAtual);
+            var itemAtualizado = updateResponse.Models.FirstOrDefault();
+
+            return GenerateCleanObject(itemAtualizado,typeof(AlertaConfigUser));
+        }
+
     }
 }
 

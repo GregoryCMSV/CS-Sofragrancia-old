@@ -140,6 +140,8 @@ namespace Sofragrancia.Banco.Repositories
 
         public virtual async Task<dynamic> UpdateByID(int id, Dictionary<string, object> atualizacoes)
         {
+            atualizacoes.Remove("id");
+            atualizacoes.Remove("Id");
             var response = await _supabase.From<T>()
                                           .Filter("id", Operator.Equals, id)
                                           .Get();
@@ -195,12 +197,9 @@ namespace Sofragrancia.Banco.Repositories
 
         public virtual async Task<dynamic> PatchByID(int id, Dictionary<string, object> atualizacoes)
         {
-            var update = JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(atualizacoes)) ;
-            var response = await _supabase.From<T>()
-                                          .Filter("id", Operator.Equals, id)
-                                          .Update(update);
 
-            return ("👍");
+            
+            return await UpdateByID(id, atualizacoes);
         }
     }
 }

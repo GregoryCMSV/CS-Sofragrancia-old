@@ -33,14 +33,6 @@ namespace Sofragrancia.API.Controllers
             if (alerta == null)
                 return BadRequest("Informe um campo para atualizar.");
             
-            /*var metadados = alerta.GetType()
-            .GetProperties()
-            .Where(p => p.GetValue(alerta) != null && p.GetValue(alerta) != default)
-            .ToDictionary(
-                p => p.Name,
-                p => p.GetValue(alerta) ?? string.Empty
-            );
-            */
             Dictionary<string, object> dicionario = new();
             if (alerta.Email != null)
             {
@@ -58,15 +50,39 @@ namespace Sofragrancia.API.Controllers
             {
                 dicionario["isEnable"] = alerta.IsEnable; 
             }
-            /*
-            if (alerta.Alertas != null)
-            {
-                //dicionario["alertas"] = new Dictionary<string, object>
-                dicionario["alertas"] = new List<AlertaConfigUserResponseDto>();
-            }
-            */
+            var response = await _repository.UpdateByID(id, dicionario);
+            return Ok(response);
+        }
 
-            var response = await _repository.PatchByID(id, dicionario);
+        [HttpPatch("Update/{idheader}/{idlinha}")]
+        public async Task<IActionResult> UpdateById(int idheader, int idlinha, AlertaConfigUserResponseDto alerta)
+        {
+            if (!await _repository.HeaderExists(idheader))
+                return NotFound("Alerta não encontrado.");
+            if (alerta == null)
+                return BadRequest("Informe um campo para atualizar.");
+            if (!await _repository.LineExists(idlinha))
+                return NotFound("Linha não encontrada.");
+
+            Dictionary<string, object> dicionario = new();
+            if (alerta.Trigger != null)
+            {
+                dicionario["trigger"] = alerta.Trigger; 
+            }
+            if (alerta.UnidadeMedida != null)
+            {
+                dicionario["unidademedida"] = alerta.UnidadeMedida; 
+            }
+            if (alerta.Value != null)
+            {
+                dicionario["value"] = alerta.Value; 
+            }
+            if (alerta.IsEnable != null)
+            {
+                dicionario["isEnable"] = alerta.IsEnable; 
+            }
+
+            var response = await _repository.UpdateLineByID(idlinha, dicionario);
             return Ok(response);
         }
     }
