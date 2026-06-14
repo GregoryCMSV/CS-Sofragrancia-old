@@ -4,7 +4,7 @@ using Supabase.Postgrest.Models;
 
 namespace Sofragrancia.Banco.Models
 {
-    [Table("Vendedor")]
+    [Table("meta_vendas")]
     public class MetaVendas : BaseModel, IEntidadeBase
     {
         [PrimaryKey("id")]
@@ -32,7 +32,7 @@ namespace Sofragrancia.Banco.Models
         public int QtdRealizada { get; set; }
 
         [Column("valorrealizado")]
-        public string ValorRealizado { get; set; }
+        public double ValorRealizado { get; set; }
 
         [Column("createdate")]
         public DateTime CriadoEm { get; set; }
