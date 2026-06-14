@@ -105,12 +105,15 @@ namespace Sofragrancia.Banco
             return userResponse;
         }
 
-        public async Task<User> ReiniciarSenhaUsuarioAsync(string userId, string novaSenha, string serviceRoleKey)
+        public async Task<User> ReiniciarSenhaUsuarioAsync(string email, string novaSenha, string serviceRoleKey)
         {
             var adminAttributes = new AdminUserAttributes
             {
                 Password = novaSenha
             };
+            var admin = _supabase.AdminAuth(serviceRoleKey);
+
+            var userId = (await admin.ListUsers()).Users.Find(u => u.Email == email).Id;
 
             var userResponse = await _supabase.AdminAuth(serviceRoleKey).UpdateUserById(userId, adminAttributes);
 

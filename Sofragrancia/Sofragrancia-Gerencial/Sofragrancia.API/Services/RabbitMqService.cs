@@ -14,7 +14,7 @@ namespace Sofragrancia.API.Services
 
         public async Task PublicarEmailTrocaSenha(string email, string novaSenha)
         {
-            var factory = new ConnectionFactory() { HostName = _host };
+            var factory = new ConnectionFactory() { Uri = new Uri(_host)};
             using var connection = await factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 

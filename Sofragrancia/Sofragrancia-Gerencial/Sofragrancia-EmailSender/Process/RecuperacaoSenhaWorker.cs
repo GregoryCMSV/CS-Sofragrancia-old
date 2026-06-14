@@ -26,7 +26,7 @@ namespace Sofragrancia_EmailSender.Process
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            var factory = new ConnectionFactory { HostName = _configuration["MQ:Url"]! };
+            var factory = new ConnectionFactory { Uri = new Uri(_configuration["MQ:Url"]!) };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 

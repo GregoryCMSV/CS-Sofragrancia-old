@@ -5,6 +5,7 @@ using Sofragrancia.Banco.Repositories;
 using Sofragrancia.Shared.Dtos;
 using Supabase.Gotrue;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 
 namespace Sofragrancia.API.Controllers
 {
@@ -97,15 +98,16 @@ namespace Sofragrancia.API.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Senha))
-                    return BadRequest(new { Message = "Informe o usuário e a nova senha" });
+                if (string.IsNullOrWhiteSpace(request.Email))
+                    return BadRequest(new { Message = "Informe o email"});
 
-                var response = await _authService.ReiniciarSenhaUsuarioAsync(request.Email, request.Senha, _configuration["Supabase:Pkey"]!);
+                var newPass = GeneratePassword();
+                var response = await _authService.ReiniciarSenhaUsuarioAsync(request.Email, newPass, _configuration["Supabase:Pkey"]!);
 
                 if (response == null)
                     return BadRequest(new { Message = "Erro ao atualizar a senha" });
 
-                await _rabbitMqService.PublicarEmailTrocaSenha(request.Email, request.Senha);
+                await _rabbitMqService.PublicarEmailTrocaSenha(request.Email, newPass);
                 return Ok("Senha atualizada, verifique o email cadastrado");
             }
             catch (Exception ex)
@@ -114,6 +116,12 @@ namespace Sofragrancia.API.Controllers
             }
         }
 
+
+        private string GeneratePassword()
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#*";
+            return RandomNumberGenerator.GetString(chars, 8);
+        }
 
 
     }

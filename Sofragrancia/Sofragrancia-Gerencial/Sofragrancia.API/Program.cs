@@ -30,6 +30,7 @@ namespace Sofragrancia.API
                 ""key_ops"": [ ""verify"" ]
             }";
 
+            builder.Services.AddSingleton<RabbitMqService>();
             builder.Services.AddScoped<AlertService>();
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
