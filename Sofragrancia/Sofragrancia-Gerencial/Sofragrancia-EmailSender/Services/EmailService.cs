@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
@@ -11,7 +14,7 @@ namespace Sofragrancia_EmailSender.Services
     {
         public string User { get; private set; }
         public string Password { get; private set; }
-        public string Provider {  get; private set; }
+        public string Provider { get; private set; }
 
         private readonly ILogger<EmailService> _logger;
 
@@ -22,27 +25,35 @@ namespace Sofragrancia_EmailSender.Services
             Password = configuration["smtp:pass"]!;
             Provider = configuration["smtp:provider"]!;
             _logger = logger;
-            _logger.LogInformation(User);
-            _logger.LogInformation(Password);
-            _logger.LogInformation(Provider);
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlFinal)
         {
             try
             {
-                if (EmailIsValid(email))
+                if (!EmailIsValid(email))
                 {
-                    var smtp = GetSmtpClient();
-                    var message = CreateMailMessage(email, subject, htmlFinal);
-                    await smtp.SendMailAsync(message);
-                    _logger.LogInformation($"Email enviado para {email}");
+                    _logger.LogWarning($"email: {email} inválido");
+                    return;
                 }
+                var message = CreateMimeMessage(email, subject, htmlFinal);
+                await SendMailMessage(message);
+                _logger.LogInformation($"Email enviado para {email}");
+
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Erro ao mandar email: {ex.Message}");
             }
+        }
+
+        private async Task SendMailMessage(MimeMessage message)
+        {
+            using var client = new MailKit.Net.Smtp.SmtpClient();
+            await client.ConnectAsync(Provider, 587, SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(User, Password);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
         }
 
         private MailMessage CreateMailMessage(string email, string subject, string htmlFinal)
@@ -56,9 +67,22 @@ namespace Sofragrancia_EmailSender.Services
             return mailMessage;
         }
 
-        private SmtpClient GetSmtpClient()
+        private MimeMessage CreateMimeMessage(string email, string subject, string htmlFinal)
         {
-            SmtpClient smtpClient = new SmtpClient(Provider, 587);
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Sofragrância", User));
+            message.To.Add(new MailboxAddress("", email));
+            message.Subject = subject;
+            var bodyBuilder = new BodyBuilder { HtmlBody = htmlFinal };
+            message.Body = bodyBuilder.ToMessageBody();
+            return message;
+        }
+
+
+
+        private System.Net.Mail.SmtpClient GetSmtpClient()
+        {
+            System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient(Provider, 587);
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(User, Password);
             smtpClient.EnableSsl = true;
@@ -67,7 +91,7 @@ namespace Sofragrancia_EmailSender.Services
 
         private bool EmailIsValid(string email)
         {
-            if(string.IsNullOrWhiteSpace(email)) return false;
+            if (string.IsNullOrWhiteSpace(email)) return false;
             Regex regex = new Regex(@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
             return regex.IsMatch(email);
         }
