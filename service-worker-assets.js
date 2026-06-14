@@ -1,5 +1,5 @@
 self.assetsManifest = {
-  "version": "VFeYGMr9",
+  "version": "kaWif40w",
   "assets": [
     {
       "hash": "sha256-NpyNN6olh5RsOUdDOtpn8s+mqzTkiBvBqCMUIIqOizA=",
@@ -82,12 +82,12 @@ self.assetsManifest = {
       "url": "_framework/Microsoft.JSInterop.zkm0j93ile.wasm"
     },
     {
-      "hash": "sha256-jSe6ef4BQ1MBdmxecz8UIbWmKEuiw2UsUKNNojR2Mp4=",
-      "url": "_framework/Sofragrancia.Shared.hvaetbndwc.wasm"
+      "hash": "sha256-1ruXM8aLTZ2SWQ7vDs6o83u5XHpzEVm79qTIPwCW9uE=",
+      "url": "_framework/Sofragrancia.Shared.a41unr2chn.wasm"
     },
     {
-      "hash": "sha256-1hYSIEWKpu0XtO9IypF0sGwJcKNIG6+oI4hG+XwNnEQ=",
-      "url": "_framework/Sofragrancia.UI.yxd5tx2rlp.wasm"
+      "hash": "sha256-fLBVD3qEW6urrj06VNa81PHqv9PCoZax+7wQMzSCF/w=",
+      "url": "_framework/Sofragrancia.UI.cm60m2tlxw.wasm"
     },
     {
       "hash": "sha256-+B5uJWaHp7qkXDNoHwmI/L5acCr1Ix4+vzs81hvLoek=",
@@ -146,8 +146,8 @@ self.assetsManifest = {
       "url": "_framework/System.Net.Primitives.uhdmdhe7b7.wasm"
     },
     {
-      "hash": "sha256-HS/gFTprQ7utD5Y8978jhehyB0WK2YpVZ0wJqgmpisY=",
-      "url": "_framework/System.Private.CoreLib.3klb7yuejn.wasm"
+      "hash": "sha256-kuuyqe9VPvM+mu2KY6sGdi6bNQS1bVtZDRv3IdbN/nk=",
+      "url": "_framework/System.Private.CoreLib.udawrduny4.wasm"
     },
     {
       "hash": "sha256-813VuT+rs+wLM4hEbtxdbs4qvth31EM61K88ANsURd0=",
@@ -190,8 +190,8 @@ self.assetsManifest = {
       "url": "_framework/blazor.webassembly.66stpp682q.js"
     },
     {
-      "hash": "sha256-rI7fisLFQ4HUal8mlec7+WxSou+guaYUaTEOJvg0kiI=",
-      "url": "_framework/dotnet.0ly53kwiwi.js"
+      "hash": "sha256-Hllipte9QXr/HFgyqh41Qw7ZH98bfCRvR//iy7JNZsA=",
+      "url": "_framework/dotnet.2c3oo22wuv.js"
     },
     {
       "hash": "sha256-kkp5wX0htwkBcZt5WmEiKmhBqjqdCJtGc+koldfyoDQ=",
@@ -238,7 +238,7 @@ self.assetsManifest = {
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-LyAb4DH+qHN0uLsX+npH3O+jQfCcLkkxiFhWf+ws+XM=",
+      "hash": "sha256-So8PIgqQHofBBYENomdvBRJkf7aP3zJxCl/40PFwayM=",
       "url": "index.html"
     },
     {
