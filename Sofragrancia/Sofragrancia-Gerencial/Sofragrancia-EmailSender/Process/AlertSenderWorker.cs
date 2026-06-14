@@ -39,7 +39,7 @@ namespace Sofragrancia_EmailSender.Process
             while (!stoppingToken.IsCancellationRequested)
             {
                 await _cronManager.WaitForNextScheduleAsync(stoppingToken);
-                _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
+                //_logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
                 _current = DateTime.Now.AddHours(-3);
                 try
                 {
@@ -49,9 +49,9 @@ namespace Sofragrancia_EmailSender.Process
                         var alertas = await GetAlertsFromToday(client);
                         //_logger.LogInformation($"Hora: {_current.Hour} / {DateTimeOffset.Now.AddHours(-3).Hour}\nMinutos: {_current.Minute} / {DateTimeOffset.Now.AddHours(-3).Minute}");
                         var alertasAgora = alertas.Where(a => a.Horario.Minute == _current.Minute && a.Horario.Hour == _current.Hour).ToList();
-
                         foreach (var alert in alertasAgora)
                         {
+                            _logger.LogInformation($"Enviando {alertasAgora.Count} alertas");
                             var alertasAtivos = alert.Alertas.Where(a => a.IsEnable).OrderBy(a => a.IdAlertaBase);
                             var htmlPartes = new List<string>();
                             foreach (var config in alertasAtivos)

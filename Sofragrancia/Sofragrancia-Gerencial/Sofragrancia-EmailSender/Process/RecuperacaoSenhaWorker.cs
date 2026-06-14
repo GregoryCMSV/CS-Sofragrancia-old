@@ -38,8 +38,9 @@ namespace Sofragrancia_EmailSender.Process
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             if (_channel == null) return;
-
             var consumer = new AsyncEventingBasicConsumer(_channel);
+
+            _logger.LogWarning("Enviando email para trocar a senha");
 
             consumer.ReceivedAsync += async (model, ea) =>
             {
