@@ -32,7 +32,7 @@ namespace Sofragrancia_EmailSender.Services
                 {
                     var smtp = GetSmtpClient();
                     var message = CreateMailMessage(email, subject, htmlFinal);
-                    smtp.Send(message);
+                    await   smtp.SendMailAsync(message);
                     _logger.LogInformation($"Email enviado para {email}");
                 }
             }

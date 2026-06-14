@@ -1,4 +1,5 @@
-﻿using Sofragrancia_EmailSender.Process;
+﻿using B1Worker.Core.Helpers;
+using Sofragrancia_EmailSender.Process;
 using Sofragrancia_EmailSender.Services;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Sofragrancia_EmailSender.Extensions
         public static IServiceCollection AddEmailWorker(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<EmailService>();
+            services.AddSingleton<CronManager>();
             services.AddHostedService<AlertSenderWorker>();
             services.AddHostedService<RecuperacaoSenhaWorker>();
             return services;

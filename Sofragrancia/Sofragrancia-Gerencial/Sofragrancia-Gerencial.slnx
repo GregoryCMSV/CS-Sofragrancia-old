@@ -1,8 +1,8 @@
 <Solution>
   <Project Path="ConsoleTeste/ConsoleTeste.csproj" Id="7c2f8074-1f72-4f1e-ac60-131212378c91" />
-  <Project Path="Sofragrancia-EmailSender/Sofragrancia-EmailSender.csproj" Id="c31ec1a0-22ca-4c88-a141-3b9933448578" />
+  <Project Path="Sofragrancia-EmailSender/Sofragrancia.EmailSender.csproj" Id="c31ec1a0-22ca-4c88-a141-3b9933448578" />
   <Project Path="Sofragrancia.API/Sofragrancia.API.csproj" />
   <Project Path="Sofragrancia.Banco/Sofragrancia.Banco.csproj" />
-  <Project Path="Sofragrancia.UI/Sofragrancia.UI.csproj" />
   <Project Path="Sofragrancia.Shared/Sofragrancia.Shared.csproj" />
+  <Project Path="Sofragrancia.UI/Sofragrancia.UI.csproj" />
 </Solution>

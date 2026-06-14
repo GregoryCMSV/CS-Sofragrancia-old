@@ -1,3 +1,4 @@
+using B1Worker.Core.Helpers;
 using Sofragrancia.Banco;
 using Sofragrancia.Banco.Models.Alertas;
 using Sofragrancia.Banco.Repositories;
@@ -16,16 +17,18 @@ namespace Sofragrancia_EmailSender.Process
         private string _supaKey;
         private string _supaUrl;
         private EmailService _emailService;
+        private CronManager _cronManager;
         private DateTime _current;
 
 
-        public AlertSenderWorker(ILogger<AlertSenderWorker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService)
+        public AlertSenderWorker(ILogger<AlertSenderWorker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService, CronManager cronManager)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _supaUrl = configuration["Supabase:Url"]!;
             _supaKey = configuration["Supabase:Key"]!;
             _emailService = emailService;
+            _cronManager = cronManager;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,8 +36,9 @@ namespace Sofragrancia_EmailSender.Process
             using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
             //using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
-            while (await timer.WaitForNextTickAsync(stoppingToken))
+            while (!stoppingToken.IsCancellationRequested)
             {
+                await _cronManager.WaitForNextScheduleAsync(stoppingToken);
                 _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
                 _current = DateTime.Now.AddHours(-3);
                 try
