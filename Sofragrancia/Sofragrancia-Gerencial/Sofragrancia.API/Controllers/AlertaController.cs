@@ -40,7 +40,7 @@ namespace Sofragrancia.API.Controllers
             }
             if (alerta.Horario != null)
             {
-                dicionario["horario"] = alerta.Horario; 
+                dicionario["horario"] = TimeOnly.Parse(alerta.Horario); 
             }
             if (alerta.Dias != null)
             {

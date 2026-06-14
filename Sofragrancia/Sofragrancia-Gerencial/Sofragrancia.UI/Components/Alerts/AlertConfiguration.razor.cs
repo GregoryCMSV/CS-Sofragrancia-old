@@ -271,8 +271,6 @@ public partial class AlertConfiguration
                     { "AtualizadoEm", DateTime.UtcNow.AddHours(-3) }
                 };
 
-                // O endpoint do PATCH de AlertaConfigUser — confirme se existe algo parecido
-                // se o controller de AlertaConfigUser está exposto ou se é pelo mesmo AlertaController
                 var respostaLinha = await HttpService.PatchAsync($"api/Alerta/Update/{_headerIdBanco}/{idLinhaConfig}", patchLinha);
 
                 if (!respostaLinha.IsSuccessStatusCode)
