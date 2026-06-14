@@ -3,8 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
-using Sofragrancia_EmailSender.Extensions;
-using Sofragrancia_EmailSender.Process;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -34,10 +32,6 @@ namespace Sofragrancia.API
 
             builder.Services.AddSingleton<RabbitMqService>();
             builder.Services.AddScoped<AlertService>();
-
-            //Serviços para envio dos emails
-
-            builder.Services.AddEmailWorker(builder.Configuration);
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
 
