@@ -9,7 +9,7 @@ namespace Sofragrancia.API.Services
         private readonly string _host;
         public RabbitMqService(IConfiguration configuration)
         {
-            _host = configuration["MQ:host"]!;
+            _host = configuration["MQ:Url"]!;
         }
 
         public async Task PublicarEmailTrocaSenha(string email, string novaSenha)

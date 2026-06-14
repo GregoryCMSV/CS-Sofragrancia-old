@@ -16,6 +16,7 @@ namespace Sofragrancia_EmailSender
         private string _supaKey;
         private string _supaUrl;
         private EmailService _emailService;
+        private DateTime _current;
 
 
         public AlertSenderWorker(ILogger<AlertSenderWorker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService)
@@ -29,21 +30,22 @@ namespace Sofragrancia_EmailSender
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
-            using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+            using var timer = new PeriodicTimer(TimeSpan.FromMinutes(1));
+            //using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
                 _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now);
-
+                _current = DateTime.Today;
                 try
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         var client = (await SofragranciaBaseConnection.GetInstanceAsync(_supaUrl, _supaKey)).SupabaseClient;
                         var alertas = await GetAlertsFromToday(client);
+                        var alertasAgora = alertas.Where(a => a.Horario.Minute == _current.Minute && a.Horario.Hour == _current.Hour).ToList();
 
-                        foreach (var alert in alertas)
+                        foreach (var alert in alertasAgora)
                         {
                             var alertasAtivos = alert.Alertas.Where(a => a.IsEnable).OrderBy(a => a.IdAlertaBase);
                             var htmlPartes = new List<string>();
@@ -147,9 +149,7 @@ namespace Sofragrancia_EmailSender
 
             var models = alertas.Models;
             return models.Where(a => a.Dias.Contains(hoje) && a.IsEnable).ToList();
-
         }
-
 
     }
 }

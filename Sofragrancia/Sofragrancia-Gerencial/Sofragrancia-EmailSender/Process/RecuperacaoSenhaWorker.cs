@@ -11,22 +11,22 @@ namespace Sofragrancia_EmailSender.Process
     public class RecuperacaoSenhaWorker : BackgroundService
     {
         private readonly ILogger<RecuperacaoSenhaWorker> _logger;
-        private readonly IServiceProvider _serviceProvider;
         private IConnection? _connection;
-        private IChannel? _channel; 
+        private IChannel? _channel;
         private EmailService _emailService;
+        private IConfiguration _configuration;
 
-        public RecuperacaoSenhaWorker(ILogger<RecuperacaoSenhaWorker> logger, IServiceProvider serviceProvider, EmailService emailService)
+        public RecuperacaoSenhaWorker(ILogger<RecuperacaoSenhaWorker> logger, EmailService emailService, IConfiguration configuration)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
             _emailService = emailService;
+            _configuration = configuration;
         }
 
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            var factory = new ConnectionFactory { HostName = "localhost" };
+            var factory = new ConnectionFactory { HostName = _configuration["MQ:Url"]! };
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 
@@ -52,13 +52,8 @@ namespace Sofragrancia_EmailSender.Process
                     var email = jsonDoc.RootElement.GetProperty("Email").GetString();
                     var novaSenha = jsonDoc.RootElement.GetProperty("NovaSenha").GetString();
 
-                    _logger.LogInformation($"Preparando envio de e-mail de recuperação para: {email}");
-
-                    using (var scope = _serviceProvider.CreateScope())
-                    {
-                        string html = $"<h1>Recuperação de Senha</h1><p>A sua nova senha é: <b>{novaSenha}</b></p>";
-                         await _emailService.SendEmailAsync(email, "A sua Nova Senha - Sofragrância", html);
-                    }
+                    string html = $"<h1>Recuperação de Senha</h1><p>A sua nova senha é: <b>{novaSenha}</b></p>";
+                    await _emailService.SendEmailAsync(email, "A sua Nova Senha - Sofragrância", html);
 
                     await _channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
                 }

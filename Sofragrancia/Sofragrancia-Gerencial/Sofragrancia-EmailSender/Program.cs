@@ -1,4 +1,5 @@
 using Sofragrancia.Banco;
+using Sofragrancia_EmailSender.Process;
 using Sofragrancia_EmailSender.Services;
 
 namespace Sofragrancia_EmailSender
