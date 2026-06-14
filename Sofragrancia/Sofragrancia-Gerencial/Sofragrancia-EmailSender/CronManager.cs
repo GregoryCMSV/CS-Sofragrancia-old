@@ -26,7 +26,7 @@ namespace B1Worker.Core.Helpers
         /// </summary>
         public async Task WaitForNextScheduleAsync(CancellationToken stoppingToken)
         {
-            var utcNow = DateTime.UtcNow;
+            var utcNow = DateTime.UtcNow.AddHours(-3);
 
             var nextUtc = _cronExpression.GetNextOccurrence(utcNow);
 
