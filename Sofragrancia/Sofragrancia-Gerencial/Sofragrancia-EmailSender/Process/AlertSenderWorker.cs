@@ -36,7 +36,7 @@ namespace Sofragrancia_EmailSender.Process
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
                 _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
-                _current = DateTime.Today;
+                _current = DateTime.Now.AddHours(-3);
                 try
                 {
                     using (var scope = _serviceProvider.CreateScope())
