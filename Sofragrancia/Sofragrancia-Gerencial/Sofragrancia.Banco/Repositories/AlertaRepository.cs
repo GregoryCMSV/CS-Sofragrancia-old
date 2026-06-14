@@ -59,7 +59,7 @@ namespace Sofragrancia.Banco.Repositories
             return header;
         }
 
-        private async Task<(List<AlertaBase> AlertasBase, List<AlertaConfigUser> LinhasAtuais)> FindCurrentAlerts(int idHeader)
+        public async Task<(List<AlertaBase> AlertasBase, List<AlertaConfigUser> LinhasAtuais)> FindCurrentAlerts(int idHeader)
         {
             var baseResponse = await _supabase.From<AlertaBase>().Get();
             var alertasBase = baseResponse.Models ?? new List<AlertaBase>();
@@ -98,6 +98,16 @@ namespace Sofragrancia.Banco.Repositories
             {
                 await _supabase.From<AlertaConfigUser>().Insert(linhasParaInserir);
             }
+        }
+        public async Task<bool> HeaderExists(int id)
+        {
+            var headerResponse = await _supabase.From<AlertaHeader>()
+                .Where(h => h.Id == id)
+                .Get();
+
+            var header = headerResponse.Models.FirstOrDefault();
+
+            return header != null;
         }
     }
 }

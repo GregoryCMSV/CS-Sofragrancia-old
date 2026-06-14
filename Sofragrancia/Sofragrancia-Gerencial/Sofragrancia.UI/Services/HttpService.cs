@@ -62,6 +62,9 @@ public async Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)
 public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)
     => await SendAsync(endpoint, () => _httpClient.PutAsJsonAsync(endpoint, data));
 
+public async Task<HttpResponseMessage> PatchAsync<T>(string endpoint, T data)
+    => await SendAsync(endpoint, () => _httpClient.PatchAsJsonAsync(endpoint, data));
+
 public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
     => await SendAsync(endpoint, () => _httpClient.DeleteAsync(endpoint));
 
