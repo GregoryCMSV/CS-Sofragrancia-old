@@ -8,7 +8,7 @@ namespace B1Worker.Core.Helpers
         private readonly ILogger _logger;
         private readonly CronExpression _cronExpression;
 
-        public CronManager(IConfiguration configuration, ILogger logger, string configKey = "Cron")
+        public CronManager(IConfiguration configuration, ILogger<CronManager> logger, string configKey = "Cron")
         {
 
             var cronString = configuration[configKey];
