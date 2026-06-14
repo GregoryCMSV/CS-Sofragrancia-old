@@ -22,6 +22,9 @@ namespace Sofragrancia_EmailSender.Services
             Password = configuration["smtp:pass"]!;
             Provider = configuration["smtp:provider"]!;
             _logger = logger;
+            _logger.LogInformation(User);
+            _logger.LogInformation(Password);
+            _logger.LogInformation(Provider);
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlFinal)
@@ -32,7 +35,7 @@ namespace Sofragrancia_EmailSender.Services
                 {
                     var smtp = GetSmtpClient();
                     var message = CreateMailMessage(email, subject, htmlFinal);
-                    await   smtp.SendMailAsync(message);
+                    await smtp.SendMailAsync(message);
                     _logger.LogInformation($"Email enviado para {email}");
                 }
             }
