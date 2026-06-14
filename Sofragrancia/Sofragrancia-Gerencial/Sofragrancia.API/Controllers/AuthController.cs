@@ -14,14 +14,17 @@ namespace Sofragrancia.API.Controllers
     {
         AuthService _authService;
         AlertService _alertController;
-        IConfiguration _configuration;
+        RabbitMqService _rabbitMqService;
         
+        IConfiguration _configuration;
 
-        public AuthController(Supabase.Client client, AlertService alertController, IConfiguration configuration)
+
+        public AuthController(Supabase.Client client, AlertService alertController, IConfiguration configuration, RabbitMqService rabbitMqService)
         {
             _authService = new(client);
             _alertController = alertController;
             _configuration = configuration;
+            _rabbitMqService = rabbitMqService;
         }
 
         [HttpPost("login")]
@@ -86,6 +89,28 @@ namespace Sofragrancia.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { Erro = "Falha ao validar o token", ex.Message });
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordUpdateRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Senha))
+                    return BadRequest(new { Message = "Informe o usuário e a nova senha" });
+
+                var response = await _authService.ReiniciarSenhaUsuarioAsync(request.Email, request.Senha, _configuration["Supabase:Pkey"]!);
+
+                if (response == null)
+                    return BadRequest(new { Message = "Erro ao atualizar a senha" });
+
+                await _rabbitMqService.PublicarEmailTrocaSenha(request.Email, request.Senha);
+                return Ok("Senha atualizada, verifique o email cadastrado");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
             }
         }
 

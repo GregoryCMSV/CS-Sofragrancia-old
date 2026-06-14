@@ -9,16 +9,16 @@ using static Supabase.Postgrest.Constants;
 
 namespace Sofragrancia_EmailSender
 {
-    public class Worker : BackgroundService
+    public class AlertSenderWorker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<AlertSenderWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
         private string _supaKey;
         private string _supaUrl;
         private EmailService _emailService;
 
 
-        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService)
+        public AlertSenderWorker(ILogger<AlertSenderWorker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

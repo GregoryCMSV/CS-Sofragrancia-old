@@ -9,7 +9,8 @@ namespace Sofragrancia_EmailSender
         {
             var builder = Host.CreateApplicationBuilder(args);
             builder.Services.AddSingleton<EmailService>();
-            builder.Services.AddHostedService<Worker>();
+            builder.Services.AddHostedService<AlertSenderWorker>();
+            builder.Services.AddHostedService<RecuperacaoSenhaWorker>();
             var host = builder.Build();
             host.Run();
         }

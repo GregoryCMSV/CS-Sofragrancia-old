@@ -18,3 +18,9 @@ public record UserMetaData
 
 }
 
+public record PasswordUpdateRequest
+{
+    public string Email { get; set; }
+    public string Senha { get; set; }
+}
+
