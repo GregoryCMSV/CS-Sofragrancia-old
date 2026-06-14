@@ -178,8 +178,9 @@ namespace Sofragrancia.Banco.Repositories
 
         public async Task<dynamic> GetByEmailAsync(string email)
         {
+            var id = _supabase.Auth.CurrentUser.Id;
             var response = await _supabase.From<AlertaHeader>()
-                                          .Where(x => x.Email == email)
+                                          .Where(x => x.IdUsuario == id)
                                           .Get();
 
             var item = response.Models.FirstOrDefault();
@@ -190,6 +191,16 @@ namespace Sofragrancia.Banco.Repositories
             }
 
             return GenerateCleanObject(item, typeof(AlertaHeader));
+        }
+
+        public virtual async Task<dynamic> PatchByID(int id, Dictionary<string, object> atualizacoes)
+        {
+            var update = JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(atualizacoes)) ;
+            var response = await _supabase.From<T>()
+                                          .Filter("id", Operator.Equals, id)
+                                          .Update(update);
+
+            return ("👍");
         }
     }
 }

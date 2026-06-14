@@ -6,12 +6,12 @@ namespace Sofragrancia.Shared.Dtos;
 public class AlertaHeaderResponseDto
 {
     public int? Id { get; set; }
-    public string? IdUsuario { get; set; } = string.Empty;
-    public string? Email { get; set; } = string.Empty;
-    public string? Horario { get; set; } = "08:00:00"; // vem como string "HH:mm:ss"
-    public int[]? Dias { get; set; } = Array.Empty<int>();
+    public string? IdUsuario { get; set; }
+    public string? Email { get; set; }
+    public string? Horario { get; set; }
+    public int[]? Dias { get; set; }
     public bool? IsEnable { get; set; }
-    public List<AlertaConfigUserResponseDto>? Alertas { get; set; } = new();
+    public List<AlertaConfigUserResponseDto>? Alertas { get; set; }
 }
 
 public class AlertaConfigUserResponseDto

@@ -33,16 +33,41 @@ namespace Sofragrancia.API.Controllers
             if (alerta == null)
                 return BadRequest("Informe um campo para atualizar.");
             
-            var metadados = alerta.GetType()
+            /*var metadados = alerta.GetType()
             .GetProperties()
-            .Where(p => p.GetValue(alerta) != null)
+            .Where(p => p.GetValue(alerta) != null && p.GetValue(alerta) != default)
             .ToDictionary(
                 p => p.Name,
                 p => p.GetValue(alerta) ?? string.Empty
             );
+            */
+            Dictionary<string, object> dicionario = new();
+            if (alerta.Email != null)
+            {
+                dicionario["email"] = alerta.Email; 
+            }
+            if (alerta.Horario != null)
+            {
+                dicionario["horario"] = alerta.Horario; 
+            }
+            if (alerta.Dias != null)
+            {
+                dicionario["dias"] = alerta.Dias; 
+            }
+            if (alerta.IsEnable != null)
+            {
+                dicionario["isEnable"] = alerta.IsEnable; 
+            }
+            /*
+            if (alerta.Alertas != null)
+            {
+                //dicionario["alertas"] = new Dictionary<string, object>
+                dicionario["alertas"] = new List<AlertaConfigUserResponseDto>();
+            }
+            */
 
-
-            return Ok();
+            var response = await _repository.PatchByID(id, dicionario);
+            return Ok(response);
         }
     }
 }
