@@ -91,13 +91,13 @@ namespace Sofragrancia.Banco
         {
             var atributos = new UserAttributes();
 
-            if (!string.IsNullOrEmpty(novoEmail))
+            if (!string.IsNullOrWhiteSpace(novoEmail))
                 atributos.Email = novoEmail;
 
-            if (!string.IsNullOrEmpty(novaSenha))
+            if (!string.IsNullOrWhiteSpace(novaSenha))
                 atributos.Password = novaSenha;
 
-            if (dadosExtras != null)
+            if (dadosExtras != null && dadosExtras.Count > 0)
                 atributos.Data = dadosExtras;
 
             var userResponse = await _supabase.Auth.Update(atributos);

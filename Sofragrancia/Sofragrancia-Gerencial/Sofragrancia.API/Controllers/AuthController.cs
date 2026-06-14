@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
 using Sofragrancia.Banco.Repositories;
@@ -16,7 +17,7 @@ namespace Sofragrancia.API.Controllers
         AuthService _authService;
         AlertService _alertController;
         RabbitMqService _rabbitMqService;
-        
+
         IConfiguration _configuration;
 
 
@@ -32,7 +33,7 @@ namespace Sofragrancia.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             try
-            {               
+            {
                 var session = await _authService.LoginAsync(request.Email, request.Password);
 
                 return Ok(new LoginResponseDto
@@ -63,7 +64,7 @@ namespace Sofragrancia.API.Controllers
                     _configuration["Supabase:Pkey"]!
                     );
 
-                if(string.IsNullOrEmpty(novoUserId)) return BadRequest(new { Erro = errorMessage });
+                if (string.IsNullOrEmpty(novoUserId)) return BadRequest(new { Erro = errorMessage });
 
                 await _alertController.SincronizarAlertasDoUsuarioAsync(novoUserId, request.Email);
 
@@ -83,8 +84,8 @@ namespace Sofragrancia.API.Controllers
                 var token = Request.Headers["Authorization"].ToString();
                 if (!_authService.ValidarMetadadosDoToken(token))
                 {
-                    return Ok(new { IsValid = false,Message = "Token invalido" });
-                }               
+                    return Ok(new { IsValid = false, Message = "Token invalido" });
+                }
                 return Ok(new { IsValid = true, Message = "Token Valido" });
             }
             catch (Exception ex)
@@ -99,7 +100,7 @@ namespace Sofragrancia.API.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(request.Email))
-                    return BadRequest(new { Message = "Informe o email"});
+                    return BadRequest(new { Message = "Informe o email" });
 
                 var newPass = GeneratePassword();
                 var response = await _authService.ReiniciarSenhaUsuarioAsync(request.Email, newPass, _configuration["Supabase:Pkey"]!);
@@ -109,6 +110,32 @@ namespace Sofragrancia.API.Controllers
 
                 await _rabbitMqService.PublicarEmailTrocaSenha(request.Email, newPass);
                 return Ok("Senha atualizada, verifique o email cadastrado");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPatch("update-user")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequestDto request)
+        {
+            try
+            {
+                
+                var metadados = request.MetaDados?.GetType()
+                .GetProperties()
+                .Where(p => p.GetValue(request.MetaDados) != null)
+                .ToDictionary(
+                    p => p.Name,
+                    p => p.GetValue(request.MetaDados) ?? string.Empty
+                );
+
+                var result = await _authService.AtualizarUsuarioAsync(request.Email, request.Senha, metadados);
+
+                if (result == null) return BadRequest(new { Message = "Erro ao atualizar o usuário" });
+                return Ok("Atualizado com sucesso");
             }
             catch (Exception ex)
             {

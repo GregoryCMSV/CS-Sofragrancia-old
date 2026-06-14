@@ -13,8 +13,8 @@ public record NewUserRequestDto
 
 public record UserMetaData
 {
-    public string Role { get; set; }
-    public string NomeCompleto { get; set; }
+    public string? Role { get; set; }
+    public string? NomeCompleto { get; set; }
 
 }
 
@@ -23,3 +23,11 @@ public record PasswordUpdateRequest
     public string Email { get; set; }
 }
 
+public class UpdateUserRequestDto
+{
+    public string? Email { get; set; }
+
+    public string? Senha { get; set; }
+
+    public UserMetaData? MetaDados { get; set; }
+}
