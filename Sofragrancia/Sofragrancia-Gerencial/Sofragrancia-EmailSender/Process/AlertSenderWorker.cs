@@ -35,7 +35,7 @@ namespace Sofragrancia_EmailSender.Process
 
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
-                _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
                 _current = DateTime.Today;
                 try
                 {
@@ -43,6 +43,7 @@ namespace Sofragrancia_EmailSender.Process
                     {
                         var client = (await SofragranciaBaseConnection.GetInstanceAsync(_supaUrl, _supaKey)).SupabaseClient;
                         var alertas = await GetAlertsFromToday(client);
+                        _logger.LogInformation($"Hora: {_current.Hour} / {DateTimeOffset.Now.AddHours(-3)}");
                         var alertasAgora = alertas.Where(a => a.Horario.Minute == _current.Minute && a.Horario.Hour == _current.Hour).ToList();
 
                         foreach (var alert in alertasAgora)
