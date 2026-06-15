@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using B1Worker.Core.Helpers.Loggers;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Sofragrancia_EmailSender.Services;
 using System;
@@ -10,17 +11,19 @@ namespace Sofragrancia_EmailSender.Process
 {
     public class RecuperacaoSenhaWorker : BackgroundService
     {
-        private readonly ILogger<RecuperacaoSenhaWorker> _logger;
+        private readonly Logger _logger;
         private IConnection? _connection;
         private IChannel? _channel;
         private EmailService _emailService;
         private IConfiguration _configuration;
+        private LogCategory logcat;
 
-        public RecuperacaoSenhaWorker(ILogger<RecuperacaoSenhaWorker> logger, EmailService emailService, IConfiguration configuration)
+        public RecuperacaoSenhaWorker(Logger logger, EmailService emailService, IConfiguration configuration)
         {
             _logger = logger;
             _emailService = emailService;
             _configuration = configuration;
+            logcat = LogCategory.Create("Email");
         }
 
 
@@ -40,7 +43,7 @@ namespace Sofragrancia_EmailSender.Process
             if (_channel == null) return;
             var consumer = new AsyncEventingBasicConsumer(_channel);
 
-            _logger.LogWarning("Enviando email para trocar a senha");
+            _logger.WriteLog("Enviando email para trocar a senha",LogStatus.Warning, logcat);
 
             consumer.ReceivedAsync += async (model, ea) =>
             {
@@ -60,7 +63,7 @@ namespace Sofragrancia_EmailSender.Process
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Erro ao enviar e-mail. A mensagem volta para a fila. Erro: {ex.Message}");
+                    _logger.WriteLog($"Erro ao enviar e-mail. A mensagem volta para a fila. Erro: {ex.Message}",LogStatus.Error, logcat);
                     await _channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
                 }
             };

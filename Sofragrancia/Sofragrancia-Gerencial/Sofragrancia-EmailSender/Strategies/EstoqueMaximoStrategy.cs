@@ -20,7 +20,7 @@ namespace Sofragrancia_EmailSender.Strategies
                 (1, 4) => p => Convert.ToDouble(p.EstoqueAtual) > config.Value,
                 (1, 5) => p => Convert.ToDouble(p.EstoqueAtual) >= config.Value,
                 (2, 4) => p => Convert.ToDouble(p.EstoqueAtual) > ((config.Value/100) * Convert.ToDouble(p.EstoqueMinimo)),
-                (2, 5) => p => Convert.ToDouble(p.EstoqueAtual) >= ((config.Value) * Convert.ToDouble(p.EstoqueMinimo)),
+                (2, 5) => p => Convert.ToDouble(p.EstoqueAtual) >= ((config.Value/100) * Convert.ToDouble(p.EstoqueMinimo)),
                 _ => p => false
             };
 
@@ -40,7 +40,7 @@ namespace Sofragrancia_EmailSender.Strategies
             sb.AppendLine("<ul class='alert-list'>");
             foreach (var prod in produtos)
             {
-                sb.AppendLine($"<li><b>{prod.Descricao}</b> - Atual: {prod.EstoqueAtual}  (Máximo: {(config.UnidadeMedida == 1? config.Value : (config.Value * Convert.ToDouble(prod.EstoqueMinimo)).ToString("F2"))})</li>");
+                sb.AppendLine($"<li><b>{prod.Descricao}</b> - Atual: {prod.EstoqueAtual}  (Máximo: {(config.UnidadeMedida == 1? config.Value : ((config.Value/100) * Convert.ToDouble(prod.EstoqueMinimo)).ToString("F2"))})</li>");
             }
             sb.AppendLine("</ul></div>");
 

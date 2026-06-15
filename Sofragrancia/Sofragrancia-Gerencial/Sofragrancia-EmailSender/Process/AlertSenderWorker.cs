@@ -1,4 +1,5 @@
 using B1Worker.Core.Helpers;
+using B1Worker.Core.Helpers.Loggers;
 using Sofragrancia.Banco;
 using Sofragrancia.Banco.Models.Alertas;
 using Sofragrancia.Banco.Repositories;
@@ -12,16 +13,17 @@ namespace Sofragrancia_EmailSender.Process
 {
     public class AlertSenderWorker : BackgroundService
     {
-        private readonly ILogger<AlertSenderWorker> _logger;
+        private readonly Logger _logger;
         private readonly IServiceProvider _serviceProvider;
         private string _supaKey;
         private string _supaUrl;
         private EmailService _emailService;
         private CronManager _cronManager;
         private DateTime _current;
+        private DateTime _last;
+        private LogCategory logcat;
 
-
-        public AlertSenderWorker(ILogger<AlertSenderWorker> logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService, CronManager cronManager)
+        public AlertSenderWorker(Logger logger, IServiceProvider serviceProvider, IConfiguration configuration, EmailService emailService, CronManager cronManager)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
@@ -29,6 +31,8 @@ namespace Sofragrancia_EmailSender.Process
             _supaKey = configuration["Supabase:Key"]!;
             _emailService = emailService;
             _cronManager = cronManager;
+            logcat = LogCategory.Create("Alerta");
+            _last = DateTime.Now.AddMinutes(-10);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,18 +44,27 @@ namespace Sofragrancia_EmailSender.Process
             {
                 await _cronManager.WaitForNextScheduleAsync(stoppingToken);
                 //_logger.LogInformation("Verificando alertas às: {time}", DateTimeOffset.Now.AddHours(-3));
-                _current = DateTime.Now.AddHours(-3);
+                _current = DateTime.Now;
                 try
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         var client = scope.ServiceProvider.GetRequiredService<Client>();
                         var alertas = await GetAlertsFromToday(client);
+                        _logger.WriteLog($"Total de alertas de hoje: {alertas.Count}",LogStatus.Info, logcat);
+                        alertas.ForEach(s => _logger.WriteLog($"{s.Email} / {s.Horario}",LogStatus.Info, logcat));
                         //_logger.LogInformation($"Hora: {_current.Hour} / {DateTimeOffset.Now.AddHours(-3).Hour}\nMinutos: {_current.Minute} / {DateTimeOffset.Now.AddHours(-3).Minute}");
-                        var alertasAgora = alertas.Where(a => a.Horario.Minute == _current.Minute && a.Horario.Hour == _current.Hour).ToList();
+                        var alertasAgora = alertas.Where(
+                            a =>
+                            {
+                                var alertTime = new DateTime(_current.Year, _current.Month, _current.Day, a.Horario.Hour, a.Horario.Minute, 0);
+                                return alertTime > _last && alertTime <= _current;
+                            }).ToList();
+                        _logger.WriteLog($"Pegando alertas de {_last} até {_current}\nTotal: {alertasAgora.Count}", LogStatus.Info, logcat);
+
                         foreach (var alert in alertasAgora)
                         {
-                            _logger.LogInformation($"Enviando {alertasAgora.Count} alertas");
+                            _logger.WriteLog($"Enviando {alertasAgora.Count} alertas", LogStatus.Info, logcat);
                             var alertasAtivos = alert.Alertas.Where(a => a.IsEnable).OrderBy(a => a.IdAlertaBase);
                             var htmlPartes = new List<string>();
                             foreach (var config in alertasAtivos)
@@ -73,7 +86,7 @@ namespace Sofragrancia_EmailSender.Process
                             {
                                 string htmlFinal = CreateEmailBody(htmlPartes); 
                                 await _emailService.SendEmailAsync(alert.Email, "Seus de Alertas - Sofragrância", htmlFinal);
-                                _logger.LogInformation($"Email de alertas enviado para {alert.Email}");
+                                _logger.WriteLog($"Email de alertas enviado para {alert.Email}", LogStatus.Info, logcat);
                             }
 
                         }
@@ -81,8 +94,9 @@ namespace Sofragrancia_EmailSender.Process
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Erro ao processar rotina de emails.");
+                    _logger.WriteLog($"Erro ao processar rotina de emails: {ex.Message}", LogStatus.Error, logcat);
                 }
+                _last = _current;
             }
         }
 

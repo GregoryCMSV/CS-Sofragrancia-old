@@ -5,6 +5,7 @@ using Supabase;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Sofragrancia_EmailSender.Strategies
 {
@@ -29,11 +30,11 @@ namespace Sofragrancia_EmailSender.Strategies
             if (!produtosAbaixo.Any())
                 return string.Empty;           
 
-            return GenerateString(produtosAbaixo);
+            return GenerateString(produtosAbaixo, config);
         }
 
 
-       private string GenerateString(List<Produto> produtos)
+       private string GenerateString(List<Produto> produtos, AlertaConfigUser config)
         {
             var sb = new StringBuilder();
             sb.AppendLine("<div class='alert-box danger'>");
@@ -41,7 +42,7 @@ namespace Sofragrancia_EmailSender.Strategies
             sb.AppendLine("<ul class='alert-list'>");
             foreach (var prod in produtos)
             {
-                sb.AppendLine($"<li><b>{prod.Descricao}</b> - Atual: {prod.EstoqueAtual} (Mínimo: {prod.EstoqueMinimo})</li>");
+                sb.AppendLine($"<li><b>{prod.Descricao}</b> - Atual: {prod.EstoqueAtual} (Mínimo: {(config.UnidadeMedida == 1 ? config.Value : ((config.Value / 100) * Convert.ToDouble(prod.EstoqueMinimo)).ToString("F2"))})</li>");
             }
             sb.AppendLine("</ul></div>");
 

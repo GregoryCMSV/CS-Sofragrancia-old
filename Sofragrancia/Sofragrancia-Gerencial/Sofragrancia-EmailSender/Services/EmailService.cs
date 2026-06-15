@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using B1Worker.Core.Helpers.Loggers;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using System;
@@ -16,15 +17,17 @@ namespace Sofragrancia_EmailSender.Services
         public string Password { get; private set; }
         public string Provider { get; private set; }
 
-        private readonly ILogger<EmailService> _logger;
+        private readonly Logger _logger;
+        private LogCategory logcat;
 
 
-        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+        public EmailService(IConfiguration configuration, Logger logger)
         {
             User = configuration["smtp:user"]!;
             Password = configuration["smtp:pass"]!;
             Provider = configuration["smtp:provider"]!;
             _logger = logger;
+            logcat = LogCategory.Create("MailService");
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlFinal)
@@ -33,17 +36,17 @@ namespace Sofragrancia_EmailSender.Services
             {
                 if (!EmailIsValid(email))
                 {
-                    _logger.LogWarning($"email: {email} inválido");
+                    _logger.WriteLog($"email: {email} inválido", LogStatus.Info, logcat);
                     return;
                 }
                 var message = CreateMimeMessage(email, subject, htmlFinal);
                 await SendMailMessage(message);
-                _logger.LogInformation($"Email enviado para {email}");
+                _logger.WriteLog($"Email enviado para {email}", LogStatus.Info,logcat);
 
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Erro ao mandar email: {ex.Message}");
+                _logger.WriteLog($"Erro ao mandar email: {ex.Message}", LogStatus.Error, logcat);
             }
         }
 
