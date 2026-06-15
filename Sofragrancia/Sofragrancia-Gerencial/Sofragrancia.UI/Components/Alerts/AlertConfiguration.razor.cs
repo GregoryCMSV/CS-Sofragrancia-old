@@ -164,7 +164,7 @@ public partial class AlertConfiguration
             Indicators = new()
         };
 
-        foreach (var alerta in banco.Alertas)
+        foreach (var alerta in banco.Alertas.OrderBy(a => a.IdAlertaBase))
         {
             var baseInfo = alerta.AlertaBaseDados;
 
