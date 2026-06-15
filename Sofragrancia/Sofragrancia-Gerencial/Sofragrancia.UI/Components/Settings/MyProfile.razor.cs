@@ -22,7 +22,7 @@ public partial class MyProfile
     protected bool exibirMenuSenha = false;
     protected string MensagemSucessoPerfil { get; set; } = string.Empty;
     protected string MensagemErroPerfil { get; set; } = string.Empty;
-
+    private bool _mensagemSucessoVisivel = false;
     protected override async Task OnInitializedAsync()
     {
         // 1. Busca os metadados (Nome e Cargo) usando o TokenService
@@ -92,11 +92,7 @@ public partial class MyProfile
 
         try
         {
-            var requestBody = new UpdateUserRequestDto
-            {
-                Senha = Perfil.NovaSenha
-            };
-
+            var requestBody = new UpdateUserRequestDto { Senha = Perfil.NovaSenha };
             var response = await HttpService.PatchAsync("api/auth/update-user", requestBody);
 
             if (!response.IsSuccessStatusCode)
@@ -106,8 +102,16 @@ public partial class MyProfile
             }
 
             MensagemSucessoPerfil = "Sua senha foi atualizada com sucesso!";
-            AlternarMenuSenha();
+            _mensagemSucessoVisivel = true;
+            StateHasChanged();
 
+            await Task.Delay(3000);
+            _mensagemSucessoVisivel = false;
+            StateHasChanged();
+
+            await Task.Delay(600);
+            MensagemSucessoPerfil = string.Empty;
+            AlternarMenuSenha();
         }
         catch (Exception)
         {
@@ -120,7 +124,8 @@ public partial class MyProfile
         if (string.IsNullOrEmpty(cargo)) return "#f1f5f9";
         return cargo.ToLower() switch
         {
-            "gerente" => "#e0f2fe",
+            "admin" => "#e0f2fe",
+            "financeiro" => "#efe5ed",
             "vendedor" => "#dcfce7",
             "estoquista" => "#f3e8ff",
             _ => "#f1f5f9"
@@ -132,7 +137,8 @@ public partial class MyProfile
         if (string.IsNullOrEmpty(cargo)) return "#475569";
         return cargo.ToLower() switch
         {
-            "gerente" => "#0369a1",
+            "admin" => "#0369a1",
+            "financeiro" => "#be5aaa",
             "vendedor" => "#15803d",
             "estoquista" => "#6b21a8",
             _ => "#475569"
