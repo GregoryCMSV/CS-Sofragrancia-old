@@ -92,18 +92,22 @@ public partial class MyProfile
 
         try
         {
-            // [INTEGRACAO_API] - Fica pronto para quando o back-end suportar a troca
-            /*
-            var response = await HttpService.PostAsync("api/usuario/alterar-senha", Perfil);
-            if (!response.IsSuccessStatusCode) 
+            var requestBody = new UpdateUserRequestDto
+            {
+                Senha = Perfil.NovaSenha
+            };
+
+            var response = await HttpService.PatchAsync("api/auth/update-user", requestBody);
+
+            if (!response.IsSuccessStatusCode)
             {
                 MensagemErroPerfil = "Não foi possível atualizar a senha no servidor.";
                 return;
             }
-            */
 
             MensagemSucessoPerfil = "Sua senha foi atualizada com sucesso!";
-            AlternarMenuSenha(); 
+            AlternarMenuSenha();
+
         }
         catch (Exception)
         {
