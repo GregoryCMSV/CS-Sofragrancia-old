@@ -27,6 +27,15 @@ namespace Sofragrancia_EmailSender.Strategies
             var totalPedidos = pedidosMes.Count();
             var pedidosCancelados = pedidosMes.Where(p => p.Status.Equals("cancelado", StringComparison.OrdinalIgnoreCase)).Count();
 
+            if (pedidosCancelados == 0)
+                return @"
+                    <div class='alert-box info'>
+                        <h3 class='alert-title info'>Taxa de Cancelamento</h3>
+                        <ul class='alert-list'>
+                            <li><b>Ainda não houve pedidos cancelados este mês.</b></li>
+                        </ul>
+                    </div>";
+
             return GenerateString(totalPedidos, pedidosCancelados, config);
         }
 
