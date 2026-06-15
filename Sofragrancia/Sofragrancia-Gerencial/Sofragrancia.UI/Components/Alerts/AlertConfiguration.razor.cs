@@ -24,6 +24,10 @@ public partial class AlertConfiguration
     // Guarda os Ids dos AlertaConfigUser por IdAlertaBase — necessário para o PATCH de cada linha
     // Chave: IdAlertaBase (ex: 1 = EstoqueMin), Valor: Id da linha na tabela alertaconfigurado
     private Dictionary<int, int> _alertaConfigIds = new();
+    protected string MensagemSucessoAlerta { get; set; } = string.Empty;
+    private bool _mensagemSucessoVisivel = false;
+    protected string MensagemErroAlerta { get; set; } = string.Empty;
+    protected bool SalvandoAlerta { get; set; } = false;
 
     // Dicionário amigável por extenso para a coluna da tabela
     protected readonly Dictionary<string, string> OperadoresDisponiveis = new()
@@ -215,10 +219,12 @@ public partial class AlertConfiguration
     {
         if (_headerIdBanco == 0)
         {
-            System.Diagnostics.Debug.WriteLine("[Erro] Id do header não encontrado. Carregue os dados antes de salvar.");
+            MensagemErroAlerta = "Não foi possível identificar sua configuração. Recarregue a página e tente novamente.";
             return;
         }
 
+        SalvandoAlerta = true;
+        
         try
         {
             // --- 1. Atualiza o AlertaHeader (email, horário, dias, ativo) ---
@@ -245,7 +251,7 @@ public partial class AlertConfiguration
             var respostaHeader = await HttpService.PatchAsync($"api/Alerta/Update/{_headerIdBanco}", patchHeader);
             if (!respostaHeader.IsSuccessStatusCode)
             {
-                System.Diagnostics.Debug.WriteLine($"[Erro] Falha ao salvar header: {respostaHeader.StatusCode}");
+                MensagemErroAlerta = "Não foi possível salvar as configurações gerais do alerta.";
                 return;
             }
 
@@ -275,15 +281,29 @@ public partial class AlertConfiguration
 
                 if (!respostaLinha.IsSuccessStatusCode)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Aviso] Falha ao salvar alerta id={idLinhaConfig}: {respostaLinha.StatusCode}");
+                    MensagemErroAlerta = $"Configuração salva parcialmente. Falha no indicador \"{item.Title}\".";
+                    return;
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("[Sucesso] Configurações de alerta salvas!");
+            MensagemSucessoAlerta = "Configurações de alerta salvas com sucesso!";
+            _mensagemSucessoVisivel = true;
+            StateHasChanged();
+
+            await Task.Delay(2400); // tempo visível
+            _mensagemSucessoVisivel = false;
+            StateHasChanged();
+
+            await Task.Delay(600); // tempo do fade
+            MensagemSucessoAlerta = string.Empty;
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"[Erro] Exceção ao salvar: {ex.Message}");
+            MensagemErroAlerta = $"Erro inesperado ao salvar: {ex.Message}";
+        } 
+        finally 
+        {
+            SalvandoAlerta = false;
         }
     }
 }
