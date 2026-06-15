@@ -18,6 +18,7 @@ public partial class NewUser
     protected override void OnInitialized()
     {
         NovoUsuario.MetaDados = new();
+        NovoUsuario.MetaDados.Role = "Vendedor";
     }
 
     protected async Task SalvarNovoUsuario()
@@ -33,9 +34,6 @@ public partial class NewUser
 
         try
         {
-            // TODO: Remover depois
-            if (NovoUsuario.MetaDados.Role.Equals("Gerente / Administrador"))
-                NovoUsuario.MetaDados.Role = "Admin";
             
             var response = await HttpService.PostAsync("api/auth/cadastro", NovoUsuario);
 
@@ -47,6 +45,7 @@ public partial class NewUser
                 MensagemSucessoCadastro = resultadoSucesso?.Mensagem ?? "Colaborador cadastrado com sucesso!";
                 NovoUsuario = new();
                 NovoUsuario.MetaDados = new();// Limpa o formulário
+                NovoUsuario.MetaDados.Role = "Vendedor";
             }
             else
             {
@@ -67,6 +66,7 @@ public partial class NewUser
         NovoUsuario = new();
         NovoUsuario.MetaDados = new();
         LimparTodasAsMensagens();
+        NovoUsuario.MetaDados.Role = "Vendedor";
     }
 
     private void LimparTodasAsMensagens()
