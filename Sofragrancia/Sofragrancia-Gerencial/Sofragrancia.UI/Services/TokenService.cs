@@ -56,9 +56,6 @@ public class TokenService
             return false;
         }
         
-        _sessaoAtiva = true;
-        return true;
-        /*
         try
         {
             var httpService = _serviceProvider.GetRequiredService<HttpService>();
@@ -84,8 +81,8 @@ public class TokenService
             await RemoverTokenAsync();
             return false;
         }
-        */
     }
+    
     public async Task<UserMetaData?> ObterDadosUsuarioLogadoAsync()
     {   
         var token = await ObterTokenAsync();

@@ -100,9 +100,17 @@ namespace Sofragrancia.UI.Pages
 
             try
             {
-                // Simula o delay de requisição para a sua apresentação de hoje
-                await Task.Delay(1500);
-                EnviouEmailRecuperacao = true;
+                var request = new RecuperarSenhaRequestDto { Email = EmailRecuperacao };
+                var response = await HttpService.PostAsync("api/auth/reset-password", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    EnviouEmailRecuperacao = true;
+                }
+                else
+                {
+                    MensagemErroModal = "Não foi possível enviar a recuperação. Verifique o e-mail informado.";
+                }
             }
             catch (Exception)
             {

@@ -130,9 +130,31 @@
         </table>
     </div>
 
+    @if (!string.IsNullOrEmpty(MensagemSucessoAlerta))
+    {
+        <div style="background-color: #d4edda; color: #155724; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; border-left: 4px solid #28a745; font-weight: 500; box-shadow: 0 2px 4px rgba(40,167,69,0.05);
+                    transition: opacity 0.6s ease; opacity: @(_mensagemSucessoVisivel ? "1" : "0");">
+            ✅ @MensagemSucessoAlerta
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(MensagemErroAlerta))
+    {
+        <div style="background-color: #fcedec; color: #c0392b; padding: 14px 18px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border-left: 4px solid #e74c3c; font-weight: 500; box-shadow: 0 2px 4px rgba(231,76,60,0.05);">
+            ⚠️ @MensagemErroAlerta
+        </div>
+    }
+
     <div class="d-flex justify-content-end align-items-center gap-2 pt-3" style="border-top: 1px solid #eee;">
-        <button class="btn btn-success px-4 py-2 fw-bold" style="border-radius: 8px; font-size: 14px;" @onclick="SalvarConfiguracoes">
-            💾 Salvar Configurações
+        <button class="btn btn-success px-4 py-2 fw-bold" style="border-radius: 8px; font-size: 14px;" @onclick="SalvarConfiguracoes" disabled="@SalvandoAlerta">
+            @if (SalvandoAlerta)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 6px;"></span>
+                <span>Salvando...</span>
+            }
+            else
+            {
+                <span>💾 Salvar Configurações</span>
+            }
         </button>
     </div>
 </div>
