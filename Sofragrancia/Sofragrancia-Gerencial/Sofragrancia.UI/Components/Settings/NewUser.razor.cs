@@ -34,7 +34,9 @@ public partial class NewUser
         try
         {
             // TODO: Remover depois
-            NovoUsuario.MetaDados.Role = "Admin";
+            if (NovoUsuario.MetaDados.Role.Equals("Gerente / Administrador"))
+                NovoUsuario.MetaDados.Role = "Admin";
+            
             var response = await HttpService.PostAsync("api/auth/cadastro", NovoUsuario);
 
             if (response.IsSuccessStatusCode)
