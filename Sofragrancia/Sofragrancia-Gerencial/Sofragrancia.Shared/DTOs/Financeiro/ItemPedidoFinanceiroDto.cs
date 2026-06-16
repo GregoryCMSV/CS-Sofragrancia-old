@@ -20,10 +20,10 @@ namespace Sofragrancia.API.DTOs
         public decimal PrecoUnitario { get; set; }
 
         [JsonPropertyName("nr_descontounitario")]
-        public decimal DescontoUnitario { get; set; }
+        public String DescontoUnitario { get; set; }
 
         [JsonPropertyName("nr_subtotal")]
-        public decimal Subtotal { get; set; }
+        public String Subtotal { get; set; }
 
         [JsonPropertyName("dt_createdate")]
         public DateTime DataCriacao { get; set; }

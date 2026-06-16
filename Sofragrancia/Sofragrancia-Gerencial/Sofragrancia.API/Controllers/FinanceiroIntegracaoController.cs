@@ -9,11 +9,24 @@ namespace Sofragrancia.API.Controllers
     {
         private readonly FinanceiroService _service;
         private readonly ProdutoIntegracaoService _produtoIntegracaoService;
+        private readonly PedidoIntegracaoService _pedidoIntegracaoService;
+        private readonly FaturaIntegracaoService _faturaIntegracaoService;
 
-        public FinanceiroIntegracaoController(FinanceiroService service, ProdutoIntegracaoService produtoIntegracaoService)
+        private readonly ItemPedidoIntegracaoService _itemPedidoIntegracaoService;
+        private readonly DescontoIntegracaoService _descontoIntegracaoService;
+        private readonly MetaVendasIntegracaoService _metaVendasIntegracaoService;
+
+        public FinanceiroIntegracaoController(FinanceiroService service, ProdutoIntegracaoService produtoIntegracaoService, 
+        PedidoIntegracaoService pedidoIntegracaoService, ItemPedidoIntegracaoService itemPedidoIntegracaoService, FaturaIntegracaoService faturaIntegracaoService,
+        DescontoIntegracaoService descontoIntegracaoService, MetaVendasIntegracaoService metaVendasIntegracaoService)
         {
             _service = service;
             _produtoIntegracaoService = produtoIntegracaoService;
+            _pedidoIntegracaoService = pedidoIntegracaoService;
+            _itemPedidoIntegracaoService = itemPedidoIntegracaoService;
+            _faturaIntegracaoService = faturaIntegracaoService;
+            _descontoIntegracaoService = descontoIntegracaoService;
+            _metaVendasIntegracaoService = metaVendasIntegracaoService;
         }
 
 
@@ -81,6 +94,42 @@ namespace Sofragrancia.API.Controllers
             await _produtoIntegracaoService.SincronizarProdutos();
 
             return Ok("Produtos sincronizados");
+        }
+        
+        [HttpPost("sincronizar-pedidos")]
+        public async Task<IActionResult> SincronizarPedidos()
+        {
+            await _pedidoIntegracaoService.SincronizarPedidos();
+
+            return Ok("Pedidos sincronizados");
+        }
+
+        [HttpPost("sincronizar-itens-pedido")]
+        public async Task<IActionResult> SincronizarItensPedido()
+        {
+            await _itemPedidoIntegracaoService.SincronizarItensPedido();
+            return Ok("Itens de pedido sincronizados");
+        }
+
+        [HttpPost("sincronizar-faturas")]
+        public async Task<IActionResult> SincronizarFaturas()
+        {
+            await _faturaIntegracaoService.SincronizarFaturas();
+            return Ok("Faturas sincronizadas");
+        }
+
+        [HttpPost("sincronizar-descontos")]
+        public async Task<IActionResult> SincronizarDescontos()
+        {
+            await _descontoIntegracaoService.SincronizarDescontos();
+            return Ok("Descontos sincronizados");
+        }
+
+        [HttpPost("sincronizar-metas-vendas")]
+        public async Task<IActionResult> SincronizarMetasVendas()
+        {
+            await _metaVendasIntegracaoService.SincronizarMetasVendas();
+            return Ok("Metas de vendas sincronizadas");
         }
     }
 

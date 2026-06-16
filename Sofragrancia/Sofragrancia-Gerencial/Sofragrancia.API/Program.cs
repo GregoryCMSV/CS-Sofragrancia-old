@@ -36,6 +36,24 @@ namespace Sofragrancia.API
 
             builder.Services.AddScoped<ProdutoRepository>();
             builder.Services.AddScoped<ProdutoIntegracaoService>();
+            
+            builder.Services.AddScoped<ItemPedidoRepository>();
+            builder.Services.AddScoped<ItemPedidoIntegracaoService>();
+
+            builder.Services.AddScoped<FaturaRepository>();
+            builder.Services.AddScoped<FaturaIntegracaoService>();
+
+            builder.Services.AddScoped<PedidoRepository>();
+            builder.Services.AddScoped<PedidoIntegracaoService>();
+
+            builder.Services.AddScoped<MetaVendasRepository>();
+            builder.Services.AddScoped<MetaVendasIntegracaoService>();
+
+            builder.Services.AddScoped<DescontoRepository>();
+            builder.Services.AddScoped<DescontoIntegracaoService>();
+            
+
+            
             builder.Services.AddHttpClient<FinanceiroService>(client =>
             {
                 client.BaseAddress = new Uri(
@@ -51,6 +69,11 @@ namespace Sofragrancia.API
                     "Authorization",
                     $"Bearer {builder.Configuration["FinanceiroApi:ApiKey"]}"
                 );
+            });
+
+            builder.Services.AddHttpClient<ReposicaoService>(client =>
+            {
+                client.BaseAddress = new Uri("https://sofragrancia-api-0qg4.onrender.com");
             });
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
