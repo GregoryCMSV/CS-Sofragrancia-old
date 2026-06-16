@@ -28,7 +28,7 @@ namespace Sofragrancia.API.Services
             {
                 var entidade = Mapear(meta);
 
-                await _metaRepository.InsertModelAsync(entidade);
+                await _metaRepository.UpsertModelAsync(entidade);
             }
         }
 

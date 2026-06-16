@@ -39,7 +39,7 @@ public class ProdutoIntegracaoService
                 IsEnable = produtoFinanceiro.IsEnable
             };
 
-            await _produtoRepository.InsertModelAsync(produto);
+            await _produtoRepository.UpsertModelAsync(produto);
         }
     }
 }

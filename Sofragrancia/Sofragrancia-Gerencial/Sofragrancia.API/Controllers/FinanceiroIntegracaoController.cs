@@ -15,10 +15,10 @@ namespace Sofragrancia.API.Controllers
         private readonly ItemPedidoIntegracaoService _itemPedidoIntegracaoService;
         private readonly DescontoIntegracaoService _descontoIntegracaoService;
         private readonly MetaVendasIntegracaoService _metaVendasIntegracaoService;
-
-        public FinanceiroIntegracaoController(FinanceiroService service, ProdutoIntegracaoService produtoIntegracaoService, 
+        private readonly ClienteService _clienteService;
+        public FinanceiroIntegracaoController(FinanceiroService service, ProdutoIntegracaoService produtoIntegracaoService,
         PedidoIntegracaoService pedidoIntegracaoService, ItemPedidoIntegracaoService itemPedidoIntegracaoService, FaturaIntegracaoService faturaIntegracaoService,
-        DescontoIntegracaoService descontoIntegracaoService, MetaVendasIntegracaoService metaVendasIntegracaoService)
+        DescontoIntegracaoService descontoIntegracaoService, MetaVendasIntegracaoService metaVendasIntegracaoService, ClienteService clienteService)
         {
             _service = service;
             _produtoIntegracaoService = produtoIntegracaoService;
@@ -27,6 +27,7 @@ namespace Sofragrancia.API.Controllers
             _faturaIntegracaoService = faturaIntegracaoService;
             _descontoIntegracaoService = descontoIntegracaoService;
             _metaVendasIntegracaoService = metaVendasIntegracaoService;
+            _clienteService = clienteService;
         }
 
 
@@ -130,6 +131,13 @@ namespace Sofragrancia.API.Controllers
         {
             await _metaVendasIntegracaoService.SincronizarMetasVendas();
             return Ok("Metas de vendas sincronizadas");
+        }
+
+        [HttpPost("sincronizar-cliente")]
+        public async Task<IActionResult> SincronizarCliente()
+        {
+            await _clienteService.SincronizarCliente();
+            return Ok("Cliente sincronizado");
         }
     }
 

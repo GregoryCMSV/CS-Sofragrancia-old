@@ -36,7 +36,7 @@ public class DescontoIntegracaoService
                 IsEnable = desconto.Ativo
             };
 
-            await _descontoRepository.InsertModelAsync(entity);
+            await _descontoRepository.UpsertModelAsync(entity);
         }
     }
 }

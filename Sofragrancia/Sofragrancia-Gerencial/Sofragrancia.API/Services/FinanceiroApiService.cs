@@ -72,8 +72,17 @@ namespace Sofragrancia.API.Services
             var response = await _httpClient.GetAsync("/rest/v1/item_pedido");
 
             response.EnsureSuccessStatusCode();
-
+            var Content = await response.Content.ReadAsStringAsync();
             return await response.Content.ReadFromJsonAsync<List<ItemPedidoFinanceiroDto>>() ?? new List<ItemPedidoFinanceiroDto>();
+        }
+
+        internal async Task<IEnumerable<ClienteDto>> ObterClientes()
+        {
+            var response = await _httpClient.GetAsync("/rest/v1/cliente");
+
+            response.EnsureSuccessStatusCode();
+            var Content = await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadFromJsonAsync<List<ClienteDto>>() ?? new List<ClienteDto>();
         }
     }
 }

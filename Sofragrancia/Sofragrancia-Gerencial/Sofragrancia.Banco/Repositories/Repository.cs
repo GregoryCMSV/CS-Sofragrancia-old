@@ -111,6 +111,18 @@ namespace Sofragrancia.Banco.Repositories
             return GenerateCleanObject(item,typeof(T));
         }
 
+        public virtual async Task<dynamic> UpsertModelAsync(T produto)
+        {
+            var response = await _supabase.From<T>().Upsert(produto);
+            var item = response.Models.FirstOrDefault();
+            if (item == null)
+            {
+                return null;
+            }
+
+            return GenerateCleanObject(item,typeof(T));
+        }
+
         public virtual async Task<List<dynamic>> GetAllModelAsync()
         {
             var response = await _supabase.From<T>().Get();

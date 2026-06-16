@@ -5,7 +5,7 @@ namespace Sofragrancia.API.DTOs
     public class ReposicaoDto
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [JsonPropertyName("produtoId")]
         public int ProdutoId { get; set; }

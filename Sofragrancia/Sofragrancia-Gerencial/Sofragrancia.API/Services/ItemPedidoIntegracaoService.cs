@@ -28,14 +28,14 @@ public class ItemPedidoIntegracaoService
                 IdProduto = item.IdProduto,
                 Quantidade = item.Quantidade,
                 PrecoUnitario = item.PrecoUnitario,
-                Desconto = item.DescontoUnitario,
-                Subtotal = item.Subtotal,
+                Desconto = item.DescontoUnitario.ToString(),
+                Subtotal = item.Subtotal.ToString(),
                 CriadoEm = item.DataCriacao,
                 AtualizadoEm = item.DataAtualizacao,
                 IsEnable = item.Ativo
             };
 
-            await _itemPedidoRepository.InsertModelAsync(entity);
+            await _itemPedidoRepository.UpsertModelAsync(entity);
         }
     }
 }

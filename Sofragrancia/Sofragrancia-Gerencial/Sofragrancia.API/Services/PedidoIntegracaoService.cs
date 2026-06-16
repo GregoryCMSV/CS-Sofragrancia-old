@@ -56,7 +56,7 @@ public class PedidoIntegracaoService
             };
 
 
-            await _pedidoRepository.InsertModelAsync(pedido);
+            await _pedidoRepository.UpsertModelAsync(pedido);
         }
     }
 }

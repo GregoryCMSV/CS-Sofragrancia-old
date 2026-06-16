@@ -37,7 +37,7 @@ public class FaturaIntegracaoService
                 IsEnable = fatura.Ativo
             };
 
-            await _faturaRepository.InsertModelAsync(entity);
+            await _faturaRepository.UpsertModelAsync(entity);
         }
     }
 }
