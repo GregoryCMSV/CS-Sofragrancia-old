@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
+using Sofragrancia.Banco.Repositories;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -32,6 +33,25 @@ namespace Sofragrancia.API
 
             builder.Services.AddSingleton<RabbitMqService>();
             builder.Services.AddScoped<AlertService>();
+
+            builder.Services.AddScoped<ProdutoRepository>();
+            builder.Services.AddScoped<ProdutoIntegracaoService>();
+            builder.Services.AddHttpClient<FinanceiroService>(client =>
+            {
+                client.BaseAddress = new Uri(
+                    builder.Configuration["FinanceiroApi:BaseUrl"]
+                );
+
+                client.DefaultRequestHeaders.Add(
+                    "apikey",
+                    builder.Configuration["FinanceiroApi:ApiKey"]
+                );
+
+                client.DefaultRequestHeaders.Add(
+                    "Authorization",
+                    $"Bearer {builder.Configuration["FinanceiroApi:ApiKey"]}"
+                );
+            });
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
 
