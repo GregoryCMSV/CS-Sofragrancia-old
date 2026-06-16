@@ -13,13 +13,13 @@ namespace Sofragrancia.API.Services
         }
 
 
-        public async Task<List<ProdutoFinanceiroDto>> ObterProdutos()
+        public async Task<List<ProdutoDto>> ObterProdutos()
         {
             var response = await _httpClient.GetAsync("/rest/v1/produto");
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<List<ProdutoFinanceiroDto>>();
+            return await response.Content.ReadFromJsonAsync<List<ProdutoDto>>();
         }
 
         public async Task<List<PedidoFinanceiroDto>> ObterPedidos()
@@ -49,13 +49,13 @@ namespace Sofragrancia.API.Services
             return await response.Content.ReadFromJsonAsync<List<FaturaFinanceiroDto>>() ?? new List<FaturaFinanceiroDto>();
         }
 
-        public async Task<List<FornecedorFinanceiroDto>> ObterFornecedores()
+        public async Task<List<FornecedorDto>> ObterFornecedores()
         {
             var response = await _httpClient.GetAsync("/rest/v1/fornecedor");
 
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<List<FornecedorFinanceiroDto>>() ?? new List<FornecedorFinanceiroDto>();
+            return await response.Content.ReadFromJsonAsync<List<FornecedorDto>>() ?? new List<FornecedorDto>();
         }
 
         public async Task<List<MetaVendaFinanceiroDto>> ObterMetasVendas()
@@ -83,6 +83,15 @@ namespace Sofragrancia.API.Services
             response.EnsureSuccessStatusCode();
             var Content = await response.Content.ReadAsStringAsync();
             return await response.Content.ReadFromJsonAsync<List<ClienteDto>>() ?? new List<ClienteDto>();
+        }
+
+        internal async Task<IEnumerable<VendedorDto>> ObterVendedores()
+        {
+            var response = await _httpClient.GetAsync("/rest/v1/vendedor");
+
+            response.EnsureSuccessStatusCode();
+            var Content = await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadFromJsonAsync<List<VendedorDto>>() ?? new List<VendedorDto>();
         }
     }
 }

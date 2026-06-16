@@ -16,9 +16,13 @@ namespace Sofragrancia.API.Controllers
         private readonly DescontoIntegracaoService _descontoIntegracaoService;
         private readonly MetaVendasIntegracaoService _metaVendasIntegracaoService;
         private readonly ClienteService _clienteService;
+        private readonly FornecedorService _fornecedorService;
+        private readonly ProdutoService _produtoService;
+        private readonly VendedorService _vendedorService;
         public FinanceiroIntegracaoController(FinanceiroService service, ProdutoIntegracaoService produtoIntegracaoService,
         PedidoIntegracaoService pedidoIntegracaoService, ItemPedidoIntegracaoService itemPedidoIntegracaoService, FaturaIntegracaoService faturaIntegracaoService,
-        DescontoIntegracaoService descontoIntegracaoService, MetaVendasIntegracaoService metaVendasIntegracaoService, ClienteService clienteService)
+        DescontoIntegracaoService descontoIntegracaoService, MetaVendasIntegracaoService metaVendasIntegracaoService, ClienteService clienteService, FornecedorService fornecedorService,
+        ProdutoService produtoService, VendedorService vendedorService)
         {
             _service = service;
             _produtoIntegracaoService = produtoIntegracaoService;
@@ -28,6 +32,9 @@ namespace Sofragrancia.API.Controllers
             _descontoIntegracaoService = descontoIntegracaoService;
             _metaVendasIntegracaoService = metaVendasIntegracaoService;
             _clienteService = clienteService;
+            _fornecedorService = fornecedorService;
+            _produtoService = produtoService;
+            _vendedorService = vendedorService;
         }
 
 
@@ -138,6 +145,27 @@ namespace Sofragrancia.API.Controllers
         {
             await _clienteService.SincronizarCliente();
             return Ok("Cliente sincronizado");
+        }
+
+        [HttpPost("sincronizar-fornecedor")]
+        public async Task<IActionResult> SincronizarFornecedor()
+        {
+            await _fornecedorService.SincronizarFornecedor();
+            return Ok("Fornecedor sincronizado");
+        }
+
+        [HttpPost("sincronizar-produto")]
+        public async Task<IActionResult> SincronizarProduto()
+        {
+            await _produtoService.SincronizarProduto();
+            return Ok("Produto sincronizado");
+        }
+
+        [HttpPost("sincronizar-vendedor")]
+        public async Task<IActionResult> SincronizarVendedor()
+        {
+            await _vendedorService.SincronizarVendedor();
+            return Ok("Vendedor sincronizado");
         }
     }
 

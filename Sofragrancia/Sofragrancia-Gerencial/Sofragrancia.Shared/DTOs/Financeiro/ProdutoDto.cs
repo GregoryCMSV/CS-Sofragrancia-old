@@ -23,10 +23,10 @@ namespace Sofragrancia.API.DTOs
         public string Unidade { get; set; } = string.Empty;
 
         [JsonPropertyName("nr_precocusto")]
-        public decimal PrecoCusto { get; set; }
+        public double PrecoCusto { get; set; }
 
         [JsonPropertyName("nr_precovenda")]
-        public decimal PrecoVenda { get; set; }
+        public double PrecoVenda { get; set; }
 
         [JsonPropertyName("nr_estoqueatual")]
         public int EstoqueAtual { get; set; }
@@ -35,13 +35,16 @@ namespace Sofragrancia.API.DTOs
         public int EstoqueMinimo { get; set; }
 
         [JsonPropertyName("dt_createdate")]
-        public DateTime DataCriacao { get; set; }
+        public DateTime CriadoEm { get; set; }
+
 
         [JsonPropertyName("dt_updatedate")]
-        public DateTime DataAtualizacao { get; set; }
+        public DateTime AtualizadoEm { get; set; }
+
 
         [JsonPropertyName("fl_isenable")]
-        public bool Ativo { get; set; }
+        public bool IsEnable { get; set; }
+        
 
         [JsonPropertyName("nr_codigo")]
         public int Codigo { get; set; }

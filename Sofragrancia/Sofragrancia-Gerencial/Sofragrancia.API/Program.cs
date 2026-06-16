@@ -50,9 +50,7 @@ namespace Sofragrancia.API
             builder.Services.AddScoped<MetaVendasIntegracaoService>();
 
             builder.Services.AddScoped<DescontoRepository>();
-            builder.Services.AddScoped<DescontoIntegracaoService>();
-            
-
+            builder.Services.AddScoped<DescontoIntegracaoService>();  
             
             builder.Services.AddHttpClient<FinanceiroService>(client =>
             {
@@ -90,6 +88,18 @@ namespace Sofragrancia.API
                         ValidateAudience = true
                     };
                 });
+
+            builder.Services.AddScoped<ClienteRepository>();
+            builder.Services.AddScoped<ClienteService>();
+
+            builder.Services.AddScoped<FornecedorRepository>();
+            builder.Services.AddScoped<FornecedorService>();
+
+            builder.Services.AddScoped<ProdutoRepository>();
+            builder.Services.AddScoped<ProdutoService>();
+
+            builder.Services.AddScoped<VendedorRepository>();
+            builder.Services.AddScoped<VendedorService>();
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();

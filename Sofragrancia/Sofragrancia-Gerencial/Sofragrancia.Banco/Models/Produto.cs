@@ -23,10 +23,10 @@ namespace Sofragrancia.Banco.Models
         public string unidade { get; set; }
 
         [Column("precocusto")]
-        public decimal PrecoCusto { get; set; }
+        public double PrecoCusto { get; set; }
 
         [Column("precovenda")]
-        public decimal PrecoVenda { get; set; }
+        public double PrecoVenda { get; set; }
 
         [Column("estoqueatual")]
         public int EstoqueAtual { get; set; }
