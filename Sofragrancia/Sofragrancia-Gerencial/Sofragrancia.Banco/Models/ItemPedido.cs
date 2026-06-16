@@ -23,10 +23,10 @@ namespace Sofragrancia.Banco.Models
         public int Quantidade { get; set; }
 
         [Column("precounitario")]
-        public double PrecoUnitario { get; set; }
+        public decimal PrecoUnitario { get; set; }
 
         [Column("desconto")]
-        public string Desconto { get; set; }
+        public String Desconto { get; set; }
 
         [Column("subtotal")]
         public string Subtotal { get; set; }

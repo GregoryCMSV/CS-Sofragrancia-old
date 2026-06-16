@@ -17,7 +17,7 @@ namespace Sofragrancia.Banco.Models
         public DateTime DocDate { get; set; }
 
         [Column("horapedido")]
-        public DateTime DocHour { get; set; }
+        public DateTime? DocHour { get; set; }
 
         [Column("id_cliente")]
         public int IdCliente { get; set; }

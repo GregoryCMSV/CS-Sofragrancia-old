@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Sofragrancia.API.Services;
 using Sofragrancia.Banco;
+using Sofragrancia.Banco.Repositories;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -32,6 +33,48 @@ namespace Sofragrancia.API
 
             builder.Services.AddSingleton<RabbitMqService>();
             builder.Services.AddScoped<AlertService>();
+
+            builder.Services.AddScoped<ProdutoRepository>();
+            builder.Services.AddScoped<ProdutoIntegracaoService>();
+            
+            builder.Services.AddScoped<ItemPedidoRepository>();
+            builder.Services.AddScoped<ItemPedidoIntegracaoService>();
+
+            builder.Services.AddScoped<FaturaRepository>();
+            builder.Services.AddScoped<FaturaIntegracaoService>();
+
+            builder.Services.AddScoped<PedidoRepository>();
+            builder.Services.AddScoped<PedidoIntegracaoService>();
+
+            builder.Services.AddScoped<MetaVendasRepository>();
+            builder.Services.AddScoped<MetaVendasIntegracaoService>();
+
+            builder.Services.AddScoped<DescontoRepository>();
+            builder.Services.AddScoped<DescontoIntegracaoService>();
+            
+
+            
+            builder.Services.AddHttpClient<FinanceiroService>(client =>
+            {
+                client.BaseAddress = new Uri(
+                    builder.Configuration["FinanceiroApi:BaseUrl"]
+                );
+
+                client.DefaultRequestHeaders.Add(
+                    "apikey",
+                    builder.Configuration["FinanceiroApi:ApiKey"]
+                );
+
+                client.DefaultRequestHeaders.Add(
+                    "Authorization",
+                    $"Bearer {builder.Configuration["FinanceiroApi:ApiKey"]}"
+                );
+            });
+
+            builder.Services.AddHttpClient<ReposicaoService>(client =>
+            {
+                client.BaseAddress = new Uri("https://sofragrancia-api-0qg4.onrender.com");
+            });
 
             var ecdsaKey = new JsonWebKey(jwtSecret);
 
